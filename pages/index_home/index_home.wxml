@@ -1,0 +1,7 @@
+<view class="page">
+  <image class="background"
+  src="../../assets/images/image.png" 
+  mode="aspectFill"></image>
+  <view class="left" bindtap="navigateToWhiteSystem">白事</view>
+  <view class="right" bindtap="navigateToRedSystem">红事</view>
+</view>
