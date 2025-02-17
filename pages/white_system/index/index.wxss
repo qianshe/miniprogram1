@@ -1,0 +1,26 @@
+/* pages/white_system/white_system.wxss */
+.page {
+  padding: 20px;
+  background-color: #f0f0f0; /* 更改背景颜色为浅灰色 */
+}
+
+.process-step {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #ccc; /* 更改边框颜色为浅灰色 */
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.process-step-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #444; /* 更改标题颜色为深灰色 */
+}
+
+.process-step-content {
+  color: #888; /* 更改内容颜色为灰色 */
+  font-size: 14px;
+}
