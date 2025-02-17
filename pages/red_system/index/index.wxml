@@ -1,0 +1,17 @@
+<view>
+  <tabBar></tabBar>
+</view>
+<view class="page">
+  <block wx:for="{{events}}" wx:key="index">
+    <view class="process-step">
+      <text class="process-step-title">{{item.name}}</text>
+
+      <block wx:for="{{item.steps}}" wx:key="stepIndex">
+        <view class="process-step">
+          <text class="process-step-title">{{item.title}}</text>
+          <text class="process-step-content">{{item.description}}</text>
+        </view>
+      </block>
+    </view>
+  </block>
+</view>

@@ -1,0 +1,36 @@
+/* pages/index_home/index_home.wxss */
+
+.page {
+  display: flex;
+  height: 100vh;
+  position: relative;
+  background-size: cover;
+}
+
+.background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background-size: cover;
+  background-position: bottom;
+}
+
+.left, .right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* 字体改成白色加粗 */
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.left {
+  background-color: transparent; /* 设置为全透明背景 */
+}
+
+.right {
+  background-color: transparent; /* 设置为全透明背景 */
+}
