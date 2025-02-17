@@ -1,7 +1,0 @@
-{
-  "navigationBarTitleText": "红事",
-
-  "usingComponents": {
-    "tabBar": "../../../Components/tabBar/tabBar"
-  }
-}

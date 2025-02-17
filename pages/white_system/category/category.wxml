@@ -1,9 +1,0 @@
-<!-- 页面 -->
-<view class="category-container">
-  <block wx:for="{{categories}}" wx:key="id">
-    <view class="category-item">
-      <text>{{item.name}}</text>
-    </view>
-  </block>
-  <tabBar ></tabBar>
-</view>

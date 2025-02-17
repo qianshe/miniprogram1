@@ -1,6 +1,0 @@
-{
-  "usingComponents": {
-    "tabBar": "../../../Components/tabBar/tabBar"
-  },
-  "navigationBarTitleText": "分类商城"
-}
