@@ -1,8 +1,8 @@
 <!--pages/white_system/white_system.wxml-->
-<tabBar></tabBar>
+
 <view class="page">
   <block wx:for="{{processSteps}}" wx:key="index">
-    <view class="process-step">
+    <view class="process-step" >
       <text class="process-step-title">{{item.title}}</text>
       <text class="process-step-content">{{item.content}}</text>
     </view>

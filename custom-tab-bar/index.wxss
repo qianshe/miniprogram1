@@ -1,19 +1,7 @@
-/* Components/tabBar/tabBar.wxss */
-
 .wrapper {
-    --td-tab-bar-border-color: #e7e7e7;
-    --td-tab-bar-bg-color: #eee;
-    --td-tab-bar-hover-color: #ddd;
-    --td-tab-bar-item-color: #bbb;
-    --td-tab-bar-item-active-color: #333;
-    /* 底部导航栏 */
-    /* 需要平铺各个导航菜单 */
-    
-    /* display: flex;
-    justify-content: space-around;
-    align-items: center;
-    width: 100%;
-    height: 48px;
-    background-color: var(--td-tab-bar-bg-color);
-    border-top: 1px solid var(--td-tab-bar-border-color); */
-  }
+  --td-tab-bar-border-color: var(--td-border-level-1-color, #e7e7e7);
+  --td-tab-bar-bg-color: var(--td-bg-color-secondarycontainer, #f3f3f3);
+  --td-tab-bar-hover-color: #ddd;
+  --td-tab-bar-item-color: var(--td-text-color-primary, rgba(0, 0, 0, 0.9));
+  --td-tab-bar-item-active-color: var(--td-brand-color, #0052d9);
+}
