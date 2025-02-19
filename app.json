@@ -3,10 +3,9 @@
     "pages/index_home/index_home",
     "pages/white_system/index/index",
     "pages/white_system/category/category",
-    "pages/white_system/user/user",
+    "pages/user/user",
     "pages/red_system/index/index",
     "pages/red_system/category/category",
-    "pages/red_system/user/user",
     "pages/index/index",
     "pages/logs/logs"
   ],
@@ -32,7 +31,7 @@
         "text": "分类"
       }, 
       {
-        "pagePath": "pages/white_system/user/user",
+        "pagePath": "pages/user/user",
         "text": "个人中心"
       },
       {
@@ -42,10 +41,6 @@
       {
         "pagePath": "pages/red_system/category/category",
         "text": "分类"
-      },
-      {
-        "pagePath": "pages/red_system/user/user",
-        "text": "个人中心"
       }
     ]
   }

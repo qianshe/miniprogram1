@@ -3,9 +3,6 @@ const app = getApp()
 Component({
   data: {
     value: 0,
-    color: "#7A7E83",
-    selectedColor: "#d32f2f",
-    backgroundColor: "#ffffff",
     list: []
   },
 
@@ -29,7 +26,7 @@ Component({
               icon: "app"
             },
             {
-              pagePath: "/pages/white_system/user/user",
+              pagePath: "/pages/user/user",
               text: "个人中心",
               icon: "user"
             }
@@ -43,7 +40,7 @@ Component({
               icon: "home"
             },
             {
-              pagePath: "/pages/red_system/user/user",
+              pagePath: "/pages/user/user",
               text: "个人中心",
               icon: "user"
             }
@@ -66,10 +63,7 @@ Component({
 
       // 将当前选中的 index 存储在全局变量中
       getApp().globalData.currentTabIndex = index;
-
-      console.log('Tab switch:', getApp().globalData.currentTabIndex);
     
-
       wx.switchTab({
         url: page.pagePath,
         fail: (err) => {

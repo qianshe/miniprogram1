@@ -3,7 +3,6 @@ const defaultAvatarUrl = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia0
 
 Page({
   data: {
-    motto: 'Hello World',
     userInfo: {
       avatarUrl: defaultAvatarUrl,
       nickName: '',
@@ -14,7 +13,7 @@ Page({
   },
   bindViewTap() {
     wx.navigateTo({
-      url: '../logs/logs'
+      url: '../../logs/logs'
     })
   },
   onChooseAvatar(e) {
