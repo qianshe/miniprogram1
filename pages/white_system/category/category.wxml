@@ -6,3 +6,4 @@
     </view>
   </block>
 </view>
+<custom-tab-bar></custom-tab-bar>

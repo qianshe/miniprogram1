@@ -6,7 +6,6 @@
     "pages/user/user",
     "pages/red_system/index/index",
     "pages/red_system/category/category",
-    "pages/index/index",
     "pages/logs/logs"
   ],
   "window": {
@@ -42,5 +41,8 @@
         "text": "分类"
       }
     ]
+  },
+  "usingComponents": {
+    "custom-tab-bar": "Components/custom-tab-bar/index"
   }
 }

@@ -22,3 +22,5 @@
     </view>
   </view>
 </scroll-view>
+
+<custom-tab-bar></custom-tab-bar>
