@@ -14,6 +14,7 @@ Page({
    */
   onLoad(options) {
     this.loadCategories();
+    getComponent('tabBar').updateValue(1)
   },
 
   /**

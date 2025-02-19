@@ -2,11 +2,12 @@
 const app = getApp()
 Component({
   data: {
-    value: 0,
+    index: 0,
     list: []
   },
 
   attached() {
+    console.log('tabBar attached')
     this.updateTabList(getApp().globalData.systemType || "white")
   },
 
@@ -47,12 +48,12 @@ Component({
           ]
         }
       }
-      console.log('systemType:', systemType, "value:", getApp().globalData.currentTabIndex)
+      console.log('systemType:', systemType, "currentTabIndex:", getApp().globalData.currentTabIndex)
 
       const config = tabConfig[systemType]
       this.setData({
         list: config.list,
-        value: getApp().globalData.currentTabIndex
+        index: getApp().globalData.currentTabIndex ? getApp().globalData.currentTabIndex : 0
       })
     },
 
