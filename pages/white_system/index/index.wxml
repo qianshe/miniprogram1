@@ -1,7 +1,5 @@
 <!--pages/white_system/white_system.wxml-->
-<view>
-  <tabBar></tabBar>
-</view>
+<tabBar></tabBar>
 <view class="page">
   <block wx:for="{{processSteps}}" wx:key="index">
     <view class="process-step">

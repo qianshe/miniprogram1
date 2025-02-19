@@ -34,7 +34,13 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
+    const app = getApp()
 
+    app.globalData.systemType = 'white' //  设置当前为白事系统
+    const tabBar = this.getTabBar()
+    if (tabBar) {
+      tabBar.updateTabList('white')
+    }
   },
 
   /**
