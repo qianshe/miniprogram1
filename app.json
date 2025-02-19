@@ -15,5 +15,23 @@
   "style": "v2",
   "componentFramework": "glass-easel",
   "sitemapLocation": "sitemap.json",
-  "lazyCodeLoading": "requiredComponents"
+  "lazyCodeLoading": "requiredComponents",
+
+  "tabBar": {
+    "custom": true,
+    "color": "#000000",
+    "selectedColor": "#000000",
+    "backgroundColor": "#000000",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/red_system/index/index",
+        "text": "Red"
+      },
+      {
+        "pagePath": "pages/white_system/index/index",
+        "text": "White"
+      }
+    ]
+  }
 }

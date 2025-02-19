@@ -5,5 +5,5 @@
       <text>{{item.name}}</text>
     </view>
   </block>
-  <tabBar ></tabBar>
 </view>
+

@@ -1,6 +1,4 @@
-<view>
-  <tabBar></tabBar>
-</view>
+
 <view class="page">
   <block wx:for="{{events}}" wx:key="index">
     <view class="process-step">

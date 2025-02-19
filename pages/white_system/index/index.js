@@ -34,7 +34,21 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
+    const app = getApp()
 
+    console.log('页面路由栈:', getCurrentPages().map(p => p.route))
+    console.log('TabBar实例:', this.getTabBar?.())
+    const pages = getCurrentPages()
+    const currentPage = pages[pages.length - 1]
+    console.log('是否tabBar页面:', currentPage.__proto__.__tabBar__ ? true : false)
+
+
+
+    app.globalData.systemType = 'white' //  设置当前为白事系统
+    const tabBar = this.getTabBar()
+    if (tabBar) {
+      tabBar.updateTabList('white')
+    }
   },
 
   /**

@@ -64,15 +64,20 @@ Page({
 
   },
 
+  navigateToSystem(systemType) {
+    const app = getApp()
+    app.globalData.systemType = systemType
+    
+    wx.switchTab({
+      url: `/pages/${systemType}_system/index/index`
+    })
+  },
+
   navigateToWhiteSystem() {
-    wx.navigateTo({
-      url: '/pages/white_system/index/index'
-    });
+    this.navigateToSystem('white')
   },
 
   navigateToRedSystem() {
-    wx.navigateTo({
-      url: '/pages/red_system/index/index'
-    });
+    this.navigateToSystem('red')
   }
 })
