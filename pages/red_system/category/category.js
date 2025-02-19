@@ -1,4 +1,4 @@
-// pages/index_home/index_home.js
+// pages/red_system/category/category.js
 Page({
 
   /**
@@ -62,21 +62,5 @@ Page({
    */
   onShareAppMessage() {
 
-  },
-
-  navigateToSystem(systemType) {
-    const app = getApp()
-    app.globalData.systemType = systemType
-    wx.switchTab({
-      url: `/pages/${systemType}_system/index/index`,
-    })
-  },
-
-  navigateToWhiteSystem() {
-    this.navigateToSystem('white')
-  },
-
-  navigateToRedSystem() {
-    this.navigateToSystem('red')
   }
 })
