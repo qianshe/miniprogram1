@@ -9,50 +9,11 @@
     /* 底部导航栏 */
     /* 需要平铺各个导航菜单 */
     
-    display: flex;
+    /* display: flex;
     justify-content: space-around;
     align-items: center;
     width: 100%;
     height: 48px;
     background-color: var(--td-tab-bar-bg-color);
-    border-top: 1px solid var(--td-tab-bar-border-color);
+    border-top: 1px solid var(--td-tab-bar-border-color); */
   }
-
-  .tab-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 48px;
-    background: white;
-    display: flex;
-    padding-bottom: env(safe-area-inset-bottom);
-}
-
-.tab-bar-border {
-    background-color: rgba(0, 0, 0, 0.33);
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 1px;
-    transform: scaleY(0.5);
-}
-
-.tab-bar-item {
-    flex: 1;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
-.tab-bar-item cover-image {
-    width: 27px;
-    height: 27px;
-}
-
-.tab-bar-item cover-view {
-    font-size: 10px;
-}

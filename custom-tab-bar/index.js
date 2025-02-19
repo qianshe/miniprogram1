@@ -2,7 +2,7 @@
 const app = getApp()
 Component({
   data: {
-    selected: 0,
+    value: 0,
     color: "#7A7E83",
     selectedColor: "#d32f2f",
     backgroundColor: "#ffffff",
@@ -10,7 +10,7 @@ Component({
   },
 
   attached() {
-    this.updateTabList(getApp().globalData.systemType || 'red')
+    this.updateTabList(getApp().globalData.systemType || "white")
   },
 
   methods: {
@@ -50,34 +50,33 @@ Component({
           ]
         }
       }
+      console.log('systemType:', systemType, "value:", getApp().globalData.currentTabIndex)
 
       const config = tabConfig[systemType]
       this.setData({
         list: config.list,
-        color: config.color,
-        selectedColor: config.selectedColor
+        value: getApp().globalData.currentTabIndex
       })
     },
 
-    switchTab(e) {
-      console.log(e)
-      // const { path: url, index } = e.detail
-      const { path: url, index } = e.currentTarget.dataset
+    onChange(e) {
+      // 转换成 JSON 格式
+      const index  = e.detail.value 
+      const page = this.data.list[index]
 
-      console.log(url)
-      console.log(e.currentTarget.dataset)
+      // 将当前选中的 index 存储在全局变量中
+      getApp().globalData.currentTabIndex = index;
+
+      console.log('Tab switch:', getApp().globalData.currentTabIndex);
+    
 
       wx.switchTab({
-        url: url.startsWith('/') ? url : `/${url}`, // 双重保障路径格式,
-        success: (res) => {
-          this.setData({
-            selected: index
-          });
-        },
+        url: page.pagePath,
         fail: (err) => {
           console.error('Tab switch failed:', err);
         }
       });
-    }
+
+    },
   }
 })
