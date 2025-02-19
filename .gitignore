@@ -1,5 +1,6 @@
 # 忽略miniprogram_npm文件夹和node_modules文件夹
 miniprogram_npm/
+node_modules/
 
 # 默认忽略的文件
 shelf/
@@ -9,3 +10,5 @@ httpRequests/
 # Datasource local storage ignored files
 dataSources/
 dataSources.local.xml
+
+project.config.json
