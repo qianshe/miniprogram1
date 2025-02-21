@@ -1,9 +1,9 @@
 {
   "navigationBarTitleText": "白事",
   "usingComponents": {
-    "t-search": "/miniprogram_npm/tdesign-miniprogram/search/search",
-    "t-swiper": "/miniprogram_npm/tdesign-miniprogram/swiper/swiper"
+    "t-search": "tdesign-miniprogram/search/search",
+    "t-swiper": "tdesign-miniprogram/swiper/swiper",
+    "t-navbar": "tdesign-miniprogram/navbar/navbar"
   },
   "enablePullDownRefresh": true
-
 }

@@ -1,5 +1,5 @@
 <!--index.wxml-->
-<scroll-view class="scrollarea" scroll-y type="list">
+<scroll-view class="scrollarea" scroll-y type="list" >
   <view class="container">
     <view class="userinfo">
       <block wx:if="{{canIUseNicknameComp && !hasUserInfo}}">
@@ -21,6 +21,14 @@
       </block>
     </view>
   </view>
-</scroll-view>
 
+</scroll-view>
+<view class="button-example">
+  <!-- 按钮: 点击触发 onButtonClick 事件 -->
+    <t-button 
+    theme="primary" 
+    size="large"
+    bindtap="onButtonClick"
+    >首页</t-button>
+</view>
 <custom-tab-bar></custom-tab-bar>

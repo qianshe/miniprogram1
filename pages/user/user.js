@@ -45,4 +45,11 @@ Page({
       }
     })
   },
+  onButtonClick: function (e) {
+    // 将页面栈清空，跳转到首页
+    wx.clearStorageSync()
+    wx.redirectTo({
+      url: '/pages/index_home/index_home'
+    })
+  }
 })
