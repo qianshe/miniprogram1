@@ -2,5 +2,6 @@
   "navigationBarTitleText": "红事",
 
   "usingComponents": {
-  }
+  },
+  "enablePullDownRefresh": true
 }
