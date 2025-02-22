@@ -5,3 +5,8 @@
   --td-tab-bar-item-color: var(--td-text-color-primary, rgba(0, 0, 0, 0.9));
   --td-tab-bar-item-active-color: var(--td-brand-color, #0052d9);
 }
+
+@font-face {
+  font-family: 'MyFont';
+  src: url('/assets/fonts/t.woff') format('woff');
+}

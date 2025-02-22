@@ -48,6 +48,7 @@ Page({
   onButtonClick: function (e) {
     // 将页面栈清空，跳转到首页
     wx.clearStorageSync()
+    getApp().globalData.currentTabIndex = 0
     wx.redirectTo({
       url: '/pages/index_home/index_home'
     })

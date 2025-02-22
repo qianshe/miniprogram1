@@ -28,7 +28,7 @@
     <t-button 
     theme="primary" 
     size="large"
-    bindtap="onButtonClick"
+    bind:tap="onButtonClick"
     >首页</t-button>
 </view>
 <custom-tab-bar></custom-tab-bar>

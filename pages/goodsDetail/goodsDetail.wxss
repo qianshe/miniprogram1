@@ -1,0 +1,63 @@
+.container {
+  padding-bottom: 100rpx;
+}
+
+.goods-swiper {
+  width: 100%;
+  height: 750rpx;
+}
+
+.goods-swiper image {
+  width: 100%;
+  height: 100%;
+}
+
+.goods-info {
+  padding: 20rpx;
+}
+
+.goods-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+}
+
+.goods-price {
+  color: #e4393c;
+  font-size: 40rpx;
+  margin-bottom: 20rpx;
+}
+
+.goods-desc {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.6;
+}
+
+.promotion-section {
+  padding: 20rpx;
+  margin-top: 20rpx;
+  background: #f8f8f8;
+}
+
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100rpx;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0 30rpx;
+  box-shadow: 0 -2rpx 10rpx rgba(0,0,0,0.1);
+}
+
+.add-cart {
+  flex: 1;
+  height: 80rpx;
+  line-height: 80rpx;
+  background: #e4393c;
+  color: #fff;
+  border-radius: 40rpx;
+}

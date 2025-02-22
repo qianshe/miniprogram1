@@ -12,7 +12,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    console.log('onLoad')
     // 模拟数据, 从后端获取数据
     const event = [
       {
@@ -49,7 +48,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-    console.log('onShow')
+
   },
 
   /**
