@@ -4,37 +4,14 @@ const defaultAvatarUrl = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia0
 Page({
   data: {
     userInfo: {
-      avatarUrl: defaultAvatarUrl,
+      avatarUrl: '/images/default-avatar.png',
       nickName: '',
     },
     hasUserInfo: false,
-    canIUseGetUserProfile: wx.canIUse('getUserProfile'),
-    canIUseNicknameComp: wx.canIUse('input.type.nickname'),
     isAdmin: false,
   },
   onLoad() {
-    // 检查登录状态
     this.checkLoginStatus();
-    // 检查用户角色
-    this.checkUserRole();
-    // 检查缓存中是否存在用户信息
-    const cachedUserInfo = wx.getStorageSync('userInfo')
-
-    console.log('cachedUserInfo:', cachedUserInfo)
-    if (cachedUserInfo) {
-      this.setData({
-        userInfo: cachedUserInfo,
-        hasUserInfo: true
-      })
-    }
-    // 检查本地是否有登录信息
-    const userInfo = wx.getStorageSync('userInfo');
-    if (userInfo) {
-      this.setData({
-        userInfo,
-        hasUserInfo: true
-      });
-    }
   },
   bindViewTap() {
     wx.navigateTo({
@@ -135,43 +112,28 @@ Page({
   },
 
   login(e) {
-    console.log('登录', e)
     wx.getUserProfile({
       desc: '用于完善会员资料', // 声明获取用户信息后的用途
       success: (res) => {
-        console.log('获取用户信息成功：', res.userInfo)
-        
-        const userInfo = {
-          avatarUrl: res.userInfo.avatarUrl,
-          nickName: res.userInfo.nickName,
-          gender: res.userInfo.gender,
-          country: res.userInfo.country,
-          province: res.userInfo.province,
-          city: res.userInfo.city,
-          language: res.userInfo.language
-        }
-
+        const userInfo = res.userInfo;
         this.setData({
-          userInfo: userInfo,
+          userInfo,
           hasUserInfo: true
-        })
-
-        // 保存到本地
-        wx.setStorageSync('userInfo', userInfo)
-        
+        });
+        wx.setStorageSync('userInfo', userInfo);
         wx.showToast({
           title: '登录成功',
           icon: 'success'
-        })
+        });
       },
       fail: (err) => {
-        console.error('获取用户信息失败：', err)
+        console.error('登录失败：', err);
         wx.showToast({
           title: '登录失败',
           icon: 'error'
-        })
+        });
       }
-    })
+    });
   },
 
   // 检查登录状态
@@ -179,7 +141,7 @@ Page({
     const userInfo = wx.getStorageSync('userInfo');
     if (userInfo) {
       this.setData({
-        userInfo: userInfo,
+        userInfo,
         hasUserInfo: true
       });
       return true;

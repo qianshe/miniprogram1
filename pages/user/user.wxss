@@ -102,6 +102,18 @@ page {
   color: #fff;
   border-radius: 40rpx;
   margin: 20rpx 0;
+  font-size: 28rpx;  /* 添加字体大小 */
+  padding: 0;        /* 重置内边距 */
+  font-weight: normal; /* 重置字体粗细 */
+  border: none;      /* 移除边框 */
+}
+
+.login-btn::after {
+  border: none;      /* 移除点击后的边框 */
+}
+
+.login-btn:active {
+  opacity: 0.8;      /* 点击效果 */
 }
 
 .userinfo-phone {

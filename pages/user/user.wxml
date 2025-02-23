@@ -1,33 +1,28 @@
 <!--index.wxml-->
 <scroll-view class="scrollarea" scroll-y type="list">
-  
   <view class="container">
     <view class="userinfo">
       <block wx:if="{{!hasUserInfo}}">
-        <text class="login-tip">点击下方按钮授权登录</text>
-        <button class="login-btn" bindtap="login">微信登录</button>
+        <image class="userinfo-avatar" src="/images/default-avatar.png"></image>
+        <text class="login-tip">您还未登录</text>
+        <button class="login-btn" bindtap="login">微信一键登录</button>
       </block>
       <block wx:else>
-        <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+        <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
         <text class="userinfo-nickname">{{userInfo.nickName}}</text>
       </block>
     </view>
   </view>
 
-  <!-- 功能入口区域 -->
-  <view class="function-area">
+  <view class="function-area" wx:if="{{hasUserInfo}}">
     <t-cell-group>
       <t-cell title="我的购物车" hover arrow bindtap="toShoppingCart" />
       <t-cell title="我的订单" hover arrow bindtap="toOrders" />
       <t-cell title="意见反馈" hover arrow bindtap="toFeedback" />
-
-      <!-- 后续需判断用户身份 -->
-      <t-cell  title="生成订单" hover arrow bindtap="toCreateOrder" theme="danger" />
+      <t-cell title="生成订单" hover arrow bindtap="toCreateOrder" theme="danger" />
 
       <t-cell wx:if="{{isAdmin}}" title="生成订单" hover arrow bindtap="toCreateOrder" theme="danger" />
-
-      <t-cell  title="返回首页" hover arrow bindtap="toIndexHome"/>
-
+      <t-cell title="返回首页" hover arrow bindtap="toIndexHome"/>
     </t-cell-group>
   </view>
 </scroll-view>

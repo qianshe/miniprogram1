@@ -151,10 +151,7 @@
 }
 
 .product-actions {
-  display: flex;
-  gap: 20rpx;
   align-items: center;
-  padding: 0 20rpx;
 }
 
 .voice-btn {

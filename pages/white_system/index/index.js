@@ -52,7 +52,15 @@ Page({
     {
       title: '第五步',
       content: '火化及安葬'
-    }
+    },
+    {
+      title: '第六步',
+      content: '安葬'
+    },
+    {
+      title: '第七步',
+      content: '安葬'
+    },
   ]
     this.setData({
       processSteps: Steps,

@@ -11,11 +11,5 @@ App({
     const logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
-
-    // TODO: 后续开启云开发时取消注释
-    // wx.cloud.init({
-    //   env: 'your-env-id',
-    //   traceUser: true
-    // })
   },
 })
