@@ -31,11 +31,4 @@
     </t-cell-group>
   </view>
 </scroll-view>
-<!-- <view class="button-example">
-    <t-button 
-    theme="primary" 
-    size="large"
-    bind:tap="onButtonClick"
-    >首页</t-button>
-</view> -->
 <custom-tab-bar></custom-tab-bar>
