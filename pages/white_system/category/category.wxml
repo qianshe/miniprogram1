@@ -1,9 +1,5 @@
 <!-- 页面 -->
-<view class="category-container">
-  <block wx:for="{{categories}}" wx:key="id">
-    <view class="category-item" style="width: 224rpx; display: block; box-sizing: border-box">
-      <text>{{item.name}}</text>
-    </view>
-  </block>
-</view>
+
+<custom-side-bar></custom-side-bar>
+
 <custom-tab-bar></custom-tab-bar>

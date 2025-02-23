@@ -1,5 +1,8 @@
 {
+  "component": true,
+  "styleIsolation": "shared",
   "usingComponents": {
+    "t-button": "tdesign-miniprogram/button/button"
   },
   "navigationBarTitleText": "个人信息"
 }

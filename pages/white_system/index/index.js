@@ -31,28 +31,31 @@ Page({
       },
     ];
 
+    // 设置白事流程步骤
+    // 后续从服务端获取
+    const Steps = [{
+      title: '第一步',
+      content: '联系殡仪馆'
+    },
+    {
+      title: '第二步',
+      content: '准备相关证件'
+    },
+    {
+      title: '第三步',
+      content: '办理丧葬手续'
+    },
+    {
+      title: '第四步',
+      content: '安排追悼会'
+    },
+    {
+      title: '第五步',
+      content: '火化及安葬'
+    }
+  ]
     this.setData({
-      processSteps: [{
-          title: '第一步',
-          content: '联系殡仪馆'
-        },
-        {
-          title: '第二步',
-          content: '准备相关证件'
-        },
-        {
-          title: '第三步',
-          content: '办理丧葬手续'
-        },
-        {
-          title: '第四步',
-          content: '安排追悼会'
-        },
-        {
-          title: '第五步',
-          content: '火化及安葬'
-        }
-      ],
+      processSteps: Steps,
       current: 1,
       autoplay: true,
       duration: 500,
