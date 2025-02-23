@@ -1,19 +1,11 @@
 <!--index.wxml-->
-<scroll-view class="scrollarea" scroll-y type="list" >
+<scroll-view class="scrollarea" scroll-y type="list">
+  
   <view class="container">
     <view class="userinfo">
-      <block wx:if="{{canIUseNicknameComp && !hasUserInfo}}">
-        <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-          <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
-        </button>
-        <view class="nickname-wrapper">
-          <text class="nickname-label">昵称</text>
-          <input type="nickname" class="nickname-input" placeholder="请输入昵称" bind:change="onInputChange" />
-        </view>
-      </block>
-      <block wx:elif="{{!hasUserInfo}}">
-        <button wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile"> 获取头像昵称 </button>
-        <view wx:else> 请使用2.10.4及以上版本基础库 </view>
+      <block wx:if="{{!hasUserInfo}}">
+        <text class="login-tip">点击下方按钮授权登录</text>
+        <button class="login-btn" bindtap="login">微信登录</button>
       </block>
       <block wx:else>
         <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
@@ -22,13 +14,28 @@
     </view>
   </view>
 
+  <!-- 功能入口区域 -->
+  <view class="function-area">
+    <t-cell-group>
+      <t-cell title="我的购物车" hover arrow bindtap="toShoppingCart" />
+      <t-cell title="我的订单" hover arrow bindtap="toOrders" />
+      <t-cell title="意见反馈" hover arrow bindtap="toFeedback" />
+
+      <!-- 后续需判断用户身份 -->
+      <t-cell  title="生成订单" hover arrow bindtap="toCreateOrder" theme="danger" />
+
+      <t-cell wx:if="{{isAdmin}}" title="生成订单" hover arrow bindtap="toCreateOrder" theme="danger" />
+
+      <t-cell  title="返回首页" hover arrow bindtap="toIndexHome"/>
+
+    </t-cell-group>
+  </view>
 </scroll-view>
-<view class="button-example">
-  <!-- 按钮: 点击触发 onButtonClick 事件 -->
+<!-- <view class="button-example">
     <t-button 
     theme="primary" 
     size="large"
     bind:tap="onButtonClick"
     >首页</t-button>
-</view>
+</view> -->
 <custom-tab-bar></custom-tab-bar>
