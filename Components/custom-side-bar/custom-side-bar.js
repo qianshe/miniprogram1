@@ -95,7 +95,7 @@ Component({
       const { id } = e.currentTarget.dataset;
       console.log(e.currentTarget);
       wx.navigateTo({
-        url: `/pages/goodsDetail/goodsDetail?id=${id}`,
+        url: `/pages/goods/detail/detail?id=${id}`,
         fail: (res) => {
           console.log('跳转失败:', res);
         },

@@ -2,12 +2,11 @@
   "pages": [
     "pages/index_home/index_home",
     "pages/white_system/index/index",
-    "pages/white_system/category/category",
+    "pages/goods/category/category",
     "pages/user/user",
     "pages/red_system/index/index",
-    "pages/red_system/category/category",
     "pages/logs/logs",
-    "pages/goodsDetail/goodsDetail",
+    "pages/goods/detail/detail",
     "pages/cart/cart",
     "pages/feedback/feedback",
     "pages/order/list/list",
@@ -36,7 +35,7 @@
         "text": "首页"
       },
       {
-        "pagePath": "pages/white_system/category/category",
+        "pagePath": "pages/goods/category/category",
         "text": "分类"
       },
       {
@@ -46,10 +45,6 @@
       {
         "pagePath": "pages/red_system/index/index",
         "text": "首页"
-      },
-      {
-        "pagePath": "pages/red_system/category/category",
-        "text": "分类"
       }
     ]
   },

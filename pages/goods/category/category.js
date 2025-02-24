@@ -1,18 +1,18 @@
-// pages/red_system/category/category.js
+// pages/white_system/category/category.js
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    value: 'category',
+    categories: []
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-
   },
 
   /**
@@ -62,5 +62,5 @@ Page({
    */
   onShareAppMessage() {
 
-  }
+  },
 })
