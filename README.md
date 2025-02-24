@@ -1,14 +1,9 @@
-# miniprogram1
-my first miniprogram
 # 殡葬/婚庆服务平台小程序
 
-### 项目简介
-提供红白事流程管理服务的微信小程序，包含以下核心模块：
-- 白事系统（殡葬流程指导）
-- 红事系统（婚庆/庆典流程管理）
-- 商品详情展示
-- 用户中心
+## 项目简介
+提供红白事服务的一站式小程序平台，集成商品展示、购物车、订单管理等功能。
 
+## 项目结构
 ### 核心功能
 #### 白事服务模块
 - 殡葬流程步骤指导（见[`processSteps`](pages/white_system/index/index.js)）
@@ -19,7 +14,7 @@ my first miniprogram
 - 事件步骤跟踪
 
 #### 通用功能
-- 商品详情查看（支持模拟数据展示，见[`getGoodsDetail`](pages/goodsDetail/goodsDetail.js)）
+- 商品详情查看（支持模拟数据展示，见[`getGoodsDetail`](pages/goods/detail/detail.js)）
 - 用户信息管理（见[`userInfo`](pages/user/user.js)）
 - 自定义导航栏（使用[TD组件库](package.json)）
 
