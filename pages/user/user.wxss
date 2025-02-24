@@ -6,7 +6,8 @@ page {
 }
 
 .button-example {
-  margin: 32rpx;
+  margin: 20rpx;
+  padding-bottom: 100rpx;
   display: flex;
   justify-content: space-between;
 }
@@ -17,9 +18,8 @@ page {
 }
 
 .scrollarea {
-  /* flex: 1;
-  overflow-y: hidden; */
-  height: 767rpx; 
+  flex: 1;
+  overflow-y: hidden;
   display: block; 
   box-sizing: border-box
 }
@@ -29,7 +29,7 @@ page {
   flex-direction: column;
   align-items: center;
   color: #aaa;
-  width: 80%;
+  width: 100%;
 }
 
 .userinfo-avatar {
@@ -74,4 +74,62 @@ page {
 
 .nickname-input {
   flex: 1;
+}
+
+.function-area {
+  margin-top: 20rpx;
+  width: 100%;
+  background: #fff;
+}
+
+.function-area .t-cell {
+  padding: 24rpx;
+  font-size: 28rpx;
+}
+
+.login-tip {
+  font-size: 28rpx;
+  color: #999;
+  margin: 20rpx 0;
+}
+
+.login-btn {
+  width: 240rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
+  background: #07c160;
+  color: #fff;
+  border-radius: 40rpx;
+  margin: 20rpx 0;
+  font-size: 28rpx;  /* 添加字体大小 */
+  padding: 0;        /* 重置内边距 */
+  font-weight: normal; /* 重置字体粗细 */
+  border: none;      /* 移除边框 */
+}
+
+.login-btn::after {
+  border: none;      /* 移除点击后的边框 */
+}
+
+.login-btn:active {
+  opacity: 0.8;      /* 点击效果 */
+}
+
+.userinfo-phone {
+  font-size: 26rpx;
+  color: #666;
+  margin: 10rpx 0;
+}
+
+.bind-phone-btn {
+  width: 200rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  font-size: 24rpx;
+  margin-top: 10rpx;
+  background: #f8f8f8;
+  color: #07c160;
+  border: 1rpx solid #07c160;
+  border-radius: 30rpx;
 }

@@ -22,7 +22,7 @@ Component({
               icon: "home"
             },
             {
-              pagePath: "/pages/white_system/category/category",
+              pagePath: "/pages/goods/category/category",
               text: "分类",
               icon: "app"
             },

@@ -2,22 +2,31 @@
   "pages": [
     "pages/index_home/index_home",
     "pages/white_system/index/index",
-    "pages/white_system/category/category",
+    "pages/goods/category/category",
     "pages/user/user",
     "pages/red_system/index/index",
-    "pages/red_system/category/category",
     "pages/logs/logs",
-    "pages/goodsDetail/goodsDetail"
+    "pages/goods/detail/detail",
+    "pages/cart/cart",
+    "pages/feedback/feedback",
+    "pages/order/list/list",
+    "pages/order/detail/detail",
+    "pages/order/confirm/confirm",
+    "pages/order/create/create"
   ],
   "window": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "Weixin",
-    "navigationBarBackgroundColor": "#ffffff"
+    "navigationBarBackgroundColor": "#ffffff",
+    "backgroundTextStyle": "light"
   },
   "componentFramework": "glass-easel",
   "sitemapLocation": "sitemap.json",
   "lazyCodeLoading": "requiredComponents",
- 
+  "useExtendedLib": {
+    "weui": true
+  },
+  "miniVersion": "0.0.1",
   "tabBar": {
     "custom": true,
     "list": [
@@ -26,9 +35,9 @@
         "text": "首页"
       },
       {
-        "pagePath": "pages/white_system/category/category",
+        "pagePath": "pages/goods/category/category",
         "text": "分类"
-      }, 
+      },
       {
         "pagePath": "pages/user/user",
         "text": "个人中心"
@@ -36,10 +45,6 @@
       {
         "pagePath": "pages/red_system/index/index",
         "text": "首页"
-      },
-      {
-        "pagePath": "pages/red_system/category/category",
-        "text": "分类"
       }
     ]
   },

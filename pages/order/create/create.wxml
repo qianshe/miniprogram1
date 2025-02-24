@@ -1,0 +1,74 @@
+<wxs src="../../../utils/tools.wxs" module="tools" />
+<!--pages/create-order/create-order.wxml-->
+<view class="create-order-container">
+  <t-cell-group title="订单信息">
+    <t-input
+      label="客户名称"
+      placeholder="请输入客户名称"
+      bind:change="onCustomerNameChange"
+      value="{{customerName}}"
+    />
+    <t-input
+      label="联系电话"
+      placeholder="请输入联系电话"
+      bind:change="onPhoneChange"
+      value="{{phone}}"
+    />
+    <view class="product-actions">
+      <t-cell title="选择商品" hover arrow bind:tap="showProductSelector" />
+    </view>
+  </t-cell-group>
+
+  <view class="product-list" wx:if="{{selectedProducts.length}}">
+    <view class="product-item" wx:for="{{selectedProducts}}" wx:key="id">
+      <text class="product-name">{{item.name}}</text>
+      <view class="quantity-control">
+        <t-icon name="remove" size="20" bind:tap="decreaseQuantity" data-index="{{index}}" />
+        <text>{{item.quantity}}</text>
+        <t-icon name="add" size="20" bind:tap="increaseQuantity" data-index="{{index}}" />
+      </view>
+      <text class="product-price">￥{{tools.formatPrice(item.price * item.quantity)}}</text>
+      <t-icon class="remove-btn" name="close" size="20" bind:tap="removeProduct" data-index="{{index}}" />
+    </view>
+  </view>
+
+  <!-- 调试输出框 -->
+  <view class="debug-box" wx:if="{{debugText}}">
+    <view class="debug-header">
+      <text class="debug-title">调试输出:</text>
+      <t-button size="small" variant="text" bind:tap="copyDebugText">复制</t-button>
+    </view>
+    <text class="debug-content" selectable="true">{{debugText}}</text>
+  </view>
+
+  <!-- 底部固定按钮 -->
+  <view class="bottom-bar">
+    <t-button 
+      class="voice-btn" 
+      theme="primary" 
+      size="small"
+      variant="outline"
+      icon="mic"
+      bind:tap="startVoiceInput"
+    >语音</t-button>
+    <view class="total-amount">
+      <text>合计：</text>
+      <text class="amount">￥{{totalAmount}}</text>
+    </view>
+    <t-button theme="primary" bind:tap="createOrder">创建订单</t-button>
+  </view>
+</view>
+
+<!-- 商品选择弹出层 -->
+<t-popup visible="{{showProductSelector}}" bind:visible-change="onPopupChange">
+  <view class="popup-content">
+    <t-search model:value="{{searchValue}}" placeholder="搜索商品" bind:change="onSearchChange" />
+    <scroll-view scroll-y class="product-scroll">
+      <view class="product-option" wx:for="{{filteredProducts}}" wx:key="id" 
+            bind:tap="selectProduct" data-product="{{item}}">
+        <text>{{item.name}}</text>
+        <text>￥{{tools.formatPrice(item.price)}}</text>
+      </view>
+    </scroll-view>
+  </view>
+</t-popup>

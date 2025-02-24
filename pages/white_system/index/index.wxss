@@ -1,11 +1,13 @@
 /* pages/white_system/white_system.wxss */
 .page {
   padding: 20px;
-  background-color: #f0f0f0; /* 更改背景颜色为浅灰色 */
   /* 高度直接填充满 */
   height: 100%;
   box-sizing: border-box; 
-  display: block
+  display: block;
+  overflow-y: auto;
+  /* 添加底部安全距离，预留tabBar高度 */
+  padding-bottom: calc(20px + 48px); /* 原有padding + tabBar高度 */
 }
 
 .process-step {

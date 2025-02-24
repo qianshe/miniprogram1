@@ -1,3 +1,4 @@
+<view class="page">
 
 <view class="example-search">
   <t-search placeholder="搜索预设文案" />
@@ -13,7 +14,6 @@
 />
 </view>
 
-<view class="page">
   <block wx:for="{{processSteps}}" wx:key="index">
     <view class="process-step" >
       <text class="process-step-title">{{item.title}}</text>
