@@ -1,0 +1,54 @@
+<view class="container" wx:if="{{!loading && order}}">
+  <view class="status-bar">
+    <text class="status-text">{{statusMap[order.status]}}</text>
+  </view>
+
+  <view class="section address-section">
+    <view class="section-title">收货信息</view>
+    <view class="address-info">
+      <view class="user-info">
+        <text>{{order.address.userName}}</text>
+        <text>{{order.address.telNumber}}</text>
+      </view>
+      <view class="address-detail">{{order.address.fullAddress}}</view>
+    </view>
+  </view>
+
+  <view class="section goods-section">
+    <view class="section-title">商品信息</view>
+    <view class="goods-list">
+      <view class="goods-item" wx:for="{{order.items}}" wx:key="id">
+        <image class="goods-image" src="{{item.image}}" mode="aspectFill"></image>
+        <view class="goods-info">
+          <text class="goods-name">{{item.name}}</text>
+          <view class="goods-price-quantity">
+            <text class="goods-price">¥{{item.price}}</text>
+            <text class="goods-quantity">x{{item.quantity}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section order-info-section">
+    <view class="section-title">订单信息</view>
+    <view class="info-item">
+      <text class="label">订单编号</text>
+      <text class="value">{{order.id}}</text>
+    </view>
+    <view class="info-item">
+      <text class="label">创建时间</text>
+      <text class="value">{{order.createTime}}</text>
+    </view>
+    <view class="info-item">
+      <text class="label">备注</text>
+      <text class="value">{{order.remarks || '无'}}</text>
+    </view>
+  </view>
+
+  <view class="footer">
+    <view class="total-amount">
+      合计：<text class="amount">¥{{order.totalAmount}}</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,55 @@
+<view class="container">
+  <!-- 收货地址 -->
+  <view class="address-section" bindtap="selectAddress">
+    <view wx:if="{{address}}" class="address-info">
+      <view class="user-info">
+        <text>{{address.userName}}</text>
+        <text>{{address.telNumber}}</text>
+      </view>
+      <view class="address-detail">{{address.fullAddress}}</view>
+    </view>
+    <view wx:else class="no-address">
+      点击选择收货地址
+    </view>
+    <view class="arrow">></view>
+  </view>
+
+  <!-- 商品列表 -->
+  <view class="goods-list">
+    <view class="goods-item" wx:for="{{orderItems}}" wx:key="id">
+      <image class="goods-image" src="{{item.image}}" mode="aspectFill"></image>
+      <view class="goods-info">
+        <text class="goods-name">{{item.name}}</text>
+        <view class="goods-price-quantity">
+          <text class="goods-price">¥{{item.price}}</text>
+          <text class="goods-quantity">x{{item.quantity}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 备注 -->
+  <view class="remarks-section">
+    <input 
+      type="text" 
+      placeholder="请输入订单备注" 
+      value="{{remarks}}"
+      bindinput="onRemarksChange"
+    />
+  </view>
+
+  <!-- 底部结算栏 -->
+  <view class="footer">
+    <view class="total-amount">
+      合计：<text class="amount">¥{{totalAmount}}</text>
+    </view>
+    <button 
+      class="submit-btn" 
+      bindtap="submitOrder" 
+      loading="{{loading}}"
+      disabled="{{loading}}"
+    >
+      提交订单
+    </button>
+  </view>
+</view>

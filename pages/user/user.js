@@ -82,7 +82,7 @@ Page({
   // 跳转到订单列表页面
   toOrders() {
     wx.navigateTo({
-      url: '/pages/orders/orders'
+      url: '/pages/order/list/list'
     });
   },
 
@@ -97,7 +97,7 @@ Page({
   toCreateOrder() {
     if (this.data.isAdmin) {
       wx.navigateTo({
-        url: '/pages/create-order/create-order'
+        url: '/pages/order/create/create'
       });
     } else {
       wx.showToast({
@@ -105,7 +105,7 @@ Page({
         icon: 'none'
       });
       wx.navigateTo({
-        url: '/pages/create-order/create-order'
+        url: '/pages/order/create/create'
       });
 
     }

@@ -9,9 +9,11 @@
     "pages/logs/logs",
     "pages/goodsDetail/goodsDetail",
     "pages/cart/cart",
-    "pages/orders/orders",
     "pages/feedback/feedback",
-    "pages/create-order/create-order"
+    "pages/order/list/list",
+    "pages/order/detail/detail",
+    "pages/order/confirm/confirm",
+    "pages/order/create/create"
   ],
   "window": {
     "navigationBarTextStyle": "black",

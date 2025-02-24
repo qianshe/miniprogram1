@@ -1,4 +1,4 @@
-<wxs src="../../utils/tools.wxs" module="tools" />
+<wxs src="../../../utils/tools.wxs" module="tools" />
 <!--pages/create-order/create-order.wxml-->
 <view class="create-order-container">
   <t-cell-group title="订单信息">

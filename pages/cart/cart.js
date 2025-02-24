@@ -176,7 +176,13 @@ Page({
     setTimeout(() => {
       wx.hideLoading()
       wx.navigateTo({
-        url: '../create-order/create-order',
+        url: '../order/confirm/confirm',  // 更新路径
+        success: (res) => {
+          res.eventChannel.emit('acceptDataFromCart', { 
+            selectedItems,
+            totalAmount: this.data.totalAmount
+          })
+        },
         fail: () => {
           wx.showToast({
             title: '页面跳转失败',
