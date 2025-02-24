@@ -1,10 +1,25 @@
-<!--pages/white_system/white_system.wxml-->
-<tabBar></tabBar>
 <view class="page">
+
+<view class="example-search">
+  <t-search placeholder="搜索预设文案" />
+</view>
+<view class="swiper">
+  <t-swiper
+  current="{{current}}"
+  autoplay="{{autoplay}}"
+  duration="{{duration}}"
+  interval="{{interval}}"
+  list="{{swiperList}}"
+  navigation="{{ { type: 'dots-bar' } }}"
+/>
+</view>
+
   <block wx:for="{{processSteps}}" wx:key="index">
-    <view class="process-step">
+    <view class="process-step" >
       <text class="process-step-title">{{item.title}}</text>
       <text class="process-step-content">{{item.content}}</text>
     </view>
   </block>
 </view>
+
+<custom-tab-bar></custom-tab-bar>

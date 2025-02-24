@@ -12,14 +12,63 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    const imageCdn = 'https://tdesign.gtimg.com/mobile/demos';
+    const swiperList = [{
+        value: `${imageCdn}/swiper1.png`,
+        ariaLabel: '图片1',
+      },
+      {
+        value: `${imageCdn}/swiper2.png`,
+        ariaLabel: '图片2',
+      },
+      {
+        value: `${imageCdn}/swiper1.png`,
+        ariaLabel: '图片1',
+      },
+      {
+        value: `${imageCdn}/swiper2.png`,
+        ariaLabel: '图片2',
+      },
+    ];
+
+    // 设置白事流程步骤
+    // 后续从服务端获取
+    const Steps = [{
+      title: '第一步',
+      content: '联系殡仪馆'
+    },
+    {
+      title: '第二步',
+      content: '准备相关证件'
+    },
+    {
+      title: '第三步',
+      content: '办理丧葬手续'
+    },
+    {
+      title: '第四步',
+      content: '安排追悼会'
+    },
+    {
+      title: '第五步',
+      content: '火化及安葬'
+    },
+    {
+      title: '第六步',
+      content: '安葬'
+    },
+    {
+      title: '第七步',
+      content: '安葬'
+    },
+  ]
     this.setData({
-      processSteps: [
-        { title: '第一步', content: '联系殡仪馆' },
-        { title: '第二步', content: '准备相关证件' },
-        { title: '第三步', content: '办理丧葬手续' },
-        { title: '第四步', content: '安排追悼会' },
-        { title: '第五步', content: '火化及安葬' }
-      ]
+      processSteps: Steps,
+      current: 1,
+      autoplay: true,
+      duration: 500,
+      interval: 5000,
+      swiperList: swiperList
     });
   },
 

@@ -1,0 +1,29 @@
+<!--index.wxml-->
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="container">
+    <view class="userinfo">
+      <block wx:if="{{!hasUserInfo}}">
+        <image class="userinfo-avatar" src="/images/default-avatar.png"></image>
+        <text class="login-tip">您还未登录</text>
+        <button class="login-btn" bindtap="login">微信一键登录</button>
+      </block>
+      <block wx:else>
+        <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+        <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+      </block>
+    </view>
+  </view>
+
+  <view class="function-area" wx:if="{{hasUserInfo}}">
+    <t-cell-group>
+      <t-cell title="我的购物车" hover arrow bindtap="toShoppingCart" />
+      <t-cell title="我的订单" hover arrow bindtap="toOrders" />
+      <t-cell title="意见反馈" hover arrow bindtap="toFeedback" />
+      <t-cell title="生成订单" hover arrow bindtap="toCreateOrder" theme="danger" />
+
+      <t-cell wx:if="{{isAdmin}}" title="生成订单" hover arrow bindtap="toCreateOrder" theme="danger" />
+      <t-cell title="返回首页" hover arrow bindtap="toIndexHome"/>
+    </t-cell-group>
+  </view>
+</scroll-view>
+<custom-tab-bar></custom-tab-bar>

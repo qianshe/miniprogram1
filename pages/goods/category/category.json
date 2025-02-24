@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "custom-side-bar": "../../../Components/custom-side-bar/custom-side-bar"
+  },
+  "navigationBarTitleText": "分类商城"
+}

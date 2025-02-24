@@ -1,0 +1,21 @@
+<view class="container">
+  <swiper class="goods-swiper" indicator-dots="true" autoplay="true">
+    <swiper-item wx:for="{{goodsInfo.images}}" wx:key="index">
+      <image src="{{item}}" mode="aspectFill" />
+    </swiper-item>
+  </swiper>
+
+  <view class="goods-info">
+    <view class="goods-title">{{goodsInfo.name}}</view>
+    <view class="goods-price">¥{{goodsInfo.price}}</view>
+    <view class="goods-desc">{{goodsInfo.description}}</view>
+  </view>
+
+  <view class="promotion-section">
+    <rich-text nodes="{{goodsInfo.promotion}}"></rich-text>
+  </view>
+
+  <view class="bottom-bar">
+    <button class="add-cart" bindtap="addToCart">加入购物车</button>
+  </view>
+</view>

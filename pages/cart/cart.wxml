@@ -1,0 +1,60 @@
+<view class="cart-container">
+  <!-- 加载状态 -->
+  <view class="loading-container" wx:if="{{loading}}">
+    <loading>加载中...</loading>
+  </view>
+
+  <!-- 空购物车提示 -->
+  <view class="empty-cart" wx:if="{{!cartItems.length && !loading}}">
+    <image 
+      src="https://tdesign.gtimg.com/mobile/demos/example3.png" 
+      mode="aspectFit">
+    </image>
+    <text>购物车是空的</text>
+  </view>
+
+  <!-- 购物车列表 -->
+  <view class="cart-list" wx:elif="{{cartItems.length}}">
+    <view class="cart-item" wx:for="{{cartItems}}" wx:key="id">
+      <view class="checkbox" bindtap="toggleSelect" data-index="{{index}}">
+        <icon type="success" size="20" color="{{item.selected ? '#07c160' : '#ddd'}}"/>
+      </view>
+      <image 
+        class="item-image" 
+        src="{{item.image}}" 
+        mode="aspectFill">
+      </image>
+      <view class="item-info">
+        <text class="item-name">{{item.name}}</text>
+        <text class="item-price">¥{{item.price}}</text>
+        <view class="quantity-control">
+          <view class="btn-decrease {{item.quantity <= minQuantity ? 'disabled' : ''}}" 
+                bindtap="decreaseQuantity" 
+                data-index="{{index}}">-</view>
+          <text class="quantity">{{item.quantity}}</text>
+          <view class="btn-increase {{item.quantity >= maxQuantity ? 'disabled' : ''}}" 
+                bindtap="increaseQuantity" 
+                data-index="{{index}}">+</view>
+        </view>
+      </view>
+      <view class="delete-btn" bindtap="deleteItem" data-index="{{index}}">
+        <icon type="clear" size="20" color="#999"/>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部结算栏 -->
+  <view class="footer" wx:if="{{cartItems.length}}">
+    <view class="select-all" bindtap="toggleSelectAll">
+      <icon type="success" size="20" color="{{allSelected ? '#07c160' : '#ddd'}}"/>
+      <text>全选</text>
+    </view>
+    <view class="total-info">
+      <text>合计：</text>
+      <text class="total-price">¥{{totalAmount}}</text>
+    </view>
+    <view class="checkout-btn {{selectedCount ? 'active' : ''}}" bindtap="checkout">
+      结算({{selectedCount}})
+    </view>
+  </view>
+</view>

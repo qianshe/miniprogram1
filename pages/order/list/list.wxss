@@ -1,0 +1,175 @@
+.orders-container {
+  padding: 20rpx;
+  background: #f6f6f6;
+  min-height: 100vh;
+}
+
+.custom-tabs {
+  background: #fff;
+  margin-bottom: 20rpx;
+}
+
+.order-list {
+  margin-top: 20rpx;
+  height: calc(100vh - 200rpx);
+  padding-bottom: 40rpx;
+}
+
+.order-item {
+  background: #fff;
+  border-radius: 12rpx;
+  margin-bottom: 20rpx;
+  padding: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.05);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.order-no {
+  color: #666;
+  font-size: 26rpx;
+}
+
+.order-status {
+  color: #e4393c;
+  font-size: 28rpx;
+}
+
+/* 添加不同状态的颜色 */
+.status-pending {
+  color: #e4393c;  /* 待付款-红色 */
+}
+
+.status-paid {
+  color: #e4393c;  /* 待发货-红色 */
+}
+
+.status-shipping {
+  color: #07c160;  /* 已发货-绿色 */
+}
+
+.status-completed {
+  color: #999;  /* 已完成-灰色 */
+}
+
+.status-cancelled {
+  color: #999;  /* 已取消-灰色 */
+}
+
+.goods-list {
+  padding: 20rpx 0;
+}
+
+.goods-item {
+  display: flex;
+  margin-bottom: 20rpx;
+}
+
+.goods-item image {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 8rpx;
+}
+
+.goods-info {
+  flex: 1;
+  margin-left: 20rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.goods-info .name {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.goods-info .price {
+  font-size: 26rpx;
+  color: #ff4d4f;
+  margin-top: 10rpx;
+}
+
+.goods-info .quantity {
+  font-size: 26rpx;
+  color: #999;
+  margin-top: 10rpx;
+}
+
+.t-cell-group {
+  margin-bottom: 20rpx;
+  border-radius: 12rpx;
+}
+
+.container {
+  padding: 20rpx;
+  background: #f8f8f8;
+  min-height: 100vh;
+}
+
+.order-id {
+  color: #666;
+  font-size: 28rpx;
+}
+
+.goods-image {
+  width: 120rpx;
+  height: 120rpx;
+  margin-right: 20rpx;
+  border-radius: 8rpx;
+}
+
+.goods-name {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.goods-price-quantity {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.goods-price {
+  color: #e4393c;
+  font-weight: bold;
+}
+
+.goods-quantity {
+  color: #999;
+  font-size: 26rpx;
+}
+
+.order-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 20rpx;
+  border-top: 1rpx solid #eee;
+}
+
+.order-time {
+  color: #999;
+  font-size: 24rpx;
+}
+
+.order-total {
+  font-size: 28rpx;
+}
+
+.amount {
+  color: #e4393c;
+  font-weight: bold;
+}
+
+.no-data {
+  text-align: center;
+  color: #999;
+  padding: 40rpx 0;
+}

@@ -12,25 +12,29 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    // 模拟数据, 从后端获取数据
+    const event = [
+      {
+        name: '婚礼',
+        steps: [
+          { title: '迎宾', description: '宾客到达并签到' },
+          { title: '仪式', description: '婚礼仪式开始' },
+          { title: '宴会', description: '婚宴开始' }
+        ]
+      },
+      {
+        name: '满月酒',
+        steps: [
+          { title: '迎宾', description: '宾客到达并签到' },
+          { title: '宴会', description: '满月酒宴会开始' }
+        ]
+      }
+    ]
     this.setData({
-      events: [
-        {
-          name: '婚礼',
-          steps: [
-            { title: '迎宾', description: '宾客到达并签到' },
-            { title: '仪式', description: '婚礼仪式开始' },
-            { title: '宴会', description: '婚宴开始' }
-          ]
-        },
-        {
-          name: '满月酒',
-          steps: [
-            { title: '迎宾', description: '宾客到达并签到' },
-            { title: '宴会', description: '满月酒宴会开始' }
-          ]
-        }
-      ]
+      events: event
     });
+    const app = getApp()
+    app.globalData.systemType = 'red' // 设置当前为红事系统
   },
 
   /**
@@ -42,10 +46,9 @@ Page({
 
   /**
    * 生命周期函数--监听页面显示
-   */  
+   */
   onShow() {
-    const app = getApp()
-    app.globalData.systemType = 'red' // 设置当前为红事系统
+
   },
 
   /**

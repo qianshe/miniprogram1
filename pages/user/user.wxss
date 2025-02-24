@@ -1,0 +1,135 @@
+/**index.wxss**/
+page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.button-example {
+  margin: 20rpx;
+  padding-bottom: 100rpx;
+  display: flex;
+  justify-content: space-between;
+}
+
+.button-example:after {
+  content: '';
+  flex: auto;
+}
+
+.scrollarea {
+  flex: 1;
+  overflow-y: hidden;
+  display: block; 
+  box-sizing: border-box
+}
+
+.userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #aaa;
+  width: 100%;
+}
+
+.userinfo-avatar {
+  overflow: hidden;
+  width: 128rpx;
+  height: 128rpx;
+  margin: 20rpx;
+  border-radius: 50%;
+}
+
+.usermotto {
+  margin-top: 200px;
+}
+
+.avatar-wrapper {
+  padding: 0;
+  width: 56px !important;
+  border-radius: 8px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.avatar {
+  display: block;
+  width: 56px;
+  height: 56px;
+}
+
+.nickname-wrapper {
+  display: flex;
+  width: 100%;
+  padding: 16px;
+  box-sizing: border-box;
+  border-top: .5px solid rgba(0, 0, 0, 0.1);
+  border-bottom: .5px solid rgba(0, 0, 0, 0.1);
+  color: black;
+}
+
+.nickname-label {
+  width: 105px;
+}
+
+.nickname-input {
+  flex: 1;
+}
+
+.function-area {
+  margin-top: 20rpx;
+  width: 100%;
+  background: #fff;
+}
+
+.function-area .t-cell {
+  padding: 24rpx;
+  font-size: 28rpx;
+}
+
+.login-tip {
+  font-size: 28rpx;
+  color: #999;
+  margin: 20rpx 0;
+}
+
+.login-btn {
+  width: 240rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
+  background: #07c160;
+  color: #fff;
+  border-radius: 40rpx;
+  margin: 20rpx 0;
+  font-size: 28rpx;  /* 添加字体大小 */
+  padding: 0;        /* 重置内边距 */
+  font-weight: normal; /* 重置字体粗细 */
+  border: none;      /* 移除边框 */
+}
+
+.login-btn::after {
+  border: none;      /* 移除点击后的边框 */
+}
+
+.login-btn:active {
+  opacity: 0.8;      /* 点击效果 */
+}
+
+.userinfo-phone {
+  font-size: 26rpx;
+  color: #666;
+  margin: 10rpx 0;
+}
+
+.bind-phone-btn {
+  width: 200rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  font-size: 24rpx;
+  margin-top: 10rpx;
+  background: #f8f8f8;
+  color: #07c160;
+  border: 1rpx solid #07c160;
+  border-radius: 30rpx;
+}

@@ -1,7 +1,13 @@
 /* pages/white_system/white_system.wxss */
 .page {
   padding: 20px;
-  background-color: #f0f0f0; /* 更改背景颜色为浅灰色 */
+  /* 高度直接填充满 */
+  height: 100%;
+  box-sizing: border-box; 
+  display: block;
+  overflow-y: auto;
+  /* 添加底部安全距离，预留tabBar高度 */
+  padding-bottom: calc(20px + 48px); /* 原有padding + tabBar高度 */
 }
 
 .process-step {
@@ -11,6 +17,19 @@
   border-radius: 8px;
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.example-search .swiper{
+  background-color: var(--bg-color-demo);
+  padding: 16rpx 32rpx;
+}
+
+.example-search:not(:last-child) {
+  margin-bottom: 32rpx;
+}
+
+.img {
+  width: 100%;
+  height: 100%;
 }
 
 .process-step-title {
