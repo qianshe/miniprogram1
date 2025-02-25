@@ -2,6 +2,7 @@
 miniprogram_npm/
 node_modules/
 .idea/
+.vscode/
 # 默认忽略的文件
 shelf/
 workspace.xml
