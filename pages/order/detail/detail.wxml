@@ -4,13 +4,13 @@
   </view>
 
   <view class="section address-section">
-    <view class="section-title">收货信息</view>
+    <view class="section-title">联系信息</view>
     <view class="address-info">
       <view class="user-info">
-        <text>{{order.address.userName}}</text>
-        <text>{{order.address.telNumber}}</text>
+        <text>{{order.contactName}}</text>
+        <text>{{order.contactPhone}}</text>
       </view>
-      <view class="address-detail">{{order.address.fullAddress}}</view>
+      <view class="address-detail">{{order.address}}</view>
     </view>
   </view>
 
@@ -34,21 +34,25 @@
     <view class="section-title">订单信息</view>
     <view class="info-item">
       <text class="label">订单编号</text>
-      <text class="value">{{order.id}}</text>
+      <text class="value">{{order.orderNo}}</text>
+    </view>
+    <view class="info-item">
+      <text class="label">服务时间</text>
+      <text class="value">{{order.displayServiceTime}}</text>
     </view>
     <view class="info-item">
       <text class="label">创建时间</text>
-      <text class="value">{{order.createTime}}</text>
+      <text class="value">{{order.displayCreatedTime}}</text>
     </view>
     <view class="info-item">
       <text class="label">备注</text>
-      <text class="value">{{order.remarks || '无'}}</text>
+      <text class="value">{{order.remark || '无'}}</text>
     </view>
   </view>
 
   <view class="footer">
     <view class="total-amount">
-      合计：<text class="amount">¥{{order.totalAmount}}</text>
+      合计：<text class="amount">¥{{order.displayAmount}}</text>
     </view>
   </view>
 </view>
