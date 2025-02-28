@@ -1,4 +1,4 @@
-// pages/create-order/create-order.js
+const request = require('../../../utils/request.js');
 
 Page({
   data: {
@@ -11,7 +11,13 @@ Page({
     filteredProducts: [],
     products: [], // 商品列表
     recording: false,
-    debugText: '' // 添加调试文本字段
+    debugText: '', // 添加调试文本字段
+    productsLoading: false,
+    productsPagination: {
+      page: 1,
+      size: 20,
+      hasMore: true
+    }
   },
 
   onCustomerNameChange(e) {
@@ -32,10 +38,15 @@ Page({
 
   onSearchChange(e) {
     const searchValue = e.detail.value.toLowerCase()
-    const filtered = this.data.products.filter(p => 
-      p.name.toLowerCase().includes(searchValue)
-    )
-    this.setData({ filteredProducts: filtered })
+    // 重置分页
+    this.setData({
+      searchValue,
+      'productsPagination.page': 1,
+      products: [],
+      filteredProducts: []
+    }, () => {
+      this.loadProducts();
+    });
   },
 
   selectProduct(e) {
@@ -154,21 +165,59 @@ Page({
   },
 
   onLoad(options) {
-    this.loadProducts()
+    this.loadProducts();
   },
 
-  loadProducts() {
-    // 模拟商品数据
-    const mockProducts = [
-      { id: 1, name: '苹果', price: 5.99, stock: 100 },
-      { id: 2, name: '香蕉', price: 3.99, stock: 150 },
-      { id: 3, name: '橙子', price: 4.99, stock: 80 }
-    ];
+  // 加载商品列表
+  async loadProducts(isLoadMore = false) {
+    if (this.data.productsLoading) return;
     
-    this.setData({
-      products: mockProducts,
-      filteredProducts: mockProducts
-    });
+    try {
+      this.setData({ productsLoading: true });
+      const { page, size } = this.data.productsPagination;
+
+      const res = await request.get('/api/products', {
+        page,
+        size,
+        // 如果有搜索关键词，添加搜索参数
+        ...(this.data.searchValue ? { keyword: this.data.searchValue } : {})
+      });
+
+      if (res.code === 200 && res.data) {
+        const formattedProducts = res.data.records.map(product => ({
+          id: product.id,
+          name: product.name,
+          price: (product.price / 100).toFixed(2),
+          stock: product.stock
+        }));
+
+        this.setData({
+          products: isLoadMore ? [...this.data.products, ...formattedProducts] : formattedProducts,
+          filteredProducts: isLoadMore ? [...this.data.filteredProducts, ...formattedProducts] : formattedProducts,
+          'productsPagination.hasMore': res.data.total > page * size,
+          productsLoading: false
+        });
+      }
+    } catch (err) {
+      console.error('加载商品列表失败:', err);
+      wx.showToast({
+        title: '加载商品失败',
+        icon: 'none'
+      });
+    } finally {
+      this.setData({ productsLoading: false });
+    }
+  },
+
+  // 加载更多商品
+  onLoadMoreProducts() {
+    if (this.data.productsPagination.hasMore && !this.data.productsLoading) {
+      this.setData({
+        'productsPagination.page': this.data.productsPagination.page + 1
+      }, () => {
+        this.loadProducts(true);
+      });
+    }
   },
 
   onReady() {

@@ -1,89 +1,117 @@
-import { errorHandler } from '../../../utils/errorHandler';
 const request = require('../../../utils/request.js');
 
 Page({
   data: {
     orders: [],
-    loading: false,
-    currentTab: '0',
-    statusMap: {
-      0: '待支付',
-      1: '已支付',
-      2: '已取消',
-      3: '已退款'
-    },
+    loading: true,
     pagination: {
-      current: 1,
+      page: 1,
       size: 10,
       total: 0
-    }
+    },
+    hasMore: true,
+    activeTab: '0', // 添加当前激活的标签页
   },
 
   onLoad() {
     this.loadOrders();
   },
 
-  onShow() {
-    this.loadOrders(this.data.currentTab);
-  },
-
   onTabsChange(e) {
     const { value } = e.detail;
-    this.setData({ 
-      currentTab: value 
+    this.setData({
+      activeTab: value,
+      'pagination.page': 1,  // 重置页码
+      orders: [],  // 清空当前订单列表
+      loading: true
+    }, () => {
+      this.loadOrders();  // 重新加载订单
     });
-    this.loadOrders(value);
   },
 
-  loadOrders(status = '0') {
-    this.setData({ loading: true });
-    
-    const params = {
-      current: this.data.pagination.current,
-      size: this.data.pagination.size
-    };
-    
-    // 根据tab更新查询状态
-    if (status === '1') { // 待付款tab
-      params.status = 0;  // 查询待支付状态
-    } else if (status === '2') { // 已完成tab
-      params.status = 1;  // 查询已支付状态
+  async loadOrders(isLoadMore = false) {
+    if (!isLoadMore) {
+      this.setData({ loading: true });
     }
 
-    request.get('/api/orders/user/1', params)
-      .then(res => {
-        if (res.code === 200 && res.data) {
-          const orders = res.data.records.map(order => ({
-            ...order,
-            statusText: this.data.statusMap[order.status],
-            displayTime: order.serviceTime.split('T')[0],
-            displayAmount: (order.totalAmount / 100).toFixed(2)
-          }));
+    try {
+      const { page, size } = this.data.pagination;
+      // 根据标签页状态过滤订单
+      const status = this.getStatusByTab(this.data.activeTab);
+      
+      const params = {
+        page,
+        size,
+        ...(status !== undefined ? { status } : {})  // 如果不是"全部"标签，添加状态过滤
+      };
 
-          this.setData({
-            orders,
-            'pagination.total': res.data.total,
-            'pagination.current': res.data.current,
-            loading: false
-          });
-        } else {
-          throw new Error(res.message || '获取订单列表失败');
-        }
-      })
-      .catch((err) => {
-        wx.showToast({
-          title: err.message || '获取订单列表失败',
-          icon: 'none'
+      const res = await request.get(`/api/orders/user/1`, params);
+
+      if (res.code === 200 && res.data) {
+        const { records, total } = res.data;
+        const formattedOrders = records.map(order => ({
+          ...order,
+          statusText: this.getStatusText(order.status),
+          createdTime: this.formatDate(order.createdTime),
+          serviceTime: this.formatDate(order.serviceTime),
+          totalAmount: (order.totalAmount / 100).toFixed(2)
+        }));
+
+        this.setData({
+          orders: isLoadMore ? [...this.data.orders, ...formattedOrders] : formattedOrders,
+          'pagination.total': total,
+          hasMore: page * size < total,
+          loading: false
         });
-        this.setData({ loading: false });
+      }
+    } catch (err) {
+      wx.showToast({
+        title: '加载订单失败',
+        icon: 'none'
       });
+    } finally {
+      this.setData({ loading: false });
+    }
   },
 
-  onOrderTap(e) {
-    const { orderid } = e.currentTarget.dataset;
+  getStatusText(status) {
+    const statusMap = {
+      0: '待支付',
+      1: '已支付',
+      2: '已取消',
+      3: '已退款'
+    };
+    return statusMap[status] || '未知状态';
+  },
+
+  getStatusByTab(tab) {
+    const statusMap = {
+      '0': undefined, // 全部
+      '1': 0,        // 待支付
+      '2': 1         // 已支付
+    };
+    return statusMap[tab];
+  },
+
+  formatDate(dateStr) {
+    if (!dateStr) return '';
+    return dateStr.split('T')[0];
+  },
+
+  onReachBottom() {
+    if (this.data.hasMore) {
+      this.setData({
+        'pagination.page': this.data.pagination.page + 1
+      }, () => {
+        this.loadOrders(true);
+      });
+    }
+  },
+
+  onOrderClick(e) {
+    const { orderno } = e.currentTarget.dataset;
     wx.navigateTo({
-      url: `../detail/detail?id=${orderid}`,
-      fail: errorHandler
+      url: `/pages/order/detail/detail?orderNo=${orderno}`
     });
   }
 });
