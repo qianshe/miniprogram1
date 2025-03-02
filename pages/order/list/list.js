@@ -37,12 +37,12 @@ Page({
     try {
       const { page, size } = this.data.pagination;
       // 根据标签页状态过滤订单
-      const status = this.getStatusByTab(this.data.activeTab);
+      const orderStatus = this.getStatusByTab(this.data.activeTab);
       
       const params = {
         page,
         size,
-        ...(status !== undefined ? { status } : {})  // 如果不是"全部"标签，添加状态过滤
+        ...(orderStatus !== undefined ? { orderStatus } : {})  // 使用新的 orderStatus 参数
       };
 
       const res = await request.get(`/api/orders/user/1`, params);
@@ -88,7 +88,9 @@ Page({
     const statusMap = {
       '0': undefined, // 全部
       '1': 0,        // 待支付
-      '2': 1         // 已支付
+      '2': 1,        // 已支付
+      '3': 2,        // 已取消
+      '4': 3         // 已退款
     };
     return statusMap[tab];
   },
