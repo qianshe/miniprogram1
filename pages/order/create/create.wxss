@@ -244,3 +244,12 @@
   color: #ff4d4f;
   margin-left: 10rpx;
 }
+
+.loading-tips,
+.no-more-tips,
+.empty-tips {
+  text-align: center;
+  padding: 20rpx;
+  color: #999;
+  font-size: 28rpx;
+}

@@ -52,3 +52,23 @@ page .round-image {
   font-family: 'MyFont';
   src: url('/assets/fonts/t.woff') format('woff');
 }
+
+.loading {
+  text-align: center;
+  padding: 40rpx;
+  color: #999;
+  font-size: 28rpx;
+}
+
+.price {
+  color: #e34d59;
+  font-size: 24rpx;
+  margin-top: 4rpx;
+}
+
+.load-more {
+  text-align: center;
+  padding: 20rpx 0;
+  color: #999;
+  font-size: 24rpx;
+}

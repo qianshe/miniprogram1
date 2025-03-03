@@ -63,11 +63,27 @@
 <t-popup visible="{{showProductSelector}}" bind:visible-change="onPopupChange">
   <view class="popup-content">
     <t-search model:value="{{searchValue}}" placeholder="搜索商品" bind:change="onSearchChange" />
-    <scroll-view scroll-y class="product-scroll">
-      <view class="product-option" wx:for="{{filteredProducts}}" wx:key="id" 
-            bind:tap="selectProduct" data-product="{{item}}">
-        <text>{{item.name}}</text>
-        <text>￥{{tools.formatPrice(item.price)}}</text>
+    <scroll-view 
+      scroll-y 
+      class="product-scroll" 
+      bindscrolltolower="onLoadMoreProducts"
+    >
+      <block wx:if="{{filteredProducts.length > 0}}">
+        <view class="product-option" 
+              wx:for="{{filteredProducts}}" 
+              wx:key="id" 
+              bind:tap="selectProduct" 
+              data-product="{{item}}">
+          <text>{{item.name}}</text>
+          <text>¥{{item.price}}</text>
+        </view>
+      </block>
+      <view class="loading-tips" wx:if="{{productsLoading}}">加载中...</view>
+      <view class="no-more-tips" wx:elif="{{!productsPagination.hasMore && filteredProducts.length > 0}}">
+        没有更多了
+      </view>
+      <view class="empty-tips" wx:elif="{{!productsLoading && filteredProducts.length === 0}}">
+        暂无商品
       </view>
     </scroll-view>
   </view>
