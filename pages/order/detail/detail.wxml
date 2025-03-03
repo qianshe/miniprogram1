@@ -1,54 +1,71 @@
-<view class="container" wx:if="{{!loading && order}}">
-  <view class="status-bar">
-    <text class="status-text">{{statusMap[order.status]}}</text>
-  </view>
-
-  <view class="section address-section">
-    <view class="section-title">收货信息</view>
-    <view class="address-info">
-      <view class="user-info">
-        <text>{{order.address.userName}}</text>
-        <text>{{order.address.telNumber}}</text>
-      </view>
-      <view class="address-detail">{{order.address.fullAddress}}</view>
+<view class="order-detail">
+  <view class="loading" wx:if="{{loading}}">加载中...</view>
+  <block wx:elif="{{orderInfo}}">
+    <view class="status-bar {{orderInfo.statusClass}}">
+      <text class="status">{{orderInfo.statusText}}</text>
+      <view class="status-desc">{{orderInfo.statusDesc}}</view>
     </view>
-  </view>
 
-  <view class="section goods-section">
-    <view class="section-title">商品信息</view>
-    <view class="goods-list">
-      <view class="goods-item" wx:for="{{order.items}}" wx:key="id">
-        <image class="goods-image" src="{{item.image}}" mode="aspectFill"></image>
-        <view class="goods-info">
-          <text class="goods-name">{{item.name}}</text>
-          <view class="goods-price-quantity">
-            <text class="goods-price">¥{{item.price}}</text>
-            <text class="goods-quantity">x{{item.quantity}}</text>
+    <view class="section">
+      <view class="section-title">基本信息</view>
+      <view class="info-item">
+        <text class="label">订单编号</text>
+        <text class="value">{{orderInfo.orderNo}}</text>
+      </view>
+      <view class="info-item">
+        <text class="label">下单时间</text>
+        <text class="value">{{orderInfo.createdTime}}</text>
+      </view>
+      <view class="info-item">
+        <text class="label">服务时间</text>
+        <text class="value">{{orderInfo.serviceTime}}</text>
+      </view>
+    </view>
+
+    <view class="section">
+      <view class="section-title">联系信息</view>
+      <view class="info-item">
+        <text class="label">联系人</text>
+        <text class="value">{{orderInfo.contactName}}</text>
+      </view>
+      <view class="info-item">
+        <text class="label">联系电话</text>
+        <text class="value">{{orderInfo.contactPhone}}</text>
+      </view>
+      <view class="info-item">
+        <text class="label">服务地址</text>
+        <text class="value">{{orderInfo.address}}</text>
+      </view>
+    </view>
+
+    <view class="section">
+      <view class="section-title">商品信息</view>
+      <view class="goods-list">
+        <view class="goods-item" wx:for="{{orderInfo.items}}" wx:key="productId">
+          <view class="goods-info">
+            <text class="goods-name">{{item.productName}}</text>
+            <text class="goods-price">¥{{item.productPrice}}</text>
+          </view>
+          <view class="goods-subtotal">
+            <text class="quantity">x{{item.quantity}}</text>
+            <text class="subtotal">¥{{item.subtotal}}</text>
           </view>
         </view>
       </view>
+      <view class="total">
+        <text>合计</text>
+        <text class="total-amount">¥{{orderInfo.totalAmount}}</text>
+      </view>
     </view>
-  </view>
 
-  <view class="section order-info-section">
-    <view class="section-title">订单信息</view>
-    <view class="info-item">
-      <text class="label">订单编号</text>
-      <text class="value">{{order.id}}</text>
+    <view class="section" wx:if="{{orderInfo.remark}}">
+      <view class="section-title">备注</view>
+      <view class="remark">{{orderInfo.remark}}</view>
     </view>
-    <view class="info-item">
-      <text class="label">创建时间</text>
-      <text class="value">{{order.createTime}}</text>
-    </view>
-    <view class="info-item">
-      <text class="label">备注</text>
-      <text class="value">{{order.remarks || '无'}}</text>
-    </view>
-  </view>
 
-  <view class="footer">
-    <view class="total-amount">
-      合计：<text class="amount">¥{{order.totalAmount}}</text>
+    <view class="actions" wx:if="{{orderInfo.status === 0}}">
+      <button class="btn cancel" bindtap="handleCancel">取消订单</button>
+      <button class="btn pay" bindtap="handlePay">立即支付</button>
     </view>
-  </view>
+  </block>
 </view>

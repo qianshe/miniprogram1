@@ -1,42 +1,43 @@
 <view class="orders-container">
-  <t-tabs defaultValue="{{0}}" bind:change="onTabsChange" t-class="custom-tabs">
+  <t-tabs defaultValue="{{activeTab}}" value="{{activeTab}}" bind:change="onTabsChange" t-class="custom-tabs">
     <t-tab-panel label="全部" value="0" />
-    <t-tab-panel label="待付款" value="1" />
-    <t-tab-panel label="已完成" value="2" />
+    <t-tab-panel label="待支付" value="1" />
+    <t-tab-panel label="已支付" value="2" />
   </t-tabs>
 
-  <view class="orders-list">
-    <view class="no-data" wx:if="{{!loading && orders.length === 0}}">
-      暂无订单数据
-    </view>
-    
-    <view class="order-item" 
-          wx:for="{{orders}}" 
-          wx:key="id"
-          bindtap="onOrderTap"
-          data-orderid="{{item.id}}">
-      <view class="order-header">
-        <text class="order-id">订单号：{{item.id}}</text>
-        <text class="order-status status-{{item.status}}">{{statusMap[item.status]}}</text>
-      </view>
-      <view class="goods-list">
-        <view class="goods-item" wx:for="{{item.items}}" wx:key="id" wx:for-item="goods">
-          <image class="goods-image" src="{{goods.image}}" mode="aspectFill"></image>
-          <view class="goods-info">
-            <text class="goods-name">{{goods.name}}</text>
-            <view class="goods-price-quantity">
-              <text class="goods-price">¥{{goods.price}}</text>
-              <text class="goods-quantity">x{{goods.quantity}}</text>
-            </view>
+  <view class="order-list">
+    <view class="loading" wx:if="{{loading}}">加载中...</view>
+    <view class="empty" wx:elif="{{!orders.length}}">暂无订单</view>
+    <view class="orders" wx:else>
+      <view class="order-item" 
+            wx:for="{{orders}}" 
+            wx:key="orderNo"
+            bindtap="onOrderClick"
+            data-orderno="{{item.orderNo}}">
+        <view class="order-header">
+          <text class="order-no">订单号：{{item.orderNo}}</text>
+          <text class="order-status status-{{item.status}}">{{item.statusText}}</text>
+        </view>
+        <view class="order-info">
+          <view class="info-row">
+            <text class="label">联系人：</text>
+            <text>{{item.contactName}}</text>
+          </view>
+          <view class="info-row">
+            <text class="label">服务时间：</text>
+            <text>{{item.serviceTime}}</text>
+          </view>
+          <view class="info-row">
+            <text class="label">创建时间：</text>
+            <text>{{item.createdTime}}</text>
           </view>
         </view>
-      </view>
-      <view class="order-footer">
-        <text class="order-time">{{item.createTime}}</text>
-        <view class="order-total">
-          合计：<text class="amount">¥{{item.totalAmount}}</text>
+        <view class="order-footer">
+          <text class="amount">¥{{item.totalAmount}}</text>
         </view>
       </view>
     </view>
+    <view class="load-more" wx:if="{{hasMore}}">加载更多...</view>
+    <view class="no-more" wx:elif="{{orders.length}}">没有更多了</view>
   </view>
 </view>

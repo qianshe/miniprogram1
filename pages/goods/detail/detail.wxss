@@ -50,7 +50,7 @@
   display: flex;
   align-items: center;
   padding: 0 30rpx;
-  box-shadow: 0 -2rpx 10rpx rgba(0,0,0,0.1);
+  box-shadow: 0 -2rpx 10rpx rgba(0,0,0,0.05);
 }
 
 .add-cart {
@@ -60,4 +60,149 @@
   background: #e4393c;
   color: #fff;
   border-radius: 40rpx;
+}
+
+.goods-detail {
+  padding-bottom: 120rpx;
+  background: #f8f8f8;
+}
+
+.goods-image {
+  width: 100%;
+  height: 750rpx;
+  background: #fff;
+}
+
+.goods-image image {
+  width: 100%;
+  height: 100%;
+}
+
+.goods-info {
+  background: #fff;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.goods-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+}
+
+.goods-price {
+  color: #e34d59;
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-bottom: 16rpx;
+}
+
+.goods-stock {
+  color: #999;
+  font-size: 26rpx;
+}
+
+.goods-description, .goods-detail-info {
+  background: #fff;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+}
+
+.description-content {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.6;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 16rpx 0;
+  font-size: 28rpx;
+}
+
+.info-item .label {
+  color: #999;
+}
+
+.info-item .value {
+  color: #333;
+}
+
+.loading {
+  text-align: center;
+  padding: 40rpx;
+  color: #999;
+  font-size: 28rpx;
+}
+
+.sku-popup {
+  background: #fff;
+  padding: 30rpx;
+  border-radius: 24rpx 24rpx 0 0;
+}
+
+.sku-header {
+  display: flex;
+  padding-bottom: 30rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.sku-image {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 12rpx;
+  margin-right: 20rpx;
+}
+
+.sku-info {
+  flex: 1;
+}
+
+.sku-price {
+  color: #e34d59;
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-bottom: 12rpx;
+}
+
+.sku-content {
+  padding: 30rpx 0;
+}
+
+.quantity-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20rpx;
+}
+
+.sku-footer {
+  margin-top: 30rpx;
+}
+
+.confirm-btn {
+  width: 100%;
+  height: 80rpx;
+  line-height: 80rpx;
+  background: #e34d59;
+  color: #fff;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+}
+
+.add-cart-btn {
+  flex: 1;
+  height: 80rpx;
+  background: #e34d59;
+  color: #fff;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+  line-height: 80rpx;
 }

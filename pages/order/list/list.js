@@ -1,157 +1,119 @@
-import { errorHandler } from '../../../utils/errorHandler';
+const request = require('../../../utils/request.js');
 
 Page({
   data: {
     orders: [],
-    loading: false,
-    currentTab: '0',
-    statusMap: {
-      'pending': '待付款',
-      'paid': '待发货',
-      'shipping': '已发货',
-      'completed': '已完成',
-      'cancelled': '已取消'
-    }
+    loading: true,
+    pagination: {
+      page: 1,
+      size: 10,
+      total: 0
+    },
+    hasMore: true,
+    activeTab: '0', // 添加当前激活的标签页
   },
 
   onLoad() {
     this.loadOrders();
   },
 
-  onShow() {
-    this.loadOrders(this.data.currentTab);
-  },
-
   onTabsChange(e) {
     const { value } = e.detail;
-    this.setData({ 
-      currentTab: value 
+    this.setData({
+      activeTab: value,
+      'pagination.page': 1,  // 重置页码
+      orders: [],  // 清空当前订单列表
+      loading: true
+    }, () => {
+      this.loadOrders();  // 重新加载订单
     });
-    this.loadOrders(value);
   },
 
-  loadOrders(status = '0') {
-    this.setData({ loading: true });
-    // 模拟加载订单数据
-    setTimeout(() => {
-      const mockOrders = [
-        {
-          id: 'ORDER001',
-          items: [
-            {
-              id: 1,
-              name: 'iPhone 15 Pro Max',
-              price: 9999.00,
-              quantity: 1,
-              image: 'https://tdesign.gtimg.com/mobile/demos/example2.png'
-            }
-          ],
-          totalAmount: '9999.00',
-          createTime: '2024-01-20 12:00:00',
-          status: 'pending'
-        },
-        {
-          id: 'ORDER002',
-          items: [
-            {
-              id: 2,
-              name: 'MacBook Pro M3',
-              price: 18999.00,
-              quantity: 1,
-              image: 'https://tdesign.gtimg.com/mobile/demos/example1.png'
-            },
-            {
-              id: 3,
-              name: 'AirPods Pro',
-              price: 1999.00,
-              quantity: 2,
-              image: 'https://tdesign.gtimg.com/mobile/demos/example3.png'
-            }
-          ],
-          totalAmount: '22997.00',
-          createTime: '2024-01-19 15:30:00',
-          status: 'paid'
-        },
-        {
-          id: 'ORDER003',
-          items: [
-            {
-              id: 4,
-              name: 'iPad Air',
-              price: 4799.00,
-              quantity: 1,
-              image: 'https://tdesign.gtimg.com/mobile/demos/example4.png'
-            }
-          ],
-          totalAmount: '4799.00',
-          createTime: '2024-01-18 09:15:00',
-          status: 'shipping'
-        },
-        {
-          id: 'ORDER004',
-          items: [
-            {
-              id: 5,
-              name: 'Apple Watch Series 9',
-              price: 3299.00,
-              quantity: 1,
-              image: 'https://tdesign.gtimg.com/mobile/demos/example5.png'
-            }
-          ],
-          totalAmount: '3299.00',
-          createTime: '2024-01-17 16:45:00',
-          status: 'completed'
-        },
-        {
-          id: 'ORDER005',
-          items: [
-            {
-              id: 6,
-              name: 'Magic Keyboard',
-              price: 999.00,
-              quantity: 1,
-              image: 'https://tdesign.gtimg.com/mobile/demos/example6.png'
-            },
-            {
-              id: 7,
-              name: 'Magic Mouse',
-              price: 699.00,
-              quantity: 1,
-              image: 'https://tdesign.gtimg.com/mobile/demos/example1.png'
-            }
-          ],
-          totalAmount: '1698.00',
-          createTime: '2024-01-16 14:20:00',
-          status: 'cancelled'
-        }
-      ];
+  async loadOrders(isLoadMore = false) {
+    if (!isLoadMore) {
+      this.setData({ loading: true });
+    }
 
-      // 根据状态过滤订单
-      let filteredOrders = mockOrders;
-      if (status === '1') { // 待付款
-        filteredOrders = mockOrders.filter(order => order.status === 'pending');
-      } else if (status === '2') { // 已完成
-        filteredOrders = mockOrders.filter(order => order.status === 'completed');
-      }
+    try {
+      const { page, size } = this.data.pagination;
+      // 根据标签页状态过滤订单
+      const orderStatus = this.getStatusByTab(this.data.activeTab);
+      
+      const params = {
+        page,
+        size,
+        ...(orderStatus !== undefined ? { orderStatus } : {})  // 使用新的 orderStatus 参数
+      };
 
-      this.setData({
-        orders: filteredOrders,
-        loading: false
-      });
-    }, 500);
-  },
+      const res = await request.get(`/api/orders/user/1`, params);
 
-  onOrderTap(e) {
-    const { orderid } = e.currentTarget.dataset;
-    wx.navigateTo({
-      url: `../detail/detail?id=${orderid}`,
-      fail (err) {
-        errorHandler({
-          page: 'order-list',
-          error: err,
-          method: 'navigateTo'
+      if (res.code === 200 && res.data) {
+        const { records, total } = res.data;
+        const formattedOrders = records.map(order => ({
+          ...order,
+          statusText: this.getStatusText(order.status),
+          createdTime: this.formatDate(order.createdTime),
+          serviceTime: this.formatDate(order.serviceTime),
+          totalAmount: (order.totalAmount / 100).toFixed(2)
+        }));
+
+        this.setData({
+          orders: isLoadMore ? [...this.data.orders, ...formattedOrders] : formattedOrders,
+          'pagination.total': total,
+          hasMore: page * size < total,
+          loading: false
         });
       }
+    } catch (err) {
+      wx.showToast({
+        title: '加载订单失败',
+        icon: 'none'
+      });
+    } finally {
+      this.setData({ loading: false });
+    }
+  },
+
+  getStatusText(status) {
+    const statusMap = {
+      0: '待支付',
+      1: '已支付',
+      2: '已取消',
+      3: '已退款'
+    };
+    return statusMap[status] || '未知状态';
+  },
+
+  getStatusByTab(tab) {
+    const statusMap = {
+      '0': undefined, // 全部
+      '1': 0,        // 待支付
+      '2': 1,        // 已支付
+      '3': 2,        // 已取消
+      '4': 3         // 已退款
+    };
+    return statusMap[tab];
+  },
+
+  formatDate(dateStr) {
+    if (!dateStr) return '';
+    return dateStr.split('T')[0];
+  },
+
+  onReachBottom() {
+    if (this.data.hasMore) {
+      this.setData({
+        'pagination.page': this.data.pagination.page + 1
+      }, () => {
+        this.loadOrders(true);
+      });
+    }
+  },
+
+  onOrderClick(e) {
+    const { orderno } = e.currentTarget.dataset;
+    wx.navigateTo({
+      url: `/pages/order/detail/detail?orderNo=${orderno}`
     });
   }
 });

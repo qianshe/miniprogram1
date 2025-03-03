@@ -3,21 +3,56 @@
   background: #f8f8f8;
 }
 
-.status-bar {
-  background: #e4393c;
-  color: #fff;
-  padding: 40rpx 30rpx;
+.order-detail {
+  padding: 20rpx;
+  background: #f5f5f5;
+  min-height: 100vh;
 }
 
-.status-text {
-  font-size: 36rpx;
+/* 修改状态栏样式 */
+.status-bar {
+  padding: 40rpx 30rpx;
+  margin-bottom: 20rpx;
+  border-radius: 12rpx;
+  transition: background 0.3s ease;
+}
+
+/* 删除旧的状态样式 */
+.status {
+  font-size: 40rpx;
   font-weight: bold;
+  color: #fff;
+}
+
+.status-desc {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: 10rpx;
+}
+
+/* 不同状态下的渐变背景 */
+.status-bar.pending {
+  background: linear-gradient(90deg, #ff6b00, #ff9248);
+}
+
+.status-bar.paid {
+  background: linear-gradient(90deg, #07c160, #10b975);
+}
+
+.status-bar.cancelled {
+  background: linear-gradient(90deg, #999, #bbb);
+}
+
+.status-bar.refunded {
+  background: linear-gradient(90deg, #666, #999);
 }
 
 .section {
   background: #fff;
   margin-top: 20rpx;
   padding: 30rpx;
+  margin-bottom: 20rpx;
+  border-radius: 12rpx;
 }
 
 .section-title {
@@ -47,7 +82,8 @@
 }
 
 .goods-list {
-  border-top: 1rpx solid #eee;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
   padding-top: 20rpx;
 }
 
@@ -68,6 +104,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  margin-bottom: 10rpx;
 }
 
 .goods-name {
@@ -82,13 +119,47 @@
 }
 
 .goods-price {
-  color: #e4393c;
-  font-weight: bold;
+  color: #666;
+  font-size: 28rpx;
 }
 
-.goods-quantity {
-  color: #999;
+.goods-subtotal {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.quantity {
   font-size: 26rpx;
+  color: #999;
+  margin-right: 20rpx;
+}
+
+.subtotal {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.total {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 20rpx 0;
+  font-size: 28rpx;
+}
+
+.total-amount {
+  text-align: right;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #ff6b00;
+  margin-left: 20rpx;
+}
+
+.amount {
+  color: #e4393c;
+  font-weight: bold;
+  font-size: 32rpx;
 }
 
 .info-item {
@@ -101,10 +172,12 @@
 
 .label {
   color: #666;
+  width: 160rpx;
 }
 
 .value {
   color: #333;
+  flex: 1;
 }
 
 .footer {
@@ -117,13 +190,43 @@
   box-shadow: 0 -2rpx 10rpx rgba(0,0,0,0.05);
 }
 
-.total-amount {
-  text-align: right;
+.remark {
   font-size: 28rpx;
+  color: #666;
 }
 
-.amount {
-  color: #e4393c;
-  font-weight: bold;
-  font-size: 32rpx;
+.actions {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20rpx;
+  background: #fff;
+  display: flex;
+  justify-content: flex-end;
+  box-shadow: 0 -2rpx 10rpx rgba(0,0,0,0.05);
+}
+
+.btn {
+  margin-left: 20rpx;
+  font-size: 28rpx;
+  padding: 16rpx 40rpx;
+  border-radius: 8rpx;
+}
+
+.btn.cancel {
+  background: #f5f5f5;
+  color: #666;
+}
+
+.btn.pay {
+  background: #ff6b00;
+  color: #fff;
+}
+
+.loading {
+  text-align: center;
+  padding: 40rpx;
+  color: #999;
+  font-size: 28rpx;
 }
