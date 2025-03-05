@@ -12,7 +12,9 @@ Page({
     current: 1,
     autoplay: true,
     duration: 500,
-    interval: 5000
+    interval: 5000,
+    recommendedProducts: [],
+    productsLoading: true
   },
 
   /**
@@ -94,6 +96,21 @@ Page({
         processSteps: Steps
 
       });
+    }
+
+    // 获取推荐商品
+    try {
+      const productsRes = await request.get('/white/steps/recommended-products');
+      if (productsRes.code === 200 && productsRes.data) {
+        this.setData({
+          recommendedProducts: productsRes.data,
+          productsLoading: false
+        });
+      }
+    } catch (err) {
+      console.error('获取推荐商品失败:', err);
+    } finally {
+      this.setData({ productsLoading: false });
     }
   },
 
