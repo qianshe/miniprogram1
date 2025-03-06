@@ -43,3 +43,53 @@
   color: #888; /* 更改内容颜色为灰色 */
   font-size: 14px;
 }
+
+/* 推荐商品区域样式 */
+.recommended-section {
+  margin: 20rpx 0;
+  padding: 20rpx;
+  background: #fff;
+  border-radius: 12rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+  color: #333;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+}
+
+.product-item {
+  background: #fff;
+  border-radius: 8rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.1);
+}
+
+.product-image {
+  width: 100%;
+  height: 200rpx;
+  object-fit: cover;
+}
+
+.product-info {
+  padding: 16rpx;
+}
+
+.product-name {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.product-price {
+  font-size: 32rpx;
+  color: #e4393c;
+  font-weight: bold;
+}

@@ -20,6 +20,25 @@
 <!-- 无数据显示 -->
 <t-empty wx:elif="{{!processSteps.length}}" description="暂无流程数据" />
 
+<!-- 推荐商品区域 -->
+<view class="recommended-section">
+  <view class="section-title">推荐商品</view>
+  <t-loading wx:if="{{productsLoading}}" theme="circular" size="40rpx" loading />
+  <view wx:else class="products-grid">
+    <view class="product-item" 
+          wx:for="{{recommendedProducts}}" 
+          wx:key="id"
+          bindtap="onProductClick"
+          data-id="{{item.id}}">
+      <image src="{{item.imageUrl}}" mode="aspectFill" class="product-image"/>
+      <view class="product-info">
+        <view class="product-name">{{item.name}}</view>
+        <view class="product-price">¥{{item.price}}</view>
+      </view>
+    </view>
+  </view>
+</view>
+
 <!-- 流程列表 -->
 <block wx:else>
   <view class="process-step" wx:for="{{processSteps}}" wx:key="index">
