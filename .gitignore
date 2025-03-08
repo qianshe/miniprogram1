@@ -16,3 +16,5 @@ dataSources.local.xml
 .DS_Store
 project.config.json
 接口文档.md
+
+default.md

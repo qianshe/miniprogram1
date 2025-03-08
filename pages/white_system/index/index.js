@@ -45,7 +45,7 @@ Page({
 
     // 获取流程数据
     try {
-      const res = await request.get('/api/process/white/steps');
+      const res = await request.get('/api/index/white/steps');
       if (res.code === 200 && res.data) {
         this.setData({
           processSteps: res.data,
@@ -100,8 +100,11 @@ Page({
 
     // 获取推荐商品
     try {
-      const productsRes = await request.get('/white/steps/recommended-products');
+      const productsRes = await request.get('/api/index/recommended-products');
       if (productsRes.code === 200 && productsRes.data) {
+        productsRes.data.forEach(item => {
+          item.price = (item.price / 100).toFixed(2);
+        });
         this.setData({
           recommendedProducts: productsRes.data,
           productsLoading: false
@@ -167,5 +170,23 @@ Page({
    */
   onShareAppMessage() {
 
+  },
+
+  /**
+   * 商品点击事件处理
+   */
+  onProductClick(e) {
+    const { id } = e.currentTarget.dataset;
+    console.log('商品点击:', id);
+    wx.navigateTo({
+      url: `/pages/goods/detail/detail?id=${id}`,
+      fail: (err) => {
+        console.error('页面跳转失败:', err);
+        wx.showToast({
+          title: '页面跳转失败',
+          icon: 'none'
+        });
+      }
+    });
   }
 })
