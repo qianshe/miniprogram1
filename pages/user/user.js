@@ -4,7 +4,7 @@ const defaultAvatarUrl = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia0
 Page({
   data: {
     userInfo: {
-      avatarUrl: '/images/default-avatar.png',
+      avatarUrl: defaultAvatarUrl,
       nickName: '',
     },
     hasUserInfo: false,
@@ -39,29 +39,6 @@ Page({
     wx.setStorageSync('userInfo', userInfo)
   },
 
-  getUserProfile(e) {
-    // 推荐使用wx.getUserProfile获取用户信息，开发者每次通过该接口获取用户个人信息均需用户确认，开发者妥善保管用户快速填写的头像昵称，避免重复弹窗
-    wx.getUserProfile({
-      desc: '用于完善个人资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
-      success: (res) => {
-        console.log(res)
-        this.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true
-        })
-        // 更新缓存
-        wx.setStorageSync('userInfo', res.userInfo)
-      }
-    })
-  },
-
-  toIndexHome(e) {
-    // 将页面栈清空，跳转到首页
-    getApp().globalData.currentTabIndex = 0
-    wx.redirectTo({
-      url: '/pages/index_home/index_home'
-    })
-  },
   // 检查用户是否为管理员
   checkUserRole() {
     // 这里需要根据你的业务逻辑判断用户身份
@@ -110,12 +87,21 @@ Page({
 
     }
   },
+  
+  toIndexHome(e) {
+    // 将页面栈清空，跳转到首页
+    getApp().globalData.currentTabIndex = 0
+    wx.redirectTo({
+      url: '/pages/index_home/index_home'
+    })
+  },
 
   login(e) {
     wx.getUserProfile({
       desc: '用于完善会员资料', // 声明获取用户信息后的用途
       success: (res) => {
         const userInfo = res.userInfo;
+        console.log('用户信息：', userInfo);
         this.setData({
           userInfo,
           hasUserInfo: true

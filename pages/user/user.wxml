@@ -3,7 +3,7 @@
   <view class="container">
     <view class="userinfo">
       <block wx:if="{{!hasUserInfo}}">
-        <image class="userinfo-avatar" src="/images/default-avatar.png"></image>
+        <!-- <image class="userinfo-avatar" src="/images/default-avatar.png"></image> -->
         <text class="login-tip">您还未登录</text>
         <button class="login-btn" bindtap="login">微信一键登录</button>
       </block>
