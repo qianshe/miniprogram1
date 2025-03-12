@@ -1,7 +1,7 @@
 <view class="cart-container">
   <!-- 加载状态 -->
-  <view class="loading-container" wx:if="{{loading}}">
-    <loading>加载中...</loading>
+  <view class="loading-container" wx:if="{{loading || syncLoading}}">
+    <loading>{{syncLoading ? '同步购物车数据中...' : '加载中...'}}</loading>
   </view>
 
   <!-- 空购物车提示 -->

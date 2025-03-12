@@ -20,6 +20,14 @@
 <!-- 无数据显示 -->
 <t-empty wx:elif="{{!processSteps.length}}" description="暂无流程数据" />
 
+<!-- 流程列表 -->
+<block wx:elif="{{processSteps.length > 0}}">
+  <view class="process-step" wx:for="{{processSteps}}" wx:key="index">
+    <text class="process-step-title">{{item.title}}</text>
+    <text class="process-step-content">{{item.content}}</text>
+  </view>
+</block>
+
 <!-- 推荐商品区域 -->
 <view class="recommended-section">
   <view class="section-title">推荐商品</view>
@@ -38,14 +46,6 @@
     </view>
   </view>
 </view>
-
-<!-- 流程列表 -->
-<block wx:else>
-  <view class="process-step" wx:for="{{processSteps}}" wx:key="index">
-    <text class="process-step-title">{{item.title}}</text>
-    <text class="process-step-content">{{item.content}}</text>
-  </view>
-</block>
 </view>
 
 <custom-tab-bar></custom-tab-bar>
