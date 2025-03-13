@@ -133,10 +133,15 @@ Page({
     app.globalData.systemType = 'white';
     app.globalData.currentTabIndex = 0; // 设置当前选中的 tab 为首页
     
-    // 更新 tabBar
-    if (typeof this.getTabBar === 'function') {
-      this.getTabBar().updateTabList('white');
-    }
+    // 使用延迟更新 TabBar
+    setTimeout(() => {
+      if (typeof this.getTabBar === 'function') {
+        const tabBar = this.getTabBar();
+        if (tabBar && typeof tabBar.updateTabList === 'function') {
+          tabBar.updateTabList('white');
+        }
+      }
+    }, 100);
   },
 
   /**

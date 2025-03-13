@@ -43,10 +43,15 @@ Page({
       themeColor
     });
     
-    // 更新 tabBar
-    if (typeof this.getTabBar === 'function') {
-      this.getTabBar().updateTabList(systemType);
-    }
+    // 使用延迟更新 TabBar
+    setTimeout(() => {
+      if (typeof this.getTabBar === 'function') {
+        const tabBar = this.getTabBar();
+        if (tabBar && typeof tabBar.updateTabList === 'function') {
+          tabBar.updateTabList(systemType);
+        }
+      }
+    }, 100);
     
     // 检查登录状态
     this.checkLoginStatus();

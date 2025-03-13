@@ -237,19 +237,19 @@ Page({
           id: 1,
           name: '婚庆布置套餐',
           price: '1288.00',
-          imageUrl: 'https://tdesign.gtimg.com/mobile/demos/goods1.png'
+          imageUrl: 'https://tdesign.gtimg.com/mobile/demos/example1.png'
         },
         {
           id: 2,
           name: '婚礼司仪服务',
           price: '888.00',
-          imageUrl: 'https://tdesign.gtimg.com/mobile/demos/goods2.png'
+          imageUrl: 'https://tdesign.gtimg.com/mobile/demos/example1.png'
         },
         {
           id: 3,
           name: '婚宴餐饮服务',
           price: '3999.00',
-          imageUrl: 'https://tdesign.gtimg.com/mobile/demos/goods3.png'
+          imageUrl: 'https://tdesign.gtimg.com/mobile/demos/example1.png'
         }
       ];
       
@@ -264,19 +264,19 @@ Page({
           id: 101,
           name: '花圈套餐',
           price: '388.00',
-          imageUrl: 'https://tdesign.gtimg.com/mobile/demos/goods4.png'
+          imageUrl: 'https://tdesign.gtimg.com/mobile/demos/example1.png'
         },
         {
           id: 102,
           name: '骨灰盒',
           price: '688.00',
-          imageUrl: 'https://tdesign.gtimg.com/mobile/demos/goods5.png'
+          imageUrl: 'https://tdesign.gtimg.com/mobile/demos/example1.png'
         },
         {
           id: 103,
           name: '丧葬服务套餐',
           price: '2999.00',
-          imageUrl: 'https://tdesign.gtimg.com/mobile/demos/goods6.png'
+          imageUrl: 'https://tdesign.gtimg.com/mobile/demos/example1.png'
         }
       ];
       

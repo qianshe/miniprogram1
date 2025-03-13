@@ -95,7 +95,7 @@
         </view>
         <view class="price-item" wx:if="{{orderInfo.discountAmount > 0}}">
           <text>优惠金额</text>
-          <text class="discount">-¥{{(orderInfo.discountAmount/100).toFixed(2)}}</text>
+          <text class="discount">-¥{{getFormattedDiscountAmount()}}</text>
         </view>
         <view class="price-item total">
           <text>实付金额</text>

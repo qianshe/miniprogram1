@@ -7,12 +7,14 @@
     "pages/red_system/index/index",
     "pages/logs/logs",
     "pages/goods/detail/detail",
+    "pages/process/detail/detail",
     "pages/cart/cart",
     "pages/feedback/feedback",
     "pages/order/list/list",
     "pages/order/detail/detail",
     "pages/order/confirm/confirm",
-    "pages/order/create/create"
+    "pages/order/create/create",
+    "pages/login/login"
   ],
   "window": {
     "navigationBarTextStyle": "black",
@@ -29,6 +31,9 @@
   "miniVersion": "0.0.1",
   "tabBar": {
     "custom": true,
+    "color": "#999999",
+    "selectedColor": "#333333",
+    "backgroundColor": "#ffffff",
     "list": [
       {
         "pagePath": "pages/white_system/index/index",

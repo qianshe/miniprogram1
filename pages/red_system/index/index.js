@@ -87,19 +87,19 @@ Page({
           id: 1,
           name: '婚庆布置套餐',
           price: '1288.00',
-          imageUrl: 'https://tdesign.gtimg.com/mobile/demos/goods1.png'
+          imageUrl: 'https://tdesign.gtimg.com/mobile/demos/swiper1.png'
         },
         {
           id: 2,
           name: '婚礼司仪服务',
           price: '888.00',
-          imageUrl: 'https://tdesign.gtimg.com/mobile/demos/goods2.png'
+          imageUrl: 'https://tdesign.gtimg.com/mobile/demos/swiper1.png'
         },
         {
           id: 3,
           name: '婚宴餐饮服务',
           price: '3999.00',
-          imageUrl: 'https://tdesign.gtimg.com/mobile/demos/goods3.png'
+          imageUrl: 'https://tdesign.gtimg.com/mobile/demos/swiper1.png'
         }
       ];
       this.setData({
@@ -128,10 +128,15 @@ Page({
     app.globalData.systemType = 'red';
     app.globalData.currentTabIndex = 0; // 设置当前选中的 tab 为首页
     
-    // 更新 tabBar
-    if (typeof this.getTabBar === 'function') {
-      this.getTabBar().updateTabList('red');
-    }
+    // 使用延迟更新 TabBar
+    setTimeout(() => {
+      if (typeof this.getTabBar === 'function') {
+        const tabBar = this.getTabBar();
+        if (tabBar && typeof tabBar.updateTabList === 'function') {
+          tabBar.updateTabList('red');
+        }
+      }
+    }, 100);
   },
 
   /**

@@ -407,5 +407,9 @@ Page({
         icon: 'none'
       });
     }
+  },
+
+  getFormattedDiscountAmount() {
+    return (this.data.orderInfo.discountAmount / 100).toFixed(2);
   }
 });
