@@ -1,4 +1,4 @@
-<view class="cart-container">
+<view class="cart-container {{systemType}}-theme">
   <!-- 加载状态 -->
   <view class="loading-container" wx:if="{{loading || syncLoading}}">
     <loading>{{syncLoading ? '同步购物车数据中...' : '加载中...'}}</loading>
@@ -17,7 +17,7 @@
   <view class="cart-list" wx:elif="{{cartItems.length}}">
     <view class="cart-item" wx:for="{{cartItems}}" wx:key="id">
       <view class="checkbox" bindtap="toggleSelect" data-index="{{index}}">
-        <icon type="success" size="20" color="{{item.selected ? '#07c160' : '#ddd'}}"/>
+        <icon type="success" size="20" color="{{item.selected ? (systemType === 'red' ? '#d32f2f' : '#07c160') : '#ddd'}}"/>
       </view>
       <image 
         class="item-image" 
@@ -26,13 +26,13 @@
       </image>
       <view class="item-info">
         <text class="item-name">{{item.name}}</text>
-        <text class="item-price">¥{{item.price}}</text>
+        <text class="item-price {{systemType}}-price">¥{{item.price}}</text>
         <view class="quantity-control">
-          <view class="btn-decrease {{item.quantity <= minQuantity ? 'disabled' : ''}}" 
+          <view class="btn-decrease {{item.quantity <= minQuantity ? 'disabled' : ''}} {{systemType}}-btn" 
                 bindtap="decreaseQuantity" 
                 data-index="{{index}}">-</view>
           <text class="quantity">{{item.quantity}}</text>
-          <view class="btn-increase {{item.quantity >= maxQuantity ? 'disabled' : ''}}" 
+          <view class="btn-increase {{item.quantity >= maxQuantity ? 'disabled' : ''}} {{systemType}}-btn" 
                 bindtap="increaseQuantity" 
                 data-index="{{index}}">+</view>
         </view>
@@ -44,16 +44,16 @@
   </view>
 
   <!-- 底部结算栏 -->
-  <view class="footer" wx:if="{{cartItems.length}}">
+  <view class="footer {{systemType}}-footer" wx:if="{{cartItems.length}}">
     <view class="select-all" bindtap="toggleSelectAll">
-      <icon type="success" size="20" color="{{allSelected ? '#07c160' : '#ddd'}}"/>
+      <icon type="success" size="20" color="{{allSelected ? (systemType === 'red' ? '#d32f2f' : '#07c160') : '#ddd'}}"/>
       <text>全选</text>
     </view>
     <view class="total-info">
       <text>合计：</text>
-      <text class="total-price">¥{{totalAmount}}</text>
+      <text class="total-price {{systemType}}-price">¥{{totalAmount}}</text>
     </view>
-    <view class="checkout-btn {{selectedCount ? 'active' : ''}}" bindtap="checkout">
+    <view class="checkout-btn {{selectedCount ? 'active' : ''}} {{systemType}}-checkout-btn" bindtap="checkout">
       结算({{selectedCount}})
     </view>
   </view>

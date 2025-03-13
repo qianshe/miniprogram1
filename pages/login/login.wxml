@@ -1,0 +1,66 @@
+<view class="login-container {{systemType}}-theme">
+  <view class="header">
+    <view class="back-icon" bindtap="goBack">
+      <image src="/assets/icons/back.png" mode="aspectFit"></image>
+    </view>
+    <view class="title">用户登录</view>
+  </view>
+
+  <view class="logo-container">
+    <image class="logo" src="/assets/images/logo.png" mode="aspectFit"></image>
+  </view>
+
+  <view class="form-container">
+    <view class="input-group">
+      <view class="input-label">手机号</view>
+      <input 
+        class="input" 
+        type="number" 
+        placeholder="请输入手机号" 
+        value="{{phone}}" 
+        bindinput="onPhoneInput"
+        maxlength="11"
+      />
+    </view>
+    
+    <view class="input-group">
+      <view class="input-label">密码</view>
+      <input 
+        class="input" 
+        type="password" 
+        placeholder="请输入密码" 
+        value="{{password}}" 
+        bindinput="onPasswordInput"
+      />
+    </view>
+
+    <button 
+      class="login-btn {{systemType}}-btn" 
+      bindtap="login" 
+      loading="{{loading}}"
+      disabled="{{loading}}"
+    >登录</button>
+
+    <view class="divider">
+      <view class="line"></view>
+      <view class="text">或</view>
+      <view class="line"></view>
+    </view>
+
+    <button 
+      class="wx-login-btn" 
+      bindtap="wxLogin"
+      disabled="{{loading}}"
+    >
+      <image class="wx-icon" src="/assets/icons/wechat.png" mode="aspectFit"></image>
+      微信一键登录
+    </button>
+  </view>
+
+  <view class="footer">
+    <text>登录即表示您同意</text>
+    <text class="link {{systemType}}-text">《用户协议》</text>
+    <text>和</text>
+    <text class="link {{systemType}}-text">《隐私政策》</text>
+  </view>
+</view>

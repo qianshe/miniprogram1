@@ -128,12 +128,14 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-    const app = getApp()
-
-    app.globalData.systemType = 'white' //  设置当前为白事系统
-    const tabBar = this.getTabBar()
-    if (tabBar) {
-      tabBar.updateTabList('white')
+    // 设置当前为白事系统
+    const app = getApp();
+    app.globalData.systemType = 'white';
+    app.globalData.currentTabIndex = 0; // 设置当前选中的 tab 为首页
+    
+    // 更新 tabBar
+    if (typeof this.getTabBar === 'function') {
+      this.getTabBar().updateTabList('white');
     }
   },
 
@@ -180,6 +182,24 @@ Page({
     console.log('商品点击:', id);
     wx.navigateTo({
       url: `/pages/goods/detail/detail?id=${id}`,
+      fail: (err) => {
+        console.error('页面跳转失败:', err);
+        wx.showToast({
+          title: '页面跳转失败',
+          icon: 'none'
+        });
+      }
+    });
+  },
+
+  /**
+   * 流程步骤点击事件处理
+   */
+  onStepClick(e) {
+    const { id } = e.currentTarget.dataset;
+    console.log('步骤点击:', id);
+    wx.navigateTo({
+      url: `/pages/process/detail/detail?id=${id}&systemType=white`,
       fail: (err) => {
         console.error('页面跳转失败:', err);
         wx.showToast({
