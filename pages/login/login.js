@@ -8,6 +8,7 @@ Page({
     loading: false,
     systemType: 'white', // 默认为白事系统
     themeColor: '#333333', // 默认主题色
+    navHeight: 0,
   },
 
   onLoad() {
@@ -18,7 +19,13 @@ Page({
     // 根据系统类型设置主题色
     const themeColor = systemType === 'red' ? '#d32f2f' : '#333333';
     
+    // 获取导航栏高度
+    const menuButtonObject = wx.getMenuButtonBoundingClientRect();
+    const systemInfo = wx.getSystemInfoSync();
+    const navHeight = (menuButtonObject.top - systemInfo.statusBarHeight) * 2 + menuButtonObject.height + systemInfo.statusBarHeight;
+    
     this.setData({
+      navHeight,
       systemType,
       themeColor
     });
@@ -63,7 +70,7 @@ Page({
     
     try {
       // 调用登录接口
-      const res = await request.post('/api/user/login', {
+      const res = await request.post('/api/auth/wx/login', {
         phone,
         password
       }, { needAuth: false });
@@ -123,7 +130,7 @@ Page({
         
         try {
           // 调用微信登录接口
-          const loginRes = await request.post('/api/user/wx-login', {
+          const loginRes = await request.post('/api/auth/wx/login', {
             userInfo
           }, { needAuth: false });
           
@@ -189,4 +196,4 @@ Page({
       }
     });
   }
-}); 
+});

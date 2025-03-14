@@ -1,5 +1,8 @@
 {
   "navigationBarTitleText": "用户登录",
   "navigationStyle": "custom",
-  "usingComponents": {}
+  "usingComponents": {
+    "t-button": "tdesign-miniprogram/button/button",
+    "t-navbar": "tdesign-miniprogram/navbar/navbar"
+  }
 }
