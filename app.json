@@ -13,8 +13,7 @@
     "pages/order/list/list",
     "pages/order/detail/detail",
     "pages/order/confirm/confirm",
-    "pages/order/create/create",
-    "pages/login/login"
+    "pages/order/create/create"
   ],
   "window": {
     "navigationBarTextStyle": "black",
