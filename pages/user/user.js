@@ -93,30 +93,14 @@ Page({
     wx.getUserProfile({
       desc: '用于完善会员资料', // 获取用户信息的原因
       success: (res) => {
-        // 获取用户信息成功
-        const userInfo = res.userInfo;
-        this.setData({
-          userInfo,
-          hasUserInfo: true
-        });
-
-        console.log('获取用户信息成功:', userInfo);
-        // 将用户信息存储到本地
-        wx.setStorageSync('userInfo', userInfo);
-        // 更新全局用户信息
-        const app = getApp();
-        app.globalData.userInfo = userInfo;
 
         // 调用微信登录接口
         wx.login({
           success: (res) => {
             console.log('调用 wx.login 成功:', res);
             if (res.code) {
-              this.setData({
-                code: res.code
-              });
+              
               console.log('获取 code 成功:', res.code);
-
               // 向后端发送 code
               try {
                 // 调用微信登录接口
@@ -133,7 +117,22 @@ Page({
                     title: '登录成功',
                     icon: 'success'
                   });
-                 
+                  // 登录成功才更新用户信息
+                  // 获取用户信息成功
+                  const userInfo = res.userInfo;
+                  this.setData({
+                    userInfo,
+                    hasUserInfo: true
+                  });
+
+                  console.log('获取用户信息成功:', userInfo);
+                  // 将用户信息存储到本地
+                  wx.setStorageSync('userInfo', userInfo);
+                  // 更新全局用户信息
+                  const app = getApp();
+                  app.globalData.userInfo = userInfo;
+
+
                 } else {
                   wx.showToast({
                     title: loginRes.message || '登录失败',
