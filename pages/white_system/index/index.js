@@ -100,7 +100,7 @@ Page({
 
     // 获取推荐商品
     try {
-      const productsRes = await request.get('/api/index/recommended-products');
+      const productsRes = await request.get('/api/products/recommended/0');
       if (productsRes.code === 200 && productsRes.data) {
         productsRes.data.forEach(item => {
           item.price = (item.price / 100).toFixed(2);

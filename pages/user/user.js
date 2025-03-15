@@ -89,76 +89,62 @@ Page({
     });
   },
 
-  login() {
-    wx.getUserProfile({
-      desc: '用于完善会员资料', // 获取用户信息的原因
-      success: (res) => {
-
-        // 调用微信登录接口
-        wx.login({
-          success: (res) => {
-            console.log('调用 wx.login 成功:', res);
-            if (res.code) {
-              
-              console.log('获取 code 成功:', res.code);
-              // 向后端发送 code
-              try {
-                // 调用微信登录接口
-                const loginRes = request.post('/api/auth/wx/login', {
-                  userInfo,
-                  code: res.code
-                }, { needAuth: false });
-
-                if (loginRes.code === 200 && loginRes.data) {
-                  // 保存token
-                  auth.setToken(loginRes.data.token);
-
-                  wx.showToast({
-                    title: '登录成功',
-                    icon: 'success'
-                  });
-                  // 登录成功才更新用户信息
-                  // 获取用户信息成功
-                  const userInfo = res.userInfo;
-                  this.setData({
-                    userInfo,
-                    hasUserInfo: true
-                  });
-
-                  console.log('获取用户信息成功:', userInfo);
-                  // 将用户信息存储到本地
-                  wx.setStorageSync('userInfo', userInfo);
-                  // 更新全局用户信息
-                  const app = getApp();
-                  app.globalData.userInfo = userInfo;
-
-
-                } else {
-                  wx.showToast({
-                    title: loginRes.message || '登录失败',
-                    icon: 'none'
-                  });
-                }
-              } catch (err) {
-                console.error('微信登录失败:', err);
-                wx.showToast({
-                  title: '登录失败，请稍后重试',
-                  icon: 'none'
-                });
-              } finally {
-                this.setData({ loading: false });
-              }
-
-            } else {
-              console.error('获取 code 失败:', res.errMsg);
-            }
-          },
-          fail: (err) => {
-            console.error('调用 wx.login 失败:', err);
-          }
+  async login() {
+    try {
+      // 获取用户信息
+      const { userInfo } = await new Promise((resolve, reject) => {
+        wx.getUserProfile({
+          desc: '用于完善会员资料',
+          success: resolve,
+          fail: reject
         });
+      });
+
+      // 获取微信登录code
+      const { code } = await new Promise((resolve, reject) => {
+        wx.login({
+          success: resolve,
+          fail: reject
+        });
+      });
+
+      // 调用后端登录接口
+      const loginRes = await request.post('/api/auth/wx/login', {
+        userInfo,
+        code
+      }, { needAuth: false });
+
+      if (loginRes.code === 200 && loginRes.data) {
+        // 保存token和用户信息
+        auth.setToken(loginRes.data.token, loginRes.data.refresh_token);
+        wx.setStorageSync('userInfo', userInfo);
+
+        // 更新页面状态
+        this.setData({
+          userInfo,
+          hasUserInfo: true
+        });
+
+        // 更新全局用户信息
+        const app = getApp();
+        app.globalData.userInfo = userInfo;
+
+        wx.showToast({
+          title: '登录成功',
+          icon: 'success'
+        });
+      } else {
+        throw new Error(loginRes.message || '登录失败');
       }
-    });
+    } catch (err) {
+      console.error('登录失败:', err);
+      wx.showToast({
+        title: err.message || '登录失败，请稍后重试',
+        icon: 'none'
+      });
+    } finally {
+      this.setData({ loading: false });
+    }
 
   },
 

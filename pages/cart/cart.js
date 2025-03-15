@@ -1,5 +1,5 @@
 const request = require('../../utils/request.js');
-// const auth = require('../../utils/auth.js');
+const auth = require('../../utils/auth.js');
 
 Page({
   data: {
@@ -27,7 +27,7 @@ Page({
       // const token = auth.getToken();
       if (cartItems.length === 0) {
         console.log('从服务器获取购物车数据');
-        const res = await request.get('/api/cart/list', { userId: 1 });
+      const res = await request.get('/api/cart/list');
         if (res.code === 200 && res.data) {
           cartItems = res.data.map(item => ({
             id: item.productId,
@@ -118,12 +118,10 @@ Page({
       wx.setStorageSync('cartList', cartItems);
       
       // 同步到服务器
-      if (auth.checkAuth()) {
-        await request.put('/api/cart/update', {
-          productId: item.id,
-          quantity: quantity
-        });
-      }
+      await request.put('/api/cart/update', {
+        productId: item.id,
+        quantity: quantity
+      });
       
       this.setData({ cartItems }, () => {
         this.updateTotalAmount();
@@ -149,9 +147,7 @@ Page({
             wx.setStorageSync('cartList', cartItems);
             
             // 同步到服务器
-            if (auth.checkAuth()) {
-              await request.delete(`/api/cart/${item.id}`);
-            }
+            await request.delete(`/api/cart/${item.id}`);
             
             this.setData({ cartItems });
             this.updateTotalAmount();

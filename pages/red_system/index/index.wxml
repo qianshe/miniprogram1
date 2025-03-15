@@ -27,7 +27,13 @@
       <view class="event-card">
         <view class="event-title">{{item.name}}</view>
         <view class="event-steps">
-          <view class="step-item" wx:for="{{item.steps}}" wx:for-item="step" wx:key="title">
+          <view class="step-item" 
+                wx:for="{{item.steps}}" 
+                wx:for-item="step" 
+                wx:key="title"
+                bindtap="onStepClick"
+                data-event-index="{{index}}"
+                data-step-index="{{index}}">
             <view class="step-title">{{step.title}}</view>
             <view class="step-desc">{{step.description}}</view>
           </view>
