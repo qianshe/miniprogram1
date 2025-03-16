@@ -1,4 +1,4 @@
-const request = require('../../utils/request.js');
+const api = require('../../utils/api.js');
 const PAGE_SIZE = 20; // 每页加载的商品数量
 
 Component({
@@ -26,39 +26,33 @@ Component({
   },
 
   methods: {
-    loadCategories() {
-      request.get('/api/categories')
-        .then(res => {
-          if (res.code === 200 && res.data) {
-            const sortedCategories = res.data
-              .sort((a, b) => a.sort - b.sort)
-              .map(category => ({
-                label: category.name,
-                title: category.name,
-                id: category.id,
-                badgeProps: {},
-                items: [],
-                hasMore: true
-              }));
+    async loadCategories() {
+      try {
+        const categories = await api.getCategories();
+        const sortedCategories = categories
+          .sort((a, b) => a.sort - b.sort)
+          .map(category => ({
+            label: category.name,
+            title: category.name,
+            id: category.id,
+            badgeProps: {},
+            items: [],
+            hasMore: true
+          }));
 
-            this.setData({ 
-              categories: sortedCategories,
-              loading: false
-            }, () => {
-              // 初始加载第一批商品数据
-              this.loadBatchProducts(0);
-            });
-          } else {
-            throw new Error(res.message || '获取分类失败');
-          }
-        })
-        .catch(err => {
-          wx.showToast({
-            title: err.message || '加载分类失败',
-            icon: 'none'
-          });
-          this.setData({ loading: false });
+        this.setData({ 
+          categories: sortedCategories,
+          loading: false
+        }, () => {
+          this.loadBatchProducts(0);
         });
+      } catch (err) {
+        wx.showToast({
+          title: '加载分类失败',
+          icon: 'none'
+        });
+        this.setData({ loading: false });
+      }
     },
 
     // 批量加载商品数据
@@ -109,30 +103,24 @@ Component({
     },
 
     // 异步加载单个分类的商品
-    loadCategoryProductsAsync(categoryId, page = 1, size = PAGE_SIZE) {
-      return new Promise((resolve, reject) => {
-        const params = {
+    async loadCategoryProductsAsync(categoryId, page = 1, size = PAGE_SIZE) {
+      try {
+        const result = await api.getProducts({
           page,
           size,
           category: categoryId
-        };
-
-        request.get('/api/products', params)
-          .then(res => {
-            if (res.code === 200 && res.data) {
-              const products = res.data.records.map(product => ({
-                id: product.id,
-                label: product.name,
-                image: 'https://tdesign.gtimg.com/mobile/demos/example2.png',
-                price: (product.price / 100).toFixed(2)
-              }));
-              resolve(products);
-            } else {
-              reject(new Error(res.message || '获取商品列表失败'));
-            }
-          })
-          .catch(reject);
-      });
+        });
+        
+        return result.records.map(product => ({
+          id: product.id,
+          label: product.name,
+          image: product.imageUrl || 'https://tdesign.gtimg.com/mobile/demos/example2.png',
+          price: product.price // api已处理价格转换
+        }));
+      } catch (err) {
+        console.error('加载商品失败:', err);
+        return [];
+      }
     },
 
     initLayout() {

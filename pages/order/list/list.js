@@ -10,15 +10,24 @@ Page({
       total: 0
     },
     hasMore: true,
-    activeTab: '0', // 添加当前激活的标签页
+    activeTab: '0', // 当前激活的标签页
+    // 搜索和筛选相关数据
+    searchKeyword: '',
+    showFilterPanel: false,
+    startDate: '',
+    endDate: '',
+    minPrice: '',
+    maxPrice: '',
+    filterApplied: false
   },
 
   onLoad() {
     this.loadOrders();
   },
 
-  onTabsChange(e) {
-    const { value } = e.detail;
+  // 标签页点击
+  onTabClick(e) {
+    const value = e.currentTarget.dataset.value;
     this.setData({
       activeTab: value,
       'pagination.page': 1,  // 重置页码
@@ -27,6 +36,94 @@ Page({
     }, () => {
       this.loadOrders();  // 重新加载订单
     });
+  },
+
+  // 搜索框输入变化
+  onSearchChange(e) {
+    this.setData({
+      searchKeyword: e.detail.value
+    });
+  },
+
+  // 搜索确认
+  onSearchConfirm() {
+    this.setData({
+      'pagination.page': 1,
+      orders: [],
+      loading: true
+    }, () => {
+      this.loadOrders();
+    });
+  },
+
+  // 切换筛选面板
+  toggleFilterPanel() {
+    this.setData({
+      showFilterPanel: !this.data.showFilterPanel
+    });
+  },
+
+  // 开始日期变化
+  onStartDateChange(e) {
+    this.setData({
+      startDate: e.detail.value
+    });
+  },
+
+  // 结束日期变化
+  onEndDateChange(e) {
+    this.setData({
+      endDate: e.detail.value
+    });
+  },
+
+  // 最低价格变化
+  onMinPriceChange(e) {
+    this.setData({
+      minPrice: e.detail.value
+    });
+  },
+
+  // 最高价格变化
+  onMaxPriceChange(e) {
+    this.setData({
+      maxPrice: e.detail.value
+    });
+  },
+
+  // 重置筛选条件
+  resetFilter() {
+    this.setData({
+      startDate: '',
+      endDate: '',
+      minPrice: '',
+      maxPrice: '',
+      filterApplied: false
+    });
+  },
+
+  // 应用筛选条件
+  applyFilter() {
+    this.setData({
+      showFilterPanel: false,
+      filterApplied: true,
+      'pagination.page': 1,
+      orders: [],
+      loading: true
+    }, () => {
+      this.loadOrders();
+    });
+  },
+
+  // 加载更多
+  loadMore() {
+    if (this.data.hasMore) {
+      this.setData({
+        'pagination.page': this.data.pagination.page + 1
+      }, () => {
+        this.loadOrders(true);
+      });
+    }
   },
 
   async loadOrders(isLoadMore = false) {
@@ -44,6 +141,27 @@ Page({
         size,
         ...(orderStatus !== undefined ? { orderStatus } : {})  // 使用新的 orderStatus 参数
       };
+
+      // 添加搜索关键词
+      if (this.data.searchKeyword) {
+        params.keyword = this.data.searchKeyword;
+      }
+
+      // 添加日期筛选
+      if (this.data.startDate) {
+        params.startDate = this.data.startDate;
+      }
+      if (this.data.endDate) {
+        params.endDate = this.data.endDate;
+      }
+
+      // 添加价格筛选
+      if (this.data.minPrice) {
+        params.minPrice = parseInt(this.data.minPrice) * 100; // 转换为分
+      }
+      if (this.data.maxPrice) {
+        params.maxPrice = parseInt(this.data.maxPrice) * 100; // 转换为分
+      }
 
       const res = await request.get(`/api/orders/user/1`, params);
 
@@ -102,11 +220,7 @@ Page({
 
   onReachBottom() {
     if (this.data.hasMore) {
-      this.setData({
-        'pagination.page': this.data.pagination.page + 1
-      }, () => {
-        this.loadOrders(true);
-      });
+      this.loadMore();
     }
   },
 

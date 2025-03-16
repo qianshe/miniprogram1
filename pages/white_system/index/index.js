@@ -1,4 +1,4 @@
-const request = require('../../../utils/request.js');
+const { api } = require('../../../utils/api.js');
 
 Page({
 
@@ -12,7 +12,9 @@ Page({
     current: 1,
     autoplay: true,
     duration: 500,
-    interval: 5000
+    interval: 5000,
+    recommendedProducts: [],
+    productsLoading: true
   },
 
   /**
@@ -43,27 +45,14 @@ Page({
 
     // 获取流程数据
     try {
-      const res = await request.get('/api/process/white/steps');
-      if (res.code === 200 && res.data) {
-        this.setData({
-          processSteps: res.data,
-          loading: false
-        });
-      } else {
-        wx.showToast({
-          title: '获取流程数据失败',
-          icon: 'none'
-        });
-      }
+      const steps = await api.getProcessSteps({ type: 0 }); // 0表示白事
+      this.setData({
+        processSteps: steps,
+        loading: false
+      });
     } catch (err) {
       console.error('获取流程数据失败:', err);
-      wx.showToast({
-        title: '获取流程数据失败',
-        icon: 'none'
-      });
-    } finally {
-      // 隐藏加载状态
-      // 后续从服务端获取
+      // 加载模拟数据
       const Steps = [{
         title: '第一步',
         content: '联系殡仪馆'
@@ -87,17 +76,30 @@ Page({
       {
         title: '第六步',
         content: '安葬'
-      },
-      {
-        title: '第七步',
-        content: '安葬'
-      },
+      }
       ];
       this.setData({
         loading: false,
         processSteps: Steps
-
       });
+    }
+
+    // 获取推荐商品
+    try {
+      const products = await api.getProducts({ 
+        page: 1,
+        size: 10,
+        recommended: true,
+        type: 0  // 0表示白事商品
+      });
+      
+      this.setData({
+        recommendedProducts: products.records,
+        productsLoading: false
+      });
+    } catch (err) {
+      console.error('获取推荐商品失败:', err);
+      this.setData({ productsLoading: false });
     }
   },
 
@@ -112,13 +114,20 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-    const app = getApp()
-
-    app.globalData.systemType = 'white' //  设置当前为白事系统
-    const tabBar = this.getTabBar()
-    if (tabBar) {
-      tabBar.updateTabList('white')
-    }
+    // 设置当前为白事系统
+    const app = getApp();
+    app.globalData.systemType = 'white';
+    app.globalData.currentTabIndex = 0; // 设置当前选中的 tab 为首页
+    
+    // 使用延迟更新 TabBar
+    setTimeout(() => {
+      if (typeof this.getTabBar === 'function') {
+        const tabBar = this.getTabBar();
+        if (tabBar && typeof tabBar.updateTabList === 'function') {
+          tabBar.updateTabList('white');
+        }
+      }
+    }, 100);
   },
 
   /**
@@ -154,5 +163,41 @@ Page({
    */
   onShareAppMessage() {
 
+  },
+
+  /**
+   * 商品点击事件处理
+   */
+  onProductClick(e) {
+    const { id } = e.currentTarget.dataset;
+    console.log('商品点击:', id);
+    wx.navigateTo({
+      url: `/pages/goods/detail/detail?id=${id}`,
+      fail: (err) => {
+        console.error('页面跳转失败:', err);
+        wx.showToast({
+          title: '页面跳转失败',
+          icon: 'none'
+        });
+      }
+    });
+  },
+
+  /**
+   * 流程步骤点击事件处理
+   */
+  onStepClick(e) {
+    const { id } = e.currentTarget.dataset;
+    console.log('步骤点击:', id);
+    wx.navigateTo({
+      url: `/pages/process/detail/detail?id=${id}&systemType=white`,
+      fail: (err) => {
+        console.error('页面跳转失败:', err);
+        wx.showToast({
+          title: '页面跳转失败',
+          icon: 'none'
+        });
+      }
+    });
   }
 })

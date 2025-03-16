@@ -5,6 +5,8 @@ Page({
     address: null,
     remarks: '',
     loading: false,
+    systemType: 'white', // 默认为白事系统
+    themeColor: '#333333', // 默认主题色
     defaultAddress: {
       userName: '张三',
       telNumber: '13800138000',
@@ -16,12 +18,22 @@ Page({
     }
   },
 
-  onLoad() {
+  onLoad(options) {
+    // 获取系统类型
+    const systemType = options.systemType || 'white';
+    const themeColor = systemType === 'red' ? '#d32f2f' : '#333333';
+    
+    this.setData({
+      systemType,
+      themeColor
+    });
+    
     const eventChannel = this.getOpenerEventChannel()
     eventChannel.on('acceptDataFromCart', (data) => {
       this.setData({
         orderItems: data.selectedItems,
-        totalAmount: data.totalAmount
+        totalAmount: data.totalAmount,
+        systemType: data.systemType || systemType
       })
     })
     // 设置默认地址
@@ -77,13 +89,26 @@ Page({
       address: this.data.address,
       remarks: this.data.remarks,
       createTime: new Date().getTime(),
-      orderStatus: 'pending' // 添加订单状态
+      orderStatus: 'pending', // 添加订单状态
+      systemType: this.data.systemType // 添加系统类型
     }
 
     // TODO: 后续接入云函数
     // 模拟提交订单
     setTimeout(() => {
       this.setData({ loading: false })
+      
+      // 保存订单到本地存储
+      const orders = wx.getStorageSync('orders') || [];
+      const newOrder = {
+        ...orderData,
+        orderNo: 'ORD' + Date.now(),
+        status: 0, // 待支付
+        createdTime: new Date().toISOString()
+      };
+      orders.push(newOrder);
+      wx.setStorageSync('orders', orders);
+      
       wx.showToast({
         title: '订单提交成功',
         icon: 'success',
@@ -92,7 +117,7 @@ Page({
           setTimeout(() => {
             // 跳转到订单列表页面
             wx.redirectTo({
-              url: '../list/list',
+              url: `../list/list?systemType=${this.data.systemType}`,
               success: () => {
                 // 返回上一页并刷新购物车
                 const pages = getCurrentPages()

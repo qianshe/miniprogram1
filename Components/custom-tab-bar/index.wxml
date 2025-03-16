@@ -7,6 +7,7 @@
     wx:key="index" 
     value="{{index}}"
     icon="{{item.icon}}" 
+    text="{{item.text}}"
     ></t-tab-bar-item>
   </t-tab-bar>
 </view>

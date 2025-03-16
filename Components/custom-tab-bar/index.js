@@ -1,18 +1,81 @@
 // Components/tabBar/tabBar.js
-const app = getApp()
 Component({
   data: {
     index: 0,
-    list: []
+    list: [],
+    ready: false
   },
 
-  attached() {
-    console.log('tabBar attached')
-    this.updateTabList(getApp().globalData.systemType || "white")
+  lifetimes: {
+    created() {
+      console.log('tabBar created');
+    },
+
+    attached() {
+      console.log('tabBar attached');
+      this.initTabBar();
+    },
+
+    ready() {
+      console.log('tabBar ready');
+      this.setData({ ready: true });
+    },
+
+    detached() {
+      console.log('tabBar detached');
+    }
+  },
+
+  pageLifetimes: {
+    show() {
+      console.log('tabBar page show');
+      if (this.data.ready) {
+        const app = getApp();
+        const systemType = app.globalData.systemType || 'white';
+        this.updateTabList(systemType);
+      }
+    }
   },
 
   methods: {
+    initTabBar() {
+      try {
+        const app = getApp();
+        const systemType = app.globalData.systemType || 'white';
+        this.updateTabList(systemType);
+      } catch (error) {
+        console.error('TabBar init error:', error);
+        // 设置默认配置
+        this.setDefaultConfig();
+      }
+    },
+
+    setDefaultConfig() {
+      const defaultList = [
+        {
+          pagePath: "/pages/white_system/index/index",
+          text: "首页",
+          icon: "home"
+        },
+        {
+          pagePath: "/pages/user/user",
+          text: "个人中心",
+          icon: "user"
+        }
+      ];
+
+      this.setData({
+        list: defaultList,
+        index: 0
+      });
+    },
+
     updateTabList(systemType) {
+      if (!systemType) {
+        console.warn('systemType is undefined, using default "white"');
+        systemType = 'white';
+      }
+      
       const tabConfig = {
         white: {
           list: [
@@ -47,23 +110,28 @@ Component({
             }
           ]
         }
-      }
-      console.log('systemType:', systemType, "currentTabIndex:", getApp().globalData.currentTabIndex)
+      };
 
-      const config = tabConfig[systemType]
+      const config = tabConfig[systemType] || tabConfig.white;
+      const app = getApp();
+      
       this.setData({
         list: config.list,
-        index: getApp().globalData.currentTabIndex ? getApp().globalData.currentTabIndex : 0
-      })
+        index: app.globalData.currentTabIndex || 0
+      });
     },
 
     onChange(e) {
-      // 转换成 JSON 格式
-      const index  = e.detail.value 
-      const page = this.data.list[index]
+      const index = e.detail.value;
+      const page = this.data.list[index];
+      
+      if (!page || !page.pagePath) {
+        console.error('Invalid page at index:', index);
+        return;
+      }
 
-      // 将当前选中的 index 存储在全局变量中
-      getApp().globalData.currentTabIndex = index;
+      const app = getApp();
+      app.globalData.currentTabIndex = index;
     
       wx.switchTab({
         url: page.pagePath,
@@ -71,7 +139,6 @@ Component({
           console.error('Tab switch failed:', err);
         }
       });
-
-    },
+    }
   }
 })

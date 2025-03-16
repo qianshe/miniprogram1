@@ -1,151 +1,185 @@
 // index.js
 const defaultAvatarUrl = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'
+const auth = require('../../utils/auth.js');
+const request = require('../../utils/request.js');
 
 Page({
   data: {
     userInfo: {
-      avatarUrl: '/images/default-avatar.png',
+      avatarUrl: defaultAvatarUrl,
       nickName: '',
+      code: ''
     },
     hasUserInfo: false,
     isAdmin: false,
+    systemType: 'white', // 默认为白事系统
+    themeColor: '#333333', // 默认主题色
   },
   onLoad() {
     this.checkLoginStatus();
-  },
-  bindViewTap() {
-    wx.navigateTo({
-      url: '../../logs/logs'
-    })
-  },
-  onChooseAvatar(e) {
-    const { avatarUrl } = e.detail
-    const userInfo = this.data.userInfo || {}
-    userInfo.avatarUrl = avatarUrl
-    this.setData({
-      userInfo
-    })
-    // 更新缓存
-    wx.setStorageSync('userInfo', userInfo)
-  },
-  onInputNickname(e) {
-    const { value } = e.detail
-    const userInfo = this.data.userInfo || {}
-    userInfo.nickName = value
-    this.setData({
-      userInfo
-    })
-    // 更新缓存
-    wx.setStorageSync('userInfo', userInfo)
-  },
+    this.checkUserRole();
 
-  getUserProfile(e) {
-    // 推荐使用wx.getUserProfile获取用户信息，开发者每次通过该接口获取用户个人信息均需用户确认，开发者妥善保管用户快速填写的头像昵称，避免重复弹窗
-    wx.getUserProfile({
-      desc: '用于完善个人资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
-      success: (res) => {
-        console.log(res)
-        this.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true
-        })
-        // 更新缓存
-        wx.setStorageSync('userInfo', res.userInfo)
-      }
-    })
-  },
+    // 获取当前系统类型
+    const app = getApp();
+    const systemType = app.globalData.systemType || 'white';
 
-  toIndexHome(e) {
-    // 将页面栈清空，跳转到首页
-    getApp().globalData.currentTabIndex = 0
-    wx.redirectTo({
-      url: '/pages/index_home/index_home'
-    })
-  },
-  // 检查用户是否为管理员
-  checkUserRole() {
-    // 这里需要根据你的业务逻辑判断用户身份
-    // 示例：从本地存储或服务器获取用户角色
-    const userRole = wx.getStorageSync('userRole');
+    // 根据系统类型设置主题色
+    const themeColor = systemType === 'red' ? '#d32f2f' : '#333333';
+
     this.setData({
-      isAdmin: userRole === 'admin'
+      systemType,
+      themeColor
     });
   },
 
-  // 跳转到购物车页面
+  onShow() {
+    // 获取当前系统类型并更新 tabBar
+    const app = getApp();
+    const systemType = app.globalData.systemType || 'white';
+
+    // 根据系统类型设置主题色
+    const themeColor = systemType === 'red' ? '#d32f2f' : '#333333';
+
+    this.setData({
+      systemType,
+      themeColor
+    });
+
+    // 使用延迟更新 TabBar
+    setTimeout(() => {
+      if (typeof this.getTabBar === 'function') {
+        const tabBar = this.getTabBar();
+        if (tabBar && typeof tabBar.updateTabList === 'function') {
+          tabBar.updateTabList(systemType);
+        }
+      }
+    }, 100);
+
+    // 检查登录状态
+    this.checkLoginStatus();
+  },
+
   toShoppingCart() {
     wx.navigateTo({
       url: '/pages/cart/cart'
     });
   },
 
-  // 跳转到订单列表页面
   toOrders() {
     wx.navigateTo({
       url: '/pages/order/list/list'
     });
   },
 
-  // 跳转到反馈页面
   toFeedback() {
     wx.navigateTo({
       url: '/pages/feedback/feedback'
     });
   },
 
-  // 管理员生成订单页面
   toCreateOrder() {
-    if (this.data.isAdmin) {
-      wx.navigateTo({
-        url: '/pages/order/create/create'
-      });
-    } else {
-      wx.showToast({
-        title: '无权限访问，调试阶段可跳转，上线时请删除',
-        icon: 'none'
-      });
-      wx.navigateTo({
-        url: '/pages/order/create/create'
-      });
-
-    }
+    wx.navigateTo({
+      url: '/pages/order/create/create'
+    });
   },
 
-  login(e) {
-    wx.getUserProfile({
-      desc: '用于完善会员资料', // 声明获取用户信息后的用途
-      success: (res) => {
-        const userInfo = res.userInfo;
+  toIndexHome() {
+    wx.switchTab({
+      url: '/pages/index_home/index_home'
+    });
+  },
+
+  async login() {
+    try {
+      // 获取用户信息
+      const { userInfo } = await new Promise((resolve, reject) => {
+        wx.getUserProfile({
+          desc: '用于完善会员资料',
+          success: resolve,
+          fail: reject
+        });
+      });
+
+      // 获取微信登录code
+      const { code } = await new Promise((resolve, reject) => {
+        wx.login({
+          success: resolve,
+          fail: reject
+        });
+      });
+
+      // 调用后端登录接口
+      const loginRes = await request.post('/api/auth/wx/login', {
+        userInfo,
+        code
+      }, { needAuth: false });
+
+      if (loginRes.code === 200 && loginRes.data) {
+        // 保存token和用户信息
+        auth.setToken(loginRes.data.token, loginRes.data.refresh_token);
+        wx.setStorageSync('userInfo', userInfo);
+
+        // 更新页面状态
         this.setData({
           userInfo,
           hasUserInfo: true
         });
-        wx.setStorageSync('userInfo', userInfo);
+
+        // 更新全局用户信息
+        const app = getApp();
+        app.globalData.userInfo = userInfo;
+
         wx.showToast({
           title: '登录成功',
           icon: 'success'
         });
-      },
-      fail: (err) => {
-        console.error('登录失败：', err);
-        wx.showToast({
-          title: '登录失败',
-          icon: 'error'
-        });
+      } else {
+        throw new Error(loginRes.message || '登录失败');
       }
-    });
+    } catch (err) {
+      console.error('登录失败:', err);
+      wx.showToast({
+        title: err.message || '登录失败，请稍后重试',
+        icon: 'none'
+      });
+    } finally {
+      this.setData({ loading: false });
+    }
+
   },
 
   // 检查登录状态
   checkLoginStatus() {
-    const userInfo = wx.getStorageSync('userInfo');
-    if (userInfo) {
-      this.setData({
-        userInfo,
-        hasUserInfo: true
-      });
-      return true;
+    // 检查token是否存在
+    if (auth.checkAuth()) {
+      const userInfo = wx.getStorageSync('userInfo');
+      if (userInfo) {
+        this.setData({
+          userInfo,
+          hasUserInfo: true
+        });
+        return true;
+      }
     }
+
+    // 如果token不存在或用户信息不存在，则清除登录状态
+    this.setData({
+      hasUserInfo: false,
+      userInfo: {
+        avatarUrl: defaultAvatarUrl,
+        nickName: '',
+      }
+    });
     return false;
+  },
+
+  // 检查用户角色
+  checkUserRole() {
+    const userInfo = wx.getStorageSync('userInfo');
+    if (userInfo && userInfo.role === 'admin') {
+      this.setData({
+        isAdmin: true
+      });
+    }
   }
 })

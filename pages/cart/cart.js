@@ -1,3 +1,6 @@
+const api = require('../../utils/api.js');
+const auth = require('../../utils/auth.js');
+
 Page({
   data: {
     cartItems: [],
@@ -5,8 +8,9 @@ Page({
     totalAmount: '0.00',
     selectedCount: 0,
     loading: false,
-    maxQuantity: 99,  // 最大购买数量
-    minQuantity: 1    // 最小购买数量
+    maxQuantity: 99,
+    minQuantity: 1,
+    syncLoading: false 
   },
 
   onShow() {
@@ -14,44 +18,28 @@ Page({
     this.loadCartItems()
   },
 
-  loadCartItems() {
-    // TODO: 后续开启云函数时恢复以下代码
-    // wx.cloud.callFunction({
-    //   name: 'getCartItems',
-    //   success: res => {
-    //     this.setData({
-    //       cartItems: res.result.data
-    //     })
-    //   }
-    // })
-
-    // 使用mock数据
-    setTimeout(() => {  // 模拟加载延迟
-      const mockCartItems = [
-        {
-          id: 1,
-          name: '示例商品1',
-          price: 99.00,
-          quantity: 1,  // 改为quantity
-          selected: true,
-          image: 'https://tdesign.gtimg.com/mobile/demos/example2.png'
-        },
-        {
-          id: 2,
-          name: '示例商品2',
-          price: 199.00,
-          quantity: 2,  // 改为quantity
-          selected: true,
-          image: 'https://tdesign.gtimg.com/mobile/demos/example1.png'
-        }
-      ]
-
+  async loadCartItems() {
+    try {
+      console.log('开始加载购物车数据');
+      const cartList = await api.getCartList();
+      const cartItems = cartList.map(item => ({
+        id: item.productId,
+        name: item.productName,
+        image: item.productImage,
+        price: item.price, // api已处理价格转换
+        quantity: item.quantity,
+        selected: false
+      }));
+      
       this.setData({
-        cartItems: mockCartItems,
+        cartItems,
         loading: false
-      })
-      this.updateTotalAmount()
-    }, 500)
+      });
+      this.updateTotalAmount();
+    } catch (error) {
+      console.error('加载购物车失败:', error);
+      this.setData({ loading: false });
+    }
   },
 
   toggleSelect(e) {
@@ -102,103 +90,209 @@ Page({
     this.updateQuantity(index, item.quantity - 1)
   },
 
-  updateQuantity(index, quantity) {
-    // 确保quantity是数字
-    quantity = parseInt(quantity) || 1
-    
-    this.setData({
-      [`cartItems[${index}].quantity`]: quantity
-    }, () => {
-      this.updateTotalAmount()
-    })
+  async updateQuantity(index, quantity) {
+    try {
+      quantity = parseInt(quantity) || 1;
+      const cartItems = [...this.data.cartItems];
+      const item = cartItems[index];
+      
+      await api.updateCart({
+        productId: item.id,
+        quantity: quantity
+      });
+      
+      cartItems[index].quantity = quantity;
+      this.setData({ cartItems }, () => {
+        this.updateTotalAmount();
+      });
+    } catch (error) {
+      console.error('更新数量失败:', error);
+    }
   },
 
-  deleteItem(e) {
-    const { index } = e.currentTarget.dataset
+  async deleteItem(e) {
+    const { index } = e.currentTarget.dataset;
     wx.showModal({
       title: '提示',
       content: '确定要删除这个商品吗？',
-      success: res => {
+      success: async (res) => {
         if (res.confirm) {
-          this.setData({
-            loading: true
-          })
-          // 模拟删除操作
-          setTimeout(() => {
-            const cartItems = [...this.data.cartItems]
-            cartItems.splice(index, 1)
-            this.setData({
-              cartItems,
-              loading: false
-            })
-            this.updateTotalAmount()
+          try {
+            const cartItems = [...this.data.cartItems];
+            const item = cartItems[index];
+            
+            await api.removeFromCart(item.id);
+            
+            cartItems.splice(index, 1);
+            this.setData({ cartItems });
+            this.updateTotalAmount();
+            
             wx.showToast({
               title: '删除成功',
               icon: 'success'
-            })
-          }, 300)
+            });
+          } catch (error) {
+            console.error('删除商品失败:', error);
+          }
         }
       }
-    })
+    });
   },
 
   updateTotalAmount() {
-    const selectedItems = this.data.cartItems.filter(item => item.selected)
+    const selectedItems = this.data.cartItems.filter(item => item.selected);
     const total = selectedItems.reduce((sum, item) => {
-      // 确保price和quantity都是数字
-      const price = parseFloat(item.price) || 0
-      const quantity = parseInt(item.quantity) || 0
-      return sum + (price * quantity)
-    }, 0)
+      const price = parseFloat(item.price) || 0;
+      const quantity = parseInt(item.quantity) || 0;
+      return sum + (price * quantity);
+    }, 0);
 
     this.setData({
       totalAmount: total.toFixed(2),
       selectedCount: selectedItems.length,
       allSelected: selectedItems.length === this.data.cartItems.length && this.data.cartItems.length > 0
-    })
+    });
   },
 
   checkout() {
-    const selectedItems = this.data.cartItems.filter(item => item.selected)
+    if (!auth.checkAuth()) {
+      auth.loginWithPrompt();
+      return;
+    }
+
+    const selectedItems = this.data.cartItems.filter(item => item.selected);
     if (selectedItems.length === 0) {
       wx.showToast({
         title: '请选择商品',
         icon: 'none'
-      })
-      return
+      });
+      return;
     }
     
     wx.showLoading({
       title: '正在创建订单'
-    })
+    });
     
-    // 模拟订单创建过程
-    setTimeout(() => {
-      wx.hideLoading()
-      wx.navigateTo({
-        url: '../order/confirm/confirm',  // 更新路径
-        success: (res) => {
-          res.eventChannel.emit('acceptDataFromCart', { 
-            selectedItems,
-            totalAmount: this.data.totalAmount
-          })
-        },
-        fail: () => {
-          wx.showToast({
-            title: '页面跳转失败',
-            icon: 'none'
-          })
-        }
-      })
-    }, 800)
+    const remainingItems = this.data.cartItems.filter(item => !item.selected);
+    wx.setStorageSync('cartList', remainingItems);
+    
+    wx.navigateTo({
+      url: '../order/confirm/confirm',
+      success: (res) => {
+        res.eventChannel.emit('acceptDataFromCart', { 
+          selectedItems,
+          totalAmount: this.data.totalAmount
+        });
+        this.setData({
+          cartItems: remainingItems
+        }, () => {
+          this.updateTotalAmount();
+        });
+      },
+      fail: () => {
+        wx.showToast({
+          title: '页面跳转失败',
+          icon: 'none'
+        });
+      }
+    });
   },
 
-  // 添加错误处理方法
   handleError(error) {
-    console.error('购物车操作错误：', error)
+    console.error('购物车操作错误：', error);
     wx.showToast({
       title: '操作失败，请重试',
       icon: 'none'
-    })
+    });
+  },
+
+  async syncCartItemsWithServer(localCartItems) {
+    if (this.data.syncLoading) return localCartItems;
+    
+    try {
+      this.setData({ syncLoading: true });
+      
+      const productIds = localCartItems.map(item => item.id);
+      if (productIds.length === 0) return [];
+      
+      const res = await request.post('/api/products/batch', { ids: productIds });
+      
+      if (res.code === 200 && res.data) {
+        return localCartItems.map(cartItem => {
+          const serverProduct = res.data.find(p => p.id === cartItem.id);
+          if (serverProduct) {
+            return {
+              ...cartItem,
+              price: serverProduct.price,
+              name: serverProduct.name,
+              image: serverProduct.imageUrl || cartItem.image,
+              stock: serverProduct.stock
+            };
+          }
+          return cartItem;
+        });
+      }
+      return localCartItems;
+    } catch (error) {
+      console.error('同步购物车数据失败：', error);
+      return localCartItems;
+    } finally {
+      this.setData({ syncLoading: false });
+    }
+  },
+  
+  async fetchCartFromServer() {
+    try {
+      const res = await request.get('/api/cart/list');
+      if (res.code === 200 && res.data) {
+        return res.data.map(item => ({
+          id: item.productId,
+          quantity: item.quantity,
+          price: item.price,
+          name: item.productName,
+          image: item.productImage,
+          stock: item.stock || 999
+        }));
+      }
+      return [];
+    } catch (error) {
+      console.error('获取服务器购物车数据失败：', error);
+      return [];
+    }
+  },
+  
+  async syncCartToServer() {
+    const token = auth.getToken();
+    if (!token) return;
+    
+    try {
+      console.log('开始同步购物车到服务器');
+      const cartItems = this.data.cartItems;
+      if (cartItems.length === 0) {
+        console.log('购物车为空,清除服务器数据');
+        await api.clearCart();
+        return;
+      }
+      
+      const cartData = cartItems.map(item => ({
+        productId: item.id,
+        quantity: item.quantity,
+        price: api.priceToFen(item.price) // 转换为分
+      }));
+      
+      console.log('同步的购物车数据:', cartData);
+      await api.addToCart(cartData);
+      console.log('同步购物车成功');
+    } catch (error) {
+      console.error('同步购物车失败:', error);
+    }
+  },
+  
+  onHide() {
+    this.syncCartToServer();
+  },
+  
+  onUnload() {
+    this.syncCartToServer();
   }
 })
