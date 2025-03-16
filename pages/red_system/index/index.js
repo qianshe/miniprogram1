@@ -1,17 +1,50 @@
 // pages/red_system/red_system.js
+const request = require('../../../utils/request.js');
+const { api } = require('../../../utils/api.js');
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    events: []
+    events: [],
+    loading: true,
+    swiperList: [],
+    current: 1,
+    autoplay: true,
+    duration: 500,
+    interval: 5000,
+    recommendedProducts: [],
+    productsLoading: true
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad(options) {
+  async onLoad(options) {
+    // 设置轮播图数据
+    const imageCdn = 'https://tdesign.gtimg.com/mobile/demos';
+    const swiperList = [{
+      value: `${imageCdn}/swiper1.png`,
+      ariaLabel: '图片1',
+    },
+    {
+      value: `${imageCdn}/swiper2.png`,
+      ariaLabel: '图片2',
+    },
+    {
+      value: `${imageCdn}/swiper1.png`,
+      ariaLabel: '图片1',
+    },
+    {
+      value: `${imageCdn}/swiper2.png`,
+      ariaLabel: '图片2',
+    },
+    ];
+
+    this.setData({ swiperList });
+
     // 模拟数据, 从后端获取数据
     const event = [
       {
@@ -31,8 +64,52 @@ Page({
       }
     ]
     this.setData({
-      events: event
+      events: event,
+      loading: false
     });
+    
+    // 获取推荐商品
+    try {
+      const products = await api.getProducts({ 
+        page: 1,
+        size: 10,
+        recommended: true,
+        type: 1  // 1表示红事商品
+      });
+      
+      this.setData({
+        recommendedProducts: products.records,
+        productsLoading: false
+      });
+    } catch (err) {
+      console.error('获取推荐商品失败:', err);
+      // 模拟数据
+      const mockProducts = [
+        {
+          id: 1,
+          name: '婚庆布置套餐',
+          price: '1288.00',
+          imageUrl: 'https://tdesign.gtimg.com/mobile/demos/swiper1.png'
+        },
+        {
+          id: 2,
+          name: '婚礼司仪服务',
+          price: '888.00',
+          imageUrl: 'https://tdesign.gtimg.com/mobile/demos/swiper1.png'
+        },
+        {
+          id: 3,
+          name: '婚宴餐饮服务',
+          price: '3999.00',
+          imageUrl: 'https://tdesign.gtimg.com/mobile/demos/swiper1.png'
+        }
+      ];
+      this.setData({
+        recommendedProducts: mockProducts,
+        productsLoading: false
+      });
+    }
+    
     const app = getApp()
     app.globalData.systemType = 'red' // 设置当前为红事系统
   },
@@ -48,7 +125,20 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+    // 设置当前为红事系统
+    const app = getApp();
+    app.globalData.systemType = 'red';
+    app.globalData.currentTabIndex = 0; // 设置当前选中的 tab 为首页
+    
+    // 使用延迟更新 TabBar
+    setTimeout(() => {
+      if (typeof this.getTabBar === 'function') {
+        const tabBar = this.getTabBar();
+        if (tabBar && typeof tabBar.updateTabList === 'function') {
+          tabBar.updateTabList('red');
+        }
+      }
+    }, 100);
   },
 
   /**
@@ -84,5 +174,53 @@ Page({
    */
   onShareAppMessage() {
 
+  },
+  
+  /**
+   * 商品点击事件处理
+   */
+  onProductClick(e) {
+    const { id } = e.currentTarget.dataset;
+    console.log('商品点击:', id);
+    wx.navigateTo({
+      url: `/pages/goods/detail/detail?id=${id}&systemType=red`,
+      fail: (err) => {
+        console.error('页面跳转失败:', err);
+        wx.showToast({
+          title: '页面跳转失败',
+          icon: 'none'
+        });
+      }
+    });
+  },
+  
+  /**
+   * 流程步骤点击事件处理
+   */
+  onStepClick(e) {
+    const { eventIndex, stepIndex } = e.currentTarget.dataset;
+    console.log('步骤点击:', eventIndex, stepIndex);
+    
+    // 根据事件类型和步骤索引确定步骤ID
+    let stepId = '1'; // 默认为第一个步骤
+    
+    if (eventIndex === 0) { // 婚礼
+      stepId = String(stepIndex + 1);
+    } else if (eventIndex === 1) { // 满月酒
+      // 满月酒只有两个步骤：迎宾和宴会
+      // 迎宾对应步骤1，宴会对应步骤3
+      stepId = stepIndex === 0 ? '1' : '3';
+    }
+    
+    wx.navigateTo({
+      url: `/pages/process/detail/detail?id=${stepId}&systemType=red`,
+      fail: (err) => {
+        console.error('页面跳转失败:', err);
+        wx.showToast({
+          title: '页面跳转失败',
+          icon: 'none'
+        });
+      }
+    });
   }
 })

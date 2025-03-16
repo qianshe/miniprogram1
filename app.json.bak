@@ -7,7 +7,6 @@
     "pages/red_system/index/index",
     "pages/logs/logs",
     "pages/goods/detail/detail",
-    "pages/process/detail/detail",
     "pages/cart/cart",
     "pages/feedback/feedback",
     "pages/order/list/list",
@@ -30,9 +29,6 @@
   "miniVersion": "0.0.1",
   "tabBar": {
     "custom": true,
-    "color": "#999999",
-    "selectedColor": "#333333",
-    "backgroundColor": "#ffffff",
     "list": [
       {
         "pagePath": "pages/white_system/index/index",

@@ -24,12 +24,23 @@ page {
   box-sizing: border-box
 }
 
+/* 白事系统主题 */
+.white-theme {
+  background-color: #f8f8f8;
+}
+
+/* 红事系统主题 */
+.red-theme {
+  background-color: #fff3e0;
+}
+
 .userinfo {
   display: flex;
   flex-direction: column;
   align-items: center;
   color: #aaa;
   width: 100%;
+  padding: 30rpx 0;
 }
 
 .userinfo-avatar {
@@ -38,6 +49,26 @@ page {
   height: 128rpx;
   margin: 20rpx;
   border-radius: 50%;
+}
+
+/* 白事系统头像样式 */
+.white-avatar {
+  border: 2px solid #333333;
+}
+
+/* 红事系统头像样式 */
+.red-avatar {
+  border: 2px solid #d32f2f;
+}
+
+/* 白事系统文本样式 */
+.white-text {
+  color: #333333;
+}
+
+/* 红事系统文本样式 */
+.red-text {
+  color: #d32f2f;
 }
 
 .usermotto {
@@ -98,7 +129,6 @@ page {
   height: 80rpx;
   line-height: 80rpx;
   text-align: center;
-  background: #07c160;
   color: #fff;
   border-radius: 40rpx;
   margin: 20rpx 0;
@@ -106,6 +136,16 @@ page {
   padding: 0;        /* 重置内边距 */
   font-weight: normal; /* 重置字体粗细 */
   border: none;      /* 移除边框 */
+}
+
+/* 白事系统按钮样式 */
+.white-btn {
+  background: #07c160;
+}
+
+/* 红事系统按钮样式 */
+.red-btn {
+  background: #d32f2f;
 }
 
 .login-btn::after {
@@ -132,4 +172,10 @@ page {
   color: #07c160;
   border: 1rpx solid #07c160;
   border-radius: 30rpx;
+}
+
+/* 红事系统绑定手机按钮 */
+.red-theme .bind-phone-btn {
+  color: #d32f2f;
+  border: 1rpx solid #d32f2f;
 }

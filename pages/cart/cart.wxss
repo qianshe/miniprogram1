@@ -261,3 +261,57 @@
 .checkout-btn:active {
   opacity: 0.9;
 }
+
+/* 白事系统主题 */
+.white-theme {
+  background-color: #f8f8f8;
+}
+
+/* 红事系统主题 */
+.red-theme {
+  background-color: #fff3e0;
+}
+
+/* 白事系统价格颜色 */
+.white-price {
+  color: #07c160 !important;
+}
+
+/* 红事系统价格颜色 */
+.red-price {
+  color: #d32f2f !important;
+}
+
+/* 白事系统按钮样式 */
+.white-btn {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+/* 红事系统按钮样式 */
+.red-btn {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+/* 白事系统底部栏 */
+.white-footer {
+  background-color: #fff;
+  border-top: 1px solid #f0f0f0;
+}
+
+/* 红事系统底部栏 */
+.red-footer {
+  background-color: #fff;
+  border-top: 1px solid #ffebee;
+}
+
+/* 白事系统结算按钮 */
+.white-checkout-btn.active {
+  background-color: #07c160;
+}
+
+/* 红事系统结算按钮 */
+.red-checkout-btn.active {
+  background-color: #d32f2f;
+}

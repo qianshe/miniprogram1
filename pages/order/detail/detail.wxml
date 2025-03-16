@@ -1,16 +1,45 @@
-<view class="order-detail">
+<view class="order-detail {{systemType}}-theme">
   <view class="loading" wx:if="{{loading}}">加载中...</view>
   <block wx:elif="{{orderInfo}}">
-    <view class="status-bar {{orderInfo.statusClass}}">
+    <!-- 状态栏 -->
+    <view class="status-bar {{systemType}}-status-{{orderInfo.status}}">
       <text class="status">{{orderInfo.statusText}}</text>
       <view class="status-desc">{{orderInfo.statusDesc}}</view>
+    </view>
+
+    <!-- 状态时间线 -->
+    <view class="timeline">
+      <view class="timeline-item {{orderInfo.status >= 0 ? 'active' : ''}}">
+        <view class="timeline-dot"></view>
+        <text class="timeline-text">下单</text>
+        <text class="timeline-time">{{orderInfo.createdTime}}</text>
+      </view>
+      <view class="timeline-line {{orderInfo.status >= 1 ? 'active' : ''}}"></view>
+      <view class="timeline-item {{orderInfo.status >= 1 ? 'active' : ''}}">
+        <view class="timeline-dot"></view>
+        <text class="timeline-text">支付</text>
+        <text class="timeline-time" wx:if="{{orderInfo.status >= 1}}">{{orderInfo.payTime || '-'}}</text>
+      </view>
+      <view class="timeline-line {{orderInfo.status >= 1 && orderInfo.status !== 2 && orderInfo.status !== 3 ? 'active' : ''}}"></view>
+      <view class="timeline-item {{orderInfo.status >= 1 && orderInfo.status !== 2 && orderInfo.status !== 3 ? 'active' : ''}}">
+        <view class="timeline-dot"></view>
+        <text class="timeline-text">服务中</text>
+      </view>
+      <view class="timeline-line {{orderInfo.status >= 1 && orderInfo.status !== 2 && orderInfo.status !== 3 ? 'active' : ''}}"></view>
+      <view class="timeline-item {{orderInfo.status >= 1 && orderInfo.status !== 2 && orderInfo.status !== 3 ? 'active' : ''}}">
+        <view class="timeline-dot"></view>
+        <text class="timeline-text">完成</text>
+      </view>
     </view>
 
     <view class="section">
       <view class="section-title">基本信息</view>
       <view class="info-item">
         <text class="label">订单编号</text>
-        <text class="value">{{orderInfo.orderNo}}</text>
+        <view class="value-with-action">
+          <text class="value">{{orderInfo.orderNo}}</text>
+          <text class="action-btn" bindtap="copyOrderNo">复制</text>
+        </view>
       </view>
       <view class="info-item">
         <text class="label">下单时间</text>
@@ -30,11 +59,17 @@
       </view>
       <view class="info-item">
         <text class="label">联系电话</text>
-        <text class="value">{{orderInfo.contactPhone}}</text>
+        <view class="value-with-action">
+          <text class="value">{{orderInfo.contactPhone}}</text>
+          <text class="action-btn" bindtap="callPhone">拨打</text>
+        </view>
       </view>
       <view class="info-item">
         <text class="label">服务地址</text>
-        <text class="value">{{orderInfo.address}}</text>
+        <view class="value-with-action">
+          <text class="value address">{{orderInfo.address}}</text>
+          <text class="action-btn" bindtap="viewLocation" wx:if="{{orderInfo.latitude && orderInfo.longitude}}">查看</text>
+        </view>
       </view>
     </view>
 
@@ -42,19 +77,30 @@
       <view class="section-title">商品信息</view>
       <view class="goods-list">
         <view class="goods-item" wx:for="{{orderInfo.items}}" wx:key="productId">
+          <image class="goods-image" src="{{item.productImage || '/assets/images/default-product.png'}}" mode="aspectFill"></image>
           <view class="goods-info">
             <text class="goods-name">{{item.productName}}</text>
-            <text class="goods-price">¥{{item.productPrice}}</text>
+            <view class="goods-price-row">
+              <text class="goods-price">¥{{item.productPrice}}</text>
+              <text class="quantity">x{{item.quantity}}</text>
+            </view>
           </view>
-          <view class="goods-subtotal">
-            <text class="quantity">x{{item.quantity}}</text>
-            <text class="subtotal">¥{{item.subtotal}}</text>
-          </view>
+          <text class="subtotal">¥{{item.subtotal}}</text>
         </view>
       </view>
-      <view class="total">
-        <text>合计</text>
-        <text class="total-amount">¥{{orderInfo.totalAmount}}</text>
+      <view class="price-summary">
+        <view class="price-item">
+          <text>商品金额</text>
+          <text>¥{{orderInfo.totalAmount}}</text>
+        </view>
+        <view class="price-item" wx:if="{{orderInfo.discountAmount > 0}}">
+          <text>优惠金额</text>
+          <text class="discount">-¥{{getFormattedDiscountAmount()}}</text>
+        </view>
+        <view class="price-item total">
+          <text>实付金额</text>
+          <text class="total-amount {{systemType}}-color">¥{{orderInfo.totalAmount}}</text>
+        </view>
       </view>
     </view>
 
@@ -63,9 +109,23 @@
       <view class="remark">{{orderInfo.remark}}</view>
     </view>
 
-    <view class="actions" wx:if="{{orderInfo.status === 0}}">
-      <button class="btn cancel" bindtap="handleCancel">取消订单</button>
-      <button class="btn pay" bindtap="handlePay">立即支付</button>
+    <view class="actions">
+      <block wx:if="{{orderInfo.status === 0}}">
+        <button class="btn cancel" bindtap="handleCancel">取消订单</button>
+        <button class="btn pay {{systemType}}-btn" bindtap="handlePay">立即支付</button>
+      </block>
+      <block wx:elif="{{orderInfo.status === 1}}">
+        <button class="btn service" bindtap="contactService">联系客服</button>
+        <button class="btn refund" bindtap="applyRefund">申请退款</button>
+      </block>
+      <block wx:elif="{{orderInfo.status === 2 || orderInfo.status === 3}}">
+        <button class="btn delete" bindtap="deleteOrder">删除订单</button>
+        <button class="btn rebuy {{systemType}}-btn" bindtap="rebuyOrder">再次购买</button>
+      </block>
     </view>
   </block>
+  <view class="not-found" wx:else>
+    <text>订单不存在</text>
+    <button class="btn back" bindtap="goBack">返回列表</button>
+  </view>
 </view>

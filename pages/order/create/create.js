@@ -1,4 +1,5 @@
 const request = require('../../../utils/request.js');
+const auth = require('../../../utils/auth.js');
 
 Page({
   data: {
@@ -122,28 +123,47 @@ Page({
     this.setData({ totalAmount: total.toFixed(2) })
   },
 
-  createOrder() {
+  async createOrder() {
     if (!this.data.customerName || !this.data.phone) {
       wx.showToast({ title: '请填写完整信息', icon: 'none' })
       return
     }
 
-    // 不使用云函数，调用自定义后端管理系统的API
-    wx.request({
-      url: 'https://example.com/api/createOrder', // 替换为实际的后端管理系统API地址
-      method: 'POST',
-      data: {
+    if (!auth.checkAuth()) {
+      auth.loginWithPrompt();
+      return;
+    }
+
+    try {
+      wx.showLoading({ title: '正在创建订单' });
+      
+      const orderData = {
         customerName: this.data.customerName,
         phone: this.data.phone,
-        products: this.data.selectedProducts,
+        products: this.data.selectedProducts.map(p => ({
+          productId: p.id,
+          quantity: p.quantity
+        })),
         totalAmount: this.data.totalAmount
-      },
-      success: (res)=> {},
-      fail: (error)=> {
-        wx.showToast({ title: '下单失败', data: data })
-        console.error('下单失败:', error)
+      };
+
+      const res = await request.post('/api/orders', orderData);
+      
+      if (res.code === 200) {
+        wx.showToast({ title: '订单创建成功' });
+        wx.navigateBack();
+      } else {
+        throw new Error(res.message || '订单创建失败');
       }
-    })
+    } catch (error) {
+      console.error('创建订单失败:', error);
+      wx.showToast({
+        title: error.message || '订单创建失败',
+        icon: 'none'
+      });
+    } finally {
+      wx.hideLoading();
+    }
   },
 
   copyDebugText() {

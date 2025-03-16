@@ -1,0 +1,69 @@
+<view class="page {{systemType}}-theme">
+  <!-- 加载状态 -->
+  <t-loading wx:if="{{loading}}" theme="circular" size="40rpx" loading />
+  
+  <!-- 步骤详情 -->
+  <block wx:elif="{{stepInfo}}">
+    <!-- 步骤标题 -->
+    <view class="step-header">
+      <view class="step-title {{systemType}}-title">{{stepInfo.title}}</view>
+      <view class="step-desc">{{stepInfo.description}}</view>
+    </view>
+    
+    <!-- 步骤图片 -->
+    <view class="step-image-container">
+      <image 
+        src="{{stepInfo.imageUrl}}" 
+        mode="aspectFill" 
+        class="step-image"
+      />
+    </view>
+    
+    <!-- 步骤内容 -->
+    <view class="step-content-section {{systemType}}-section">
+      <view class="section-title {{systemType}}-section-title">详细说明</view>
+      <view class="step-content">{{stepInfo.content}}</view>
+    </view>
+    
+    <!-- 步骤提示 -->
+    <view class="step-tips-section {{systemType}}-section">
+      <view class="section-title {{systemType}}-section-title">注意事项</view>
+      <view class="tips-list">
+        <view class="tip-item {{systemType}}-tip-item" wx:for="{{stepInfo.tips}}" wx:key="index">
+          <text class="tip-icon {{systemType}}-tip-icon">•</text>
+          <text class="tip-text">{{item}}</text>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 相关商品 -->
+    <view class="related-products-section {{systemType}}-section">
+      <view class="section-title {{systemType}}-section-title">相关商品</view>
+      <t-loading wx:if="{{productsLoading}}" theme="circular" size="40rpx" loading />
+      <view wx:elif="{{!relatedProducts.length}}" class="no-products">暂无相关商品</view>
+      <view wx:else class="products-list">
+        <view class="product-item {{systemType}}-product-item" 
+              wx:for="{{relatedProducts}}" 
+              wx:key="id">
+          <view class="product-image-container" bindtap="onProductClick" data-id="{{item.id}}">
+            <image 
+              src="{{item.imageUrl}}" 
+              mode="aspectFill" 
+              class="product-image"
+            />
+          </view>
+          <view class="product-info" bindtap="onProductClick" data-id="{{item.id}}">
+            <view class="product-name">{{item.name}}</view>
+            <view class="product-price {{systemType}}-price">¥{{item.price}}</view>
+          </view>
+          <view class="add-to-cart-btn {{systemType}}-btn" bindtap="addToCart" data-product="{{item}}">
+            <text class="add-icon">+</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
+  
+  <!-- 无数据显示 -->
+  <t-empty wx:else description="暂无步骤详情" />
+</view> 

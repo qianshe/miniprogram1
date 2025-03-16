@@ -1,9 +1,93 @@
 <view class="orders-container">
-  <t-tabs defaultValue="{{activeTab}}" value="{{activeTab}}" bind:change="onTabsChange" t-class="custom-tabs">
-    <t-tab-panel label="全部" value="0" />
-    <t-tab-panel label="待支付" value="1" />
-    <t-tab-panel label="已支付" value="2" />
-  </t-tabs>
+  <!-- 搜索框 -->
+  <view class="search-container">
+    <view class="search-box">
+      <input
+        class="search-input"
+        placeholder="搜索订单号或联系人"
+        value="{{searchKeyword}}"
+        bindinput="onSearchChange"
+        bindconfirm="onSearchConfirm"
+      />
+      <view class="search-icon">
+        <image src="/assets/icons/search.png" mode="aspectFit"></image>
+      </view>
+    </view>
+    <view class="filter-btn" bindtap="toggleFilterPanel">
+      <image src="/assets/icons/filter.png" mode="aspectFit"></image>
+    </view>
+  </view>
+
+  <!-- 筛选面板 -->
+  <view class="filter-panel {{showFilterPanel ? 'show' : ''}}">
+    <view class="filter-header">
+      <text>筛选条件</text>
+      <view class="close-icon" bindtap="toggleFilterPanel">
+        <image src="/assets/icons/close.png" mode="aspectFit"></image>
+      </view>
+    </view>
+    <view class="filter-content">
+      <view class="filter-item">
+        <text class="filter-label">订单时间</text>
+        <view class="date-range">
+          <picker mode="date" value="{{startDate}}" bindchange="onStartDateChange">
+            <view class="date-picker">{{startDate || '开始日期'}}</view>
+          </picker>
+          <text class="date-separator">至</text>
+          <picker mode="date" value="{{endDate}}" bindchange="onEndDateChange">
+            <view class="date-picker">{{endDate || '结束日期'}}</view>
+          </picker>
+        </view>
+      </view>
+      <view class="filter-item">
+        <text class="filter-label">价格区间</text>
+        <view class="price-range">
+          <input
+            type="digit"
+            placeholder="最低价"
+            value="{{minPrice}}"
+            bindinput="onMinPriceChange"
+            class="price-input"
+          />
+          <text class="price-separator">至</text>
+          <input
+            type="digit"
+            placeholder="最高价"
+            value="{{maxPrice}}"
+            bindinput="onMaxPriceChange"
+            class="price-input"
+          />
+        </view>
+      </view>
+    </view>
+    <view class="filter-footer">
+      <button class="reset-btn" bindtap="resetFilter">重置</button>
+      <button class="apply-btn" bindtap="applyFilter">确定</button>
+    </view>
+  </view>
+
+  <view class="tabs">
+    <view 
+      class="tab-item {{activeTab === '0' ? 'active' : ''}}" 
+      data-value="0" 
+      bindtap="onTabClick">全部</view>
+    <view 
+      class="tab-item {{activeTab === '1' ? 'active' : ''}}" 
+      data-value="1" 
+      bindtap="onTabClick">待支付</view>
+    <view 
+      class="tab-item {{activeTab === '2' ? 'active' : ''}}" 
+      data-value="2" 
+      bindtap="onTabClick">已支付</view>
+    <view 
+      class="tab-item {{activeTab === '3' ? 'active' : ''}}" 
+      data-value="3" 
+      bindtap="onTabClick">已取消</view>
+    <view 
+      class="tab-item {{activeTab === '4' ? 'active' : ''}}" 
+      data-value="4" 
+      bindtap="onTabClick">已退款</view>
+  </view>
 
   <view class="order-list">
     <view class="loading" wx:if="{{loading}}">加载中...</view>
@@ -37,7 +121,7 @@
         </view>
       </view>
     </view>
-    <view class="load-more" wx:if="{{hasMore}}">加载更多...</view>
+    <view class="load-more" wx:if="{{hasMore}}" bindtap="loadMore">加载更多</view>
     <view class="no-more" wx:elif="{{orders.length}}">没有更多了</view>
   </view>
 </view>

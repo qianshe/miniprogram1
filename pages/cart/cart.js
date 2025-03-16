@@ -1,5 +1,5 @@
-const request = require('../../utils/request.js');
-// const auth = require('../../utils/auth.js');
+const api = require('../../utils/api.js');
+const auth = require('../../utils/auth.js');
 
 Page({
   data: {
@@ -21,33 +21,16 @@ Page({
   async loadCartItems() {
     try {
       console.log('开始加载购物车数据');
-      // let cartItems = wx.getStorageSync('cartList') || [];
-      let cartItems = [];
-      // 登录用户，从服务器获取购物车数据
-      // const token = auth.getToken();
-      if (cartItems.length === 0) {
-        console.log('从服务器获取购物车数据');
-        const res = await request.get('/api/cart/list', { userId: 1 });
-        if (res.code === 200 && res.data) {
-          cartItems = res.data.map(item => ({
-            id: item.productId,
-            name: item.productName,
-            image: item.productImage,
-            price: item.price,
-            quantity: item.quantity,
-          }));
-          wx.setStorageSync('cartList', cartItems);
-          console.log('服务器购物车数据:', cartItems);
-        } else {
-          console.error('获取购物车数据失败:', res);
-        }
-      }
-      
-      // 将价格分转换成元
-      cartItems = cartItems.map(item => ({
-        ...item,
-        price: (parseFloat(item.price) / 100).toFixed(2)
+      const cartList = await api.getCartList();
+      const cartItems = cartList.map(item => ({
+        id: item.productId,
+        name: item.productName,
+        image: item.productImage,
+        price: item.price, // api已处理价格转换
+        quantity: item.quantity,
+        selected: false
       }));
+      
       this.setData({
         cartItems,
         loading: false
@@ -113,18 +96,12 @@ Page({
       const cartItems = [...this.data.cartItems];
       const item = cartItems[index];
       
-      // 更新本地数据
+      await api.updateCart({
+        productId: item.id,
+        quantity: quantity
+      });
+      
       cartItems[index].quantity = quantity;
-      wx.setStorageSync('cartList', cartItems);
-      
-      // 同步到服务器
-      if (auth.checkAuth()) {
-        await request.put('/api/cart/update', {
-          productId: item.id,
-          quantity: quantity
-        });
-      }
-      
       this.setData({ cartItems }, () => {
         this.updateTotalAmount();
       });
@@ -144,15 +121,9 @@ Page({
             const cartItems = [...this.data.cartItems];
             const item = cartItems[index];
             
-            // 删除本地数据
+            await api.removeFromCart(item.id);
+            
             cartItems.splice(index, 1);
-            wx.setStorageSync('cartList', cartItems);
-            
-            // 同步到服务器
-            if (auth.checkAuth()) {
-              await request.delete(`/api/cart/${item.id}`);
-            }
-            
             this.setData({ cartItems });
             this.updateTotalAmount();
             
@@ -299,18 +270,18 @@ Page({
       const cartItems = this.data.cartItems;
       if (cartItems.length === 0) {
         console.log('购物车为空,清除服务器数据');
-        await request.delete('/api/cart/clear');
+        await api.clearCart();
         return;
       }
       
       const cartData = cartItems.map(item => ({
         productId: item.id,
         quantity: item.quantity,
-        price: Math.round(parseFloat(item.price) * 100) // 转换为分
+        price: api.priceToFen(item.price) // 转换为分
       }));
       
       console.log('同步的购物车数据:', cartData);
-      await request.post('/api/cart/add', cartData);
+      await api.addToCart(cartData);
       console.log('同步购物车成功');
     } catch (error) {
       console.error('同步购物车失败:', error);
