@@ -1,4 +1,4 @@
-const request = require('../../../utils/request.js');
+const { api } = require('../../../utils/api.js');
 
 Page({
 
@@ -45,27 +45,14 @@ Page({
 
     // 获取流程数据
     try {
-      const res = await request.get('/api/index/white/steps');
-      if (res.code === 200 && res.data) {
-        this.setData({
-          processSteps: res.data,
-          loading: false
-        });
-      } else {
-        wx.showToast({
-          title: '获取流程数据失败',
-          icon: 'none'
-        });
-      }
+      const steps = await api.getProcessSteps({ type: 0 }); // 0表示白事
+      this.setData({
+        processSteps: steps,
+        loading: false
+      });
     } catch (err) {
       console.error('获取流程数据失败:', err);
-      wx.showToast({
-        title: '获取流程数据失败',
-        icon: 'none'
-      });
-    } finally {
-      // 隐藏加载状态
-      // 后续从服务端获取
+      // 加载模拟数据
       const Steps = [{
         title: '第一步',
         content: '联系殡仪馆'
@@ -94,25 +81,24 @@ Page({
       this.setData({
         loading: false,
         processSteps: Steps
-
       });
     }
 
     // 获取推荐商品
     try {
-      const productsRes = await request.get('/api/products/recommended/0');
-      if (productsRes.code === 200 && productsRes.data) {
-        productsRes.data.forEach(item => {
-          item.price = (item.price / 100).toFixed(2);
-        });
-        this.setData({
-          recommendedProducts: productsRes.data,
-          productsLoading: false
-        });
-      }
+      const products = await api.getProducts({ 
+        page: 1,
+        size: 10,
+        recommended: true,
+        type: 0  // 0表示白事商品
+      });
+      
+      this.setData({
+        recommendedProducts: products.records,
+        productsLoading: false
+      });
     } catch (err) {
       console.error('获取推荐商品失败:', err);
-    } finally {
       this.setData({ productsLoading: false });
     }
   },

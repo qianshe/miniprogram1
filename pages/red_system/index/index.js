@@ -1,5 +1,6 @@
 // pages/red_system/red_system.js
 const request = require('../../../utils/request.js');
+const { api } = require('../../../utils/api.js');
 
 Page({
 
@@ -69,16 +70,17 @@ Page({
     
     // 获取推荐商品
     try {
-      const productsRes = await request.get('/api/products/recommended/1');
-      if (productsRes.code === 200 && productsRes.data) {
-        productsRes.data.forEach(item => {
-          item.price = (item.price / 100).toFixed(2);
-        });
-        this.setData({
-          recommendedProducts: productsRes.data,
-          productsLoading: false
-        });
-      }
+      const products = await api.getProducts({ 
+        page: 1,
+        size: 10,
+        recommended: true,
+        type: 1  // 1表示红事商品
+      });
+      
+      this.setData({
+        recommendedProducts: products.records,
+        productsLoading: false
+      });
     } catch (err) {
       console.error('获取推荐商品失败:', err);
       // 模拟数据

@@ -1,4 +1,4 @@
-const request = require('../../../utils/request.js');
+const { api } = require('../../../utils/api.js');
 
 Page({
   data: {
@@ -17,38 +17,29 @@ Page({
     }
   },
 
-  loadGoodsDetail(id) {
-    this.setData({ loading: true });
-    
-    request.get(`/api/products/${id}`)
-      .then(res => {
-        if (res.code === 200 && res.data) {
-          res.data.imageUrl = "https://tdesign.gtimg.com/mobile/demos/example2.png";
-          const goodsData = {
-            ...res.data,
-            displayPrice: (res.data.price / 100).toFixed(2),
-            displayTime: res.data.createdTime.replace('T', ' ').slice(0, 16),
-            // 处理图片URL
-            image: res.data.imageUrl || 'https://tdesign.gtimg.com/mobile/demos/default_goods.png',
-            // 转换图片列表为数组
-            images: res.data.imageUrl ? [res.data.imageUrl] : ['https://tdesign.gtimg.com/mobile/demos/default_goods.png']
-          };
-          
-          this.setData({
-            goods: goodsData,
-            loading: false
-          });
-        } else {
-          throw new Error(res.message || '获取商品详情失败');
-        }
-      })
-      .catch(err => {
-        wx.showToast({
-          title: err.message || '加载失败',
-          icon: 'none'
-        });
-        this.setData({ loading: false });
+  async loadGoodsDetail(id) {
+    try {
+      this.setData({ loading: true });
+      const goods = await api.getProductDetail(id);
+      
+      const goodsData = {
+        ...goods,
+        displayTime: goods.createdTime.replace('T', ' ').slice(0, 16),
+        image: goods.imageUrl || 'https://tdesign.gtimg.com/mobile/demos/default_goods.png',
+        images: goods.imageUrl ? [goods.imageUrl] : ['https://tdesign.gtimg.com/mobile/demos/default_goods.png']
+      };
+      
+      this.setData({
+        goods: goodsData,
+        loading: false
       });
+    } catch (err) {
+      wx.showToast({
+        title: '加载失败',
+        icon: 'none'
+      });
+      this.setData({ loading: false });
+    }
   },
 
   // 修改商品数量

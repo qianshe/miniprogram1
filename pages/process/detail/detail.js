@@ -1,4 +1,4 @@
-const request = require('../../../utils/request.js');
+const { api } = require('../../../utils/api.js');
 
 Page({
   data: {
@@ -35,46 +35,28 @@ Page({
 
   async loadStepDetail(stepId) {
     try {
-      // 尝试从服务器获取步骤详情
-      try {
-        const apiPath = `/api/process/step-details/${stepId}`;
-        const params = {
-          type: this.data.systemType === 'red' ? 1 : 0
-        };
-        
-        const res = await request.get(apiPath, { params });
-        
-        if (res.code === 200 && res.data) {
-          this.setData({
-            stepInfo: res.data,
-            loading: false
-          });
-          
-          // 加载相关商品
-          this.loadRelatedProducts(stepId);
-        } else {
-          throw new Error(res.message || '获取步骤详情失败');
-        }
-      } catch (err) {
-        console.error('从服务器获取步骤详情失败:', err);
-        
-        // 模拟数据
-        const mockStepInfo = this.getMockStepInfo(stepId);
-        
-        this.setData({
-          stepInfo: mockStepInfo,
-          loading: false
-        });
-        
-        // 加载模拟相关商品
-        this.loadMockRelatedProducts();
-      }
-    } catch (err) {
-      wx.showToast({
-        title: '加载步骤详情失败',
-        icon: 'none'
+      // 获取步骤详情，包含相关商品
+      const stepDetail = await api.getStepDetail(stepId, {
+        type: this.data.systemType === 'red' ? 1 : 0
       });
-      this.setData({ loading: false });
+
+      // 直接使用API返回的数据，不需要额外处理价格
+      this.setData({
+        stepInfo: stepDetail,
+        relatedProducts: stepDetail.productList || [],
+        loading: false,
+        productsLoading: false
+      });
+
+    } catch (err) {
+      console.error('获取步骤详情失败:', err);
+      // 加载模拟数据
+      const mockStepInfo = this.getMockStepInfo(stepId);
+      this.setData({
+        stepInfo: mockStepInfo,
+        loading: false
+      });
+      this.loadMockRelatedProducts();
     }
   },
   
@@ -89,35 +71,6 @@ Page({
     };
   },
   
-  async loadRelatedProducts(stepId) {
-    try {
-      const apiPath = `/api/process/step-details/${stepId}`;
-      const params = {
-        type: this.data.systemType === 'red' ? 1 : 0
-      };
-      
-      const res = await request.get(apiPath, { params });
-      
-      if (res.code === 200 && res.data) {
-        // 格式化价格
-        const products = res.data.map(item => ({
-          ...item,
-          price: (item.price / 100).toFixed(2)
-        }));
-        
-        this.setData({
-          relatedProducts: products,
-          productsLoading: false
-        });
-      } else {
-        throw new Error(res.message || '获取相关商品失败');
-      }
-    } catch (err) {
-      console.error('从服务器获取相关商品失败:', err);
-      this.loadMockRelatedProducts();
-    }
-  },
-  
   loadMockRelatedProducts() {
     // 根据系统类型返回模拟商品数据
     if (this.data.systemType === 'red') {
@@ -126,25 +79,31 @@ Page({
         {
           id: 1,
           name: '婚庆布置套餐',
-          price: '1288.00',
+          price: 128800, // 使用分为单位，保持与后端一致
           imageUrl: 'https://tdesign.gtimg.com/mobile/demos/example1.png'
         },
         {
           id: 2,
           name: '婚礼司仪服务',
-          price: '888.00',
+          price: 88800, // 使用分为单位，保持与后端一致
           imageUrl: 'https://tdesign.gtimg.com/mobile/demos/example1.png'
         },
         {
           id: 3,
           name: '婚宴餐饮服务',
-          price: '3999.00',
+          price: 399900, // 使用分为单位，保持与后端一致
           imageUrl: 'https://tdesign.gtimg.com/mobile/demos/example1.png'
         }
       ];
       
+      // 转换价格为元
+      const products = redProducts.map(item => ({
+        ...item,
+        price: api.priceToYuan(item.price)
+      }));
+      
       this.setData({
-        relatedProducts: redProducts,
+        relatedProducts: products,
         productsLoading: false
       });
     } else {
@@ -153,25 +112,31 @@ Page({
         {
           id: 101,
           name: '花圈套餐',
-          price: '388.00',
+          price: 38800, // 使用分为单位，保持与后端一致
           imageUrl: 'https://tdesign.gtimg.com/mobile/demos/example1.png'
         },
         {
           id: 102,
           name: '骨灰盒',
-          price: '688.00',
+          price: 68800, // 使用分为单位，保持与后端一致
           imageUrl: 'https://tdesign.gtimg.com/mobile/demos/example1.png'
         },
         {
           id: 103,
           name: '丧葬服务套餐',
-          price: '2999.00',
+          price: 299900, // 使用分为单位，保持与后端一致
           imageUrl: 'https://tdesign.gtimg.com/mobile/demos/example1.png'
         }
       ];
       
+      // 转换价格为元
+      const products = whiteProducts.map(item => ({
+        ...item,
+        price: api.priceToYuan(item.price)
+      }));
+      
       this.setData({
-        relatedProducts: whiteProducts,
+        relatedProducts: products,
         productsLoading: false
       });
     }
@@ -194,33 +159,49 @@ Page({
   addToCart(e) {
     const { product } = e.currentTarget.dataset;
     
-    // 获取购物车数据
-    let cartList = wx.getStorageSync('cartList') || [];
-    
-    // 查找是否已存在该商品
-    const existingIndex = cartList.findIndex(item => item.id === product.id);
-    
-    if (existingIndex > -1) {
-      // 已存在则更新数量
-      cartList[existingIndex].quantity += 1;
-    } else {
-      // 不存在则添加新商品
-      cartList.push({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        image: product.imageUrl,
-        quantity: 1,
-        systemType: this.data.systemType // 添加系统类型标记
+    try {
+      // 调用购物车API
+      api.addToCart({
+        productId: product.id,
+        quantity: 1
+      }).then(() => {
+        // API调用成功后，同步更新本地购物车数据
+        let cartList = wx.getStorageSync('cartList') || [];
+        const existingIndex = cartList.findIndex(item => item.id === product.id);
+        
+        if (existingIndex > -1) {
+          cartList[existingIndex].quantity += 1;
+        } else {
+          cartList.push({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            image: product.imageUrl || product.image,
+            quantity: 1,
+            systemType: this.data.systemType // 添加系统类型标记
+          });
+        }
+
+        // 更新本地存储
+        wx.setStorageSync('cartList', cartList);
+
+        wx.showToast({
+          title: '添加成功',
+          icon: 'success'
+        });
+      }).catch(err => {
+        console.error('添加购物车失败:', err);
+        wx.showToast({
+          title: '添加失败',
+          icon: 'none'
+        });
+      });
+    } catch (err) {
+      console.error('添加购物车失败:', err);
+      wx.showToast({
+        title: '添加失败',
+        icon: 'none'
       });
     }
-
-    // 保存购物车数据
-    wx.setStorageSync('cartList', cartList);
-
-    wx.showToast({
-      title: '添加成功',
-      icon: 'success'
-    });
   }
 });
