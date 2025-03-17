@@ -5,6 +5,8 @@ const AUTH_KEY = 'user_token';
 const REFRESH_KEY = 'refresh_token';
 const EXPIRES_KEY = 'token_expires';
 
+const app = getApp();
+
 module.exports = {
   /**
    * 检查用户是否已登录
@@ -45,6 +47,12 @@ module.exports = {
     wx.removeStorageSync(AUTH_KEY);
     wx.removeStorageSync(REFRESH_KEY);
     wx.removeStorageSync(EXPIRES_KEY);
+    
+    // 清除全局状态
+    if (app) {
+      app.globalData.userInfo = null;
+      app.globalData.isAdmin = false;
+    }
   },
 
   /**

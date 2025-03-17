@@ -118,16 +118,25 @@ Page({
       if (loginRes.code === 200 && loginRes.data) {
         // 保存token和用户信息
         auth.setToken(loginRes.data.token, loginRes.data.refresh_token);
-        wx.setStorageSync('userInfo', userInfo);
+        
+        // 转换用户角色信息
+        const userInfoWithRole = {
+          ...userInfo,
+          role: loginRes.data.role || 0,
+          isAdmin: loginRes.data.role === 1
+        };
+        wx.setStorageSync('userInfo', userInfoWithRole);
 
         // 更新页面状态
         this.setData({
-          userInfo,
-          hasUserInfo: true
+          userInfo: userInfoWithRole,
+          hasUserInfo: true,
+          isAdmin: userInfoWithRole.isAdmin
         });
 
         // 更新全局用户信息
-        app.globalData.userInfo = userInfo;
+        app.globalData.userInfo = userInfoWithRole;
+        app.globalData.isAdmin = userInfoWithRole.isAdmin;
 
         wx.showToast({
           title: '登录成功',
@@ -154,10 +163,14 @@ Page({
     if (auth.checkAuth()) {
       const userInfo = wx.getStorageSync('userInfo');
       if (userInfo) {
+        // 更新页面和全局状态
         this.setData({
           userInfo,
-          hasUserInfo: true
+          hasUserInfo: true,
+          isAdmin: userInfo.isAdmin || false
         });
+        app.globalData.userInfo = userInfo;
+        app.globalData.isAdmin = userInfo.isAdmin || false;
         return true;
       }
     }
@@ -165,11 +178,13 @@ Page({
     // 如果token不存在或用户信息不存在，则清除登录状态
     this.setData({
       hasUserInfo: false,
+      isAdmin: false,
       userInfo: {
         avatarUrl: defaultAvatarUrl,
         nickName: '',
       }
     });
+    app.globalData.isAdmin = false;
     return false;
   },
 

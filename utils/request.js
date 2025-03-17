@@ -65,9 +65,16 @@ const request = async (options = {}, retryCount = 0) => {
       auth.loginWithPrompt();
       throw new Error('未授权，请重新登录');
     }
-
-    // 处理业务状态码
-    if (responseData.code !== 200) {
+    
+    if (responseData.code === 403) {
+      wx.showToast({
+        title: '权限不足',
+        icon: 'none',
+        duration: 2000,
+        message: responseData.message
+      });
+      // 处理业务状态码
+    } else if (responseData.code !== 200) {
       console.error('业务错误:', {
         url: requestUrl,
         code: responseData.code,
