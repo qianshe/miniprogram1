@@ -2,6 +2,7 @@
 const defaultAvatarUrl = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'
 const auth = require('../../utils/auth.js');
 const request = require('../../utils/request.js');
+const app = getApp();
 
 Page({
   data: {
@@ -20,7 +21,6 @@ Page({
     this.checkUserRole();
 
     // 获取当前系统类型
-    const app = getApp();
     const systemType = app.globalData.systemType || 'white';
 
     // 根据系统类型设置主题色
@@ -34,7 +34,6 @@ Page({
 
   onShow() {
     // 获取当前系统类型并更新 tabBar
-    const app = getApp();
     const systemType = app.globalData.systemType || 'white';
 
     // 根据系统类型设置主题色
@@ -84,7 +83,9 @@ Page({
   },
 
   toIndexHome() {
-    wx.switchTab({
+    // 重置app.globalData.index
+    app.globalData.currentTabIndex = 0;
+    wx.navigateTo({
       url: '/pages/index_home/index_home'
     });
   },
@@ -126,7 +127,6 @@ Page({
         });
 
         // 更新全局用户信息
-        const app = getApp();
         app.globalData.userInfo = userInfo;
 
         wx.showToast({

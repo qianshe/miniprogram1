@@ -13,7 +13,7 @@
 
   <view class="goods-info">
     <view class="goods-name">{{goods.name}}</view>
-    <view class="goods-price">¥{{goods.displayPrice}}</view>
+    <view class="goods-price">¥{{goods.price}}</view>
     <view class="goods-stock">库存: {{goods.stock}}</view>
   </view>
 

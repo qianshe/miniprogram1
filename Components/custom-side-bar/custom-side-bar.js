@@ -1,4 +1,4 @@
-const api = require('../../utils/api.js');
+const { api } = require('../../utils/api.js');
 const PAGE_SIZE = 20; // 每页加载的商品数量
 
 Component({
@@ -28,7 +28,9 @@ Component({
   methods: {
     async loadCategories() {
       try {
-        const categories = await api.getCategories();
+        const categories = await api.getCategories(
+          {type : 0}
+        );
         const sortedCategories = categories
           .sort((a, b) => a.sort - b.sort)
           .map(category => ({
@@ -47,6 +49,7 @@ Component({
           this.loadBatchProducts(0);
         });
       } catch (err) {
+        console.error("加载分类失败", err);
         wx.showToast({
           title: '加载分类失败',
           icon: 'none'

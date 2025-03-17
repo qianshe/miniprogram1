@@ -1,4 +1,4 @@
-const api = require('../../utils/api.js');
+const { api } = require('../../utils/api.js');  // 修改引入方式
 const auth = require('../../utils/auth.js');
 
 Page({
@@ -22,11 +22,13 @@ Page({
     try {
       console.log('开始加载购物车数据');
       const cartList = await api.getCartList();
+      console.log('购物车数据:', cartList);
+      
       const cartItems = cartList.map(item => ({
         id: item.productId,
         name: item.productName,
         image: item.productImage,
-        price: item.price, // api已处理价格转换
+        price: item.price,
         quantity: item.quantity,
         selected: false
       }));
@@ -38,7 +40,14 @@ Page({
       this.updateTotalAmount();
     } catch (error) {
       console.error('加载购物车失败:', error);
-      this.setData({ loading: false });
+      this.setData({ 
+        loading: false,
+        cartItems: []  // 确保失败时清空购物车显示
+      });
+      wx.showToast({
+        title: '加载购物车失败',
+        icon: 'none'
+      });
     }
   },
 
@@ -269,15 +278,13 @@ Page({
       console.log('开始同步购物车到服务器');
       const cartItems = this.data.cartItems;
       if (cartItems.length === 0) {
-        console.log('购物车为空,清除服务器数据');
-        await api.clearCart();
+        console.log('购物车为空');
         return;
       }
       
       const cartData = cartItems.map(item => ({
         productId: item.id,
-        quantity: item.quantity,
-        price: api.priceToFen(item.price) // 转换为分
+        quantity: item.quantity
       }));
       
       console.log('同步的购物车数据:', cartData);

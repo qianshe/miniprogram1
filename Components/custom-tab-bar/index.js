@@ -39,35 +39,9 @@ Component({
 
   methods: {
     initTabBar() {
-      try {
-        const app = getApp();
-        const systemType = app.globalData.systemType || 'white';
-        this.updateTabList(systemType);
-      } catch (error) {
-        console.error('TabBar init error:', error);
-        // 设置默认配置
-        this.setDefaultConfig();
-      }
-    },
-
-    setDefaultConfig() {
-      const defaultList = [
-        {
-          pagePath: "/pages/white_system/index/index",
-          text: "首页",
-          icon: "home"
-        },
-        {
-          pagePath: "/pages/user/user",
-          text: "个人中心",
-          icon: "user"
-        }
-      ];
-
-      this.setData({
-        list: defaultList,
-        index: 0
-      });
+      const app = getApp();
+      const systemType = app.globalData.systemType || 'white';
+      this.updateTabList(systemType);
     },
 
     updateTabList(systemType) {
