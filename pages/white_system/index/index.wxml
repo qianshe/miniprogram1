@@ -29,8 +29,8 @@
           wx:key="index"
           bindtap="onStepClick"
           data-id="{{index + 1}}">
-      <text class="process-step-title">{{item.title}}</text>
-      <text class="process-step-content">{{item.content}}</text>
+      <text class="process-step-title">{{item.stepName}}</text>
+      <text class="process-step-content">{{item.description}}</text>
       <view class="step-arrow">></view>
     </view>
   </view>

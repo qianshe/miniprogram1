@@ -2,6 +2,7 @@
 const defaultAvatarUrl = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'
 const auth = require('../../utils/auth.js');
 const request = require('../../utils/request.js');
+const app = getApp();
 
 Page({
   data: {
@@ -20,7 +21,6 @@ Page({
     this.checkUserRole();
 
     // 获取当前系统类型
-    const app = getApp();
     const systemType = app.globalData.systemType || 'white';
 
     // 根据系统类型设置主题色
@@ -34,7 +34,6 @@ Page({
 
   onShow() {
     // 获取当前系统类型并更新 tabBar
-    const app = getApp();
     const systemType = app.globalData.systemType || 'white';
 
     // 根据系统类型设置主题色
@@ -84,7 +83,9 @@ Page({
   },
 
   toIndexHome() {
-    wx.switchTab({
+    // 重置app.globalData.index
+    app.globalData.currentTabIndex = 0;
+    wx.navigateTo({
       url: '/pages/index_home/index_home'
     });
   },
@@ -117,17 +118,25 @@ Page({
       if (loginRes.code === 200 && loginRes.data) {
         // 保存token和用户信息
         auth.setToken(loginRes.data.token, loginRes.data.refresh_token);
-        wx.setStorageSync('userInfo', userInfo);
+        
+        // 转换用户角色信息
+        const userInfoWithRole = {
+          ...userInfo,
+          role: loginRes.data.role || 0,
+          isAdmin: loginRes.data.role === 1
+        };
+        wx.setStorageSync('userInfo', userInfoWithRole);
 
         // 更新页面状态
         this.setData({
-          userInfo,
-          hasUserInfo: true
+          userInfo: userInfoWithRole,
+          hasUserInfo: true,
+          isAdmin: userInfoWithRole.isAdmin
         });
 
         // 更新全局用户信息
-        const app = getApp();
-        app.globalData.userInfo = userInfo;
+        app.globalData.userInfo = userInfoWithRole;
+        app.globalData.isAdmin = userInfoWithRole.isAdmin;
 
         wx.showToast({
           title: '登录成功',
@@ -154,10 +163,14 @@ Page({
     if (auth.checkAuth()) {
       const userInfo = wx.getStorageSync('userInfo');
       if (userInfo) {
+        // 更新页面和全局状态
         this.setData({
           userInfo,
-          hasUserInfo: true
+          hasUserInfo: true,
+          isAdmin: userInfo.isAdmin || false
         });
+        app.globalData.userInfo = userInfo;
+        app.globalData.isAdmin = userInfo.isAdmin || false;
         return true;
       }
     }
@@ -165,11 +178,13 @@ Page({
     // 如果token不存在或用户信息不存在，则清除登录状态
     this.setData({
       hasUserInfo: false,
+      isAdmin: false,
       userInfo: {
         avatarUrl: defaultAvatarUrl,
         nickName: '',
       }
     });
+    app.globalData.isAdmin = false;
     return false;
   },
 
