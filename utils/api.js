@@ -13,15 +13,24 @@ const priceToFen = (price) => {
 
 // 通用响应处理
 const handleResponse = (res) => {
-  if (res.code === 200) {
-    return res.data
+  console.log('API Response:', res);
+  
+  if (!res || typeof res !== 'object') {
+    throw new Error('无效的响应数据');
   }
-  wx.showToast({
-    title: res.message || '操作失败',
-    icon: 'none'
-  })
-  return Promise.reject(res)
-}
+
+  // 检查标准返回结构
+  if (res.code !== 200) {
+    const error = new Error(res.message || '操作失败');
+    error.code = res.code;
+    error.data = res.data;
+    console.error('API Error:', error);
+    throw error;
+  }
+
+  // 只返回data字段
+  return res.data;
+};
 
 // 普通用户API封装
 const api = {
@@ -30,14 +39,20 @@ const api = {
     return request.get(apiConfig.api.products, params)
       .then(handleResponse)
       .then(data => {
-        if (data.records) {
-          // 处理分页数据中的价格
-          data.records = data.records.map(item => ({
-            ...item,
-            price: priceToYuan(item.price)
-          }));
+        if (!data || !data.records) {
+          console.error('Invalid products data:', data);
+          throw new Error('无效的商品数据');
         }
+        // 处理分页数据中的价格
+        data.records = data.records.map(item => ({
+          ...item,
+          price: priceToYuan(item.price || 0)
+        }));
         return data;
+      })
+      .catch(err => {
+        console.error('获取商品列表失败:', err);
+        throw err;
       });
   },
   
@@ -50,9 +65,19 @@ const api = {
         price: priceToYuan(data.price)
       }));
   },
+
+  getRecommendProducts: (params) => {
+    return request.get(apiConfig.api.recommendProducts, params)
+      .then(handleResponse)
+      .then(data => data.map(item => ({
+        ...item,
+        price: priceToYuan(item.price)
+      })));
+  },
   
-  getCategories: () => {
-    return request.get(apiConfig.api.categories).then(handleResponse)
+  getCategories: (params) => {
+    return request.get(apiConfig.api.categories)
+      .then(handleResponse)
   },
 
   // 购物车相关
@@ -129,4 +154,4 @@ module.exports = {
   adminApi,
   priceToYuan,
   priceToFen
-}
+};

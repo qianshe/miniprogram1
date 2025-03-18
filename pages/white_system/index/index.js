@@ -54,28 +54,28 @@ Page({
       console.error('获取流程数据失败:', err);
       // 加载模拟数据
       const Steps = [{
-        title: '第一步',
-        content: '联系殡仪馆'
+        step_name: '第一步',
+        description: '联系殡仪馆'
       },
       {
-        title: '第二步',
-        content: '准备相关证件'
+        step_name: '第二步',
+        description: '准备相关证件'
       },
       {
-        title: '第三步',
-        content: '办理丧葬手续'
+        step_name: '第三步',
+        description: '办理丧葬手续'
       },
       {
-        title: '第四步',
-        content: '安排追悼会'
+        step_name: '第四步',
+        description: '安排追悼会'
       },
       {
-        title: '第五步',
-        content: '火化及安葬'
+        step_name: '第五步',
+        description: '火化及安葬'
       },
       {
-        title: '第六步',
-        content: '安葬'
+        step_name: '第六步',
+        description: '安葬'
       }
       ];
       this.setData({
@@ -86,20 +86,27 @@ Page({
 
     // 获取推荐商品
     try {
-      const products = await api.getProducts({ 
-        page: 1,
-        size: 10,
-        recommended: true,
+      const products = await api.getRecommendProducts({ 
         type: 0  // 0表示白事商品
       });
-      
       this.setData({
-        recommendedProducts: products.records,
+        recommendedProducts: products || [],
         productsLoading: false
       });
     } catch (err) {
       console.error('获取推荐商品失败:', err);
-      this.setData({ productsLoading: false });
+      this.setData({ 
+        recommendedProducts: [],
+        productsLoading: false 
+      });
+      
+      // 根据错误类型显示不同提示
+      const message = err.type === 'network' ? '网络连接失败' : '获取商品失败';
+      wx.showToast({
+        title: message,
+        icon: 'none',
+        duration: 2000
+      });
     }
   },
 

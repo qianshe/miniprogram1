@@ -15,6 +15,7 @@ const config = {
     // 商品相关
     products: '/api/products',
     productDetail: '/api/products/{id}',
+    recommendProducts: '/api/products/recommend',
     categories: '/api/products/categories',
     categoryDetail: '/api/products/categories/{id}',
     

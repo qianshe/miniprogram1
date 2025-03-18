@@ -21,7 +21,7 @@ Page({
     try {
       this.setData({ loading: true });
       const goods = await api.getProductDetail(id);
-      
+      console.log('商品详情:', goods);
       const goodsData = {
         ...goods,
         displayTime: goods.createdTime.replace('T', ' ').slice(0, 16),
@@ -34,6 +34,7 @@ Page({
         loading: false
       });
     } catch (err) {
+      console.error('加载商品详情失败:', err);
       wx.showToast({
         title: '加载失败',
         icon: 'none'

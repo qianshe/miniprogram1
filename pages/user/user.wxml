@@ -16,12 +16,20 @@
 
   <view class="function-area" wx:if="{{hasUserInfo}}">
     <t-cell-group>
-      <t-cell title="我的购物车" hover arrow bindtap="toShoppingCart" />
-      <t-cell title="我的订单" hover arrow bindtap="toOrders" />
-      <t-cell title="意见反馈" hover arrow bindtap="toFeedback" />
-      <t-cell title="生成订单" hover arrow bindtap="toCreateOrder" theme="{{systemType === 'red' ? 'danger' : 'default'}}" />
+      <!-- 管理不展示购物车 -->
+      <t-cell wx:if="{{!isAdmin}}" title="我的购物车" hover arrow bindtap="toShoppingCart" />
+      <t-cell wx:if="{{!isAdmin}}" title="我的订单" hover arrow bindtap="toOrders" />
 
-      <t-cell wx:if="{{isAdmin}}" title="管理订单" hover arrow bindtap="toCreateOrder" theme="{{systemType === 'red' ? 'danger' : 'default'}}" />
+      <t-cell title="意见反馈" hover arrow bindtap="toFeedback" />
+<!-- 
+      <t-cell wx:if="{{isAdmin}}" title="生成订单" hover arrow bindtap="toCreateOrder" />
+      <t-cell wx:if="{{isAdmin}}" title="管理订单" hover arrow bindtap="toCreateOrder" />
+       -->
+       
+      <t-cell title="生成订单" hover arrow bindtap="toCreateOrder" />
+      <t-cell title="管理订单" hover arrow bindtap="toManageOrder" />
+
+
       <t-cell title="返回首页" hover arrow bindtap="toIndexHome"/>
     </t-cell-group>
   </view>

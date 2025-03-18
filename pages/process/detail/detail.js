@@ -1,4 +1,4 @@
-const { api } = require('../../../utils/api.js');
+const { api, priceToYuan } = require('../../../utils/api.js');
 
 Page({
   data: {
@@ -99,7 +99,7 @@ Page({
       // 转换价格为元
       const products = redProducts.map(item => ({
         ...item,
-        price: api.priceToYuan(item.price)
+        price: priceToYuan(item.price)
       }));
       
       this.setData({

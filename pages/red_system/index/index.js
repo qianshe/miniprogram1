@@ -70,15 +70,11 @@ Page({
     
     // 获取推荐商品
     try {
-      const products = await api.getProducts({ 
-        page: 1,
-        size: 10,
-        recommended: true,
-        type: 1  // 1表示红事商品
+      const products = await api.getRecommendProducts({ 
+        type: 1  // 0表示白事商品
       });
-      
       this.setData({
-        recommendedProducts: products.records,
+        recommendedProducts: products || [],
         productsLoading: false
       });
     } catch (err) {
