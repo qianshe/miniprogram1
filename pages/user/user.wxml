@@ -27,8 +27,10 @@
        -->
        
       <t-cell title="生成订单" hover arrow bindtap="toCreateOrder" />
-      <t-cell title="管理订单" hover arrow bindtap="toManageOrder" />
-
+     
+      <t-cell title="查询订单" hover arrow bindtap="toManageOrder" /> 
+      <t-cell title="管理商品" hover arrow bindtap="toManageOrder" />  
+      <t-cell title="管理流程" hover arrow bindtap="toManageOrder" />
 
       <t-cell title="返回首页" hover arrow bindtap="toIndexHome"/>
     </t-cell-group>
