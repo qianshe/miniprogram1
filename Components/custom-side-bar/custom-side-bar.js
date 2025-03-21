@@ -1,9 +1,10 @@
-const { api } = require('../../utils/api.js');
+const { api, priceToYuan } = require('../../utils/api.js');
+const mockData = require('../../config/mock.js');
 const PAGE_SIZE = 20; // 每页加载的商品数量
 
 Component({
-  offsetTopList: [],
   data: {
+    ready: false,
     sideBarIndex: 0,
     scrollTop: 0,
     categories: [],
@@ -20,17 +21,30 @@ Component({
     batchLoading: false,  // 批量加载状态
   },
 
-  attached() {
-    this.loadCategories();
-    this.initLayout();
+  lifetimes: {
+    attached() {
+      const app = getApp();
+      // 获取当前系统类型
+      const currentSystemType = app.globalData.systemType || 'white';
+      
+      this.setData({ 
+        ready: true,
+        systemType: currentSystemType 
+      }, () => {
+        this.loadCategories();
+        this.initLayout();
+      });
+    }
   },
 
   methods: {
     async loadCategories() {
       try {
-        const categories = await api.getCategories(
-          {type : 0}
-        );
+        // data中的systemType是当前组件的系统类型
+        const type = this.data.systemType === 'red' ? 1 : 0;
+        
+        const categories = await api.getCategories({ type });
+        
         const sortedCategories = categories
           .sort((a, b) => a.sort - b.sort)
           .map(category => ({
@@ -49,12 +63,35 @@ Component({
           this.loadBatchProducts(0);
         });
       } catch (err) {
-        console.error("加载分类失败", err);
+        console.error("加载分类失败，使用mock数据:", err);
+        
+        // 修复语法错误
+        const mockCategories = (this.properties.systemType === 'red' ? 
+          mockData.redCategories : 
+          mockData.whiteCategories)
+          .map(category => ({
+            label: category.name,
+            title: category.name,
+            id: category.id,
+            badgeProps: {},
+            items: category.products.map(product => ({
+              id: product.id,
+              label: product.name,
+              image: product.image,
+              price: priceToYuan(product.price) // 修复括号闭合
+            })),
+            hasMore: false
+          }));
+
+        this.setData({ 
+          categories: mockCategories,
+          loading: false
+        });
+
         wx.showToast({
-          title: '加载分类失败',
+          title: '使用离线数据',
           icon: 'none'
         });
-        this.setData({ loading: false });
       }
     },
 
@@ -111,7 +148,8 @@ Component({
         const result = await api.getProducts({
           page,
           size,
-          category: categoryId
+          category: categoryId,
+          type: this.properties.systemType === 'red' ? 1 : 0
         });
         
         return result.records.map(product => ({

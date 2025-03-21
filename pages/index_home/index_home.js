@@ -68,7 +68,7 @@ Page({
     const app = getApp()
     app.globalData.systemType = systemType
     wx.switchTab({
-      url: `/pages/${systemType}_system/index/index`,
+      url: `/pages/index/index`,
     })
   },
 

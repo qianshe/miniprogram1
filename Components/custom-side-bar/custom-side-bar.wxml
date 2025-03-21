@@ -1,7 +1,6 @@
-<view class="custom-side-bar">
+<view class="custom-side-bar" data-theme="{{systemType}}">
   <view class="side-bar-container">
     <view class="custom-navbar">
-      <!-- <t-navbar class="demo-navbar" title="TDesign" leftArrow /> -->
     </view>
 
     <view class="side-bar-wrapper" style="height: calc(100vh - {{navbarHeight}}px - 48px)">
@@ -33,7 +32,7 @@
       <view wx:else>
         <view wx:for="{{categories}}" wx:key="id" class="section">
           <view class="title-item">{{item.title}}</view>
-          <t-grid column="{{3}}" border="{{false}}">
+          <t-grid column="{{2}}" border="{{false}}">
             <block wx:for="{{item.items}}" wx:key="id" wx:for-item="cargo">
               <t-grid-item
                 t-class-image="image"

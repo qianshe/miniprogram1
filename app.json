@@ -1,10 +1,9 @@
 {
   "pages": [
     "pages/index_home/index_home",
-    "pages/white_system/index/index",
+    "pages/index/index",
     "pages/goods/category/category",
     "pages/user/user",
-    "pages/red_system/index/index",
     "pages/logs/logs",
     "pages/goods/detail/detail",
     "pages/process/detail/detail",
@@ -14,6 +13,7 @@
     "pages/order/detail/detail",
     "pages/order/confirm/confirm",
     "pages/order/create/create"
+    
   ],
   "window": {
     "navigationBarTextStyle": "black",
@@ -35,7 +35,7 @@
     "backgroundColor": "#ffffff",
     "list": [
       {
-        "pagePath": "pages/white_system/index/index",
+        "pagePath": "pages/index/index",
         "text": "首页"
       },
       {
@@ -45,10 +45,6 @@
       {
         "pagePath": "pages/user/user",
         "text": "个人中心"
-      },
-      {
-        "pagePath": "pages/red_system/index/index",
-        "text": "首页"
       }
     ]
   },

@@ -1,5 +1,7 @@
 <!-- 页面 -->
 
-<custom-side-bar></custom-side-bar>
+<view class="container {{systemType}}-theme">
+  <custom-side-bar systemType="{{systemType}}" />
+</view>
 
 <custom-tab-bar></custom-tab-bar>

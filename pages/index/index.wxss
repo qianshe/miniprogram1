@@ -1,0 +1,177 @@
+/* pages/white_system/white_system.wxss */
+.page {
+    padding: 20px;
+    /* 高度直接填充满 */
+    height: 100%;
+    box-sizing: border-box; 
+    display: block;
+    overflow-y: auto;
+    /* 添加底部安全距离，预留tabBar高度 */
+    padding-bottom: calc(20px + 48px); /* 原有padding + tabBar高度 */
+  }
+  
+  /* 添加流程区块样式 */
+  .process-section {
+    margin-top: 20rpx;
+  }
+
+.container {
+  min-height: 100vh;
+  background: #f5f5f5;
+  padding-bottom: calc(20rpx + 120rpx); /* 增加底部间距，避免被TabBar遮挡 */
+}
+
+/* 搜索框样式优化 */
+.example-search {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 16rpx 24rpx;
+  background: #fff;
+  box-shadow: 0 2rpx 6rpx rgba(0,0,0,0.05);
+}
+
+/* 内容区域布局 */
+.content-wrapper {
+  margin-top: 88rpx; /* 为固定定位的搜索框留出空间 */
+  padding: 24rpx;
+}
+
+/* 流程和商品区块通用样式 */
+.process-section,
+.products-section {
+  position: relative;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+
+}
+
+/* 标题样式优化 */
+.section-title {
+  display: flex;
+  align-items: center;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--theme-color);
+  margin-bottom: 24rpx;
+  padding-left: 16rpx;
+  border-left: 8rpx solid var(--theme-color);
+  line-height: 1.4;
+}
+
+/* 流程步骤样式优化 */
+.process-step {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+  background: var(--step-color);
+  border-radius: 12rpx;
+  margin-bottom: 16rpx;
+  transition: all 0.3s ease;
+}
+
+.process-step:active {
+  opacity: 0.8;
+  transform: scale(0.98);
+}
+
+.step-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--theme-color);
+  min-width: 160rpx;
+}
+
+.step-desc {
+  flex: 1;
+  font-size: 26rpx;
+  color: var(--text-color);
+  margin: 0 20rpx;
+}
+
+/* 商品网格优化 */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+}
+
+.product-item {
+  background: #fff;
+  border-radius: 12rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+}
+
+.product-item:active {
+  transform: scale(0.98);
+}
+
+.product-image {
+  width: 100%;
+  height: 300rpx;
+  background: #f8f8f8;
+}
+
+.product-info {
+  padding: 16rpx;
+}
+
+.product-name {
+  font-size: 28rpx;
+  color: var(--text-color);
+  margin-bottom: 8rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-height: 1.4;
+}
+
+/* 商品价格统一样式 */
+.product-price {
+  font-size: 32rpx;
+  color: #ff4444 !important;  /* 统一使用红色，不受主题影响 */
+  font-weight: bold;
+  margin-top: 8rpx;
+}
+
+/* 主题变量 */
+.red-theme {
+  --theme-color: #d32f2f;
+  --text-color: #333;
+  --step-color: #fef2f2;
+  --border-color: #ffebee;
+  --price-color: #ff4444;  /* 添加价格颜色变量 */
+}
+
+.white-theme {
+  --theme-color: #333333;
+  --text-color: #666;
+  --step-color: #f8f8f8;
+  --border-color: #f0f0f0;
+  --price-color: #ff4444;  /* 添加价格颜色变量 */
+}
+
+/* 加载状态和空态优化 */
+.no-data {
+  text-align: center;
+  color: #999;
+  font-size: 28rpx;
+  padding: 48rpx 0;
+}
+
+/* 轮播图优化 */
+t-swiper {
+  margin: 24rpx 0;
+  border-radius: 12rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.08);
+}

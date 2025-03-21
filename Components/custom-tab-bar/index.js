@@ -51,10 +51,9 @@ Component({
       }
       
       const tabConfig = {
-        white: {
           list: [
             {
-              pagePath: "/pages/white_system/index/index",
+              pagePath: "/pages/index/index",
               text: "首页",
               icon: "home"
             },
@@ -69,28 +68,11 @@ Component({
               icon: "user"
             }
           ]
-        },
-        red: {
-          list: [
-            {
-              pagePath: "/pages/red_system/index/index",
-              text: "首页",
-              icon: "home"
-            },
-            {
-              pagePath: "/pages/user/user",
-              text: "个人中心",
-              icon: "user"
-            }
-          ]
-        }
       };
-
-      const config = tabConfig[systemType] || tabConfig.white;
       const app = getApp();
       
       this.setData({
-        list: config.list,
+        list: tabConfig.list,
         index: app.globalData.currentTabIndex || 0
       });
     },

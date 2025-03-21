@@ -6,13 +6,18 @@ Page({
    */
   data: {
     value: 'category',
-    categories: []
+    categories: [],
+    systemType: 'white'
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    const app = getApp();
+    const systemType = options.systemType || app.globalData.systemType || 'white';
+    
+    this.setData({ systemType });
   },
 
   /**
@@ -26,7 +31,13 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+    const app = getApp();
+    const systemType = app.globalData.systemType || 'white';
+    
+    // 更新系统类型
+    if (this.data.systemType !== systemType) {
+      this.setData({ systemType });
+    }
   },
 
   /**
