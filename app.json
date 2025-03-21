@@ -13,7 +13,6 @@
     "pages/order/detail/detail",
     "pages/order/confirm/confirm",
     "pages/order/create/create"
-    
   ],
   "window": {
     "navigationBarTextStyle": "black",
@@ -27,7 +26,6 @@
   "useExtendedLib": {
     "weui": true
   },
-  "miniVersion": "0.0.1",
   "tabBar": {
     "custom": true,
     "color": "#999999",

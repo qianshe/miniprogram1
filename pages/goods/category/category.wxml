@@ -1,7 +1,56 @@
-<!-- 页面 -->
+<view class="custom-navbar">
+  <!-- <t-navbar class="demo-navbar" title="TDesign" leftArrow /> -->
+</view>
 
-<view class="container {{systemType}}-theme">
-  <custom-side-bar systemType="{{systemType}}" />
+<view class="side-bar-wrapper" style="height: calc(100vh - {{navbarHeight}}px)">
+  <t-side-bar value="{{sideBarIndex}}" bind:change="onSideBarChange">
+    <t-side-bar-item
+      wx:for="{{categories}}"
+      wx:key="label"
+      value="{{item.value || index}}"
+      label="{{item.label}}"
+      disabled="{{item.disabled}}"
+      badge-props="{{item.badgeProps}}"
+    />
+  </t-side-bar>
+  <view class="content" style="transform: translateY(-{{sideBarIndex * 100}}%)">
+    <scroll-view
+      wx:for="{{categories}}"
+      wx:key="label"
+      class="section"
+      scroll-y
+      scroll-top="{{scrollTop}}"
+      scroll-with-animation
+      show-scrollbar="{{true}}"
+      bindscrolltolower="onScrollToLower"
+      enable-flex
+      enhanced
+    >
+      <view class="title">{{item.title || item.label}}</view>
+      <t-cell-group>
+        <block wx:for="{{item.items}}" wx:key="index" wx:for-item="cargo">
+          <t-cell t-class-left="cell" 
+            title="{{cargo.label}}"
+            bind:tap="onGoodsClick"
+            data-id="{{cargo.id}}"
+          >
+            <t-image shape="round" src="{{cargo.image}}" slot="image" lazy t-class="image" />
+            <view slot="description" class="price">¥{{cargo.price}}</view>
+          </t-cell>
+        </block>
+      </t-cell-group>
+      
+      <!-- 将加载状态移到商品列表后面 -->
+      <view class="loading-status">
+        <view class="loading-more" wx:if="{{loading}}">
+          <t-loading size="small" text="加载中..." />
+        </view>
+        <view class="no-more" wx:elif="{{!item.hasMore}}">
+          <text>没有更多商品了</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
 </view>
 
 <custom-tab-bar></custom-tab-bar>

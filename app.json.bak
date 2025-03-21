@@ -1,7 +1,6 @@
 {
   "pages": [
     "pages/index_home/index_home",
-    "pages/white_system/index/index",
     "pages/goods/category/category",
     "pages/user/user",
     "pages/red_system/index/index",
