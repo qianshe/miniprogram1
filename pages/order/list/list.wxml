@@ -121,7 +121,5 @@
         </view>
       </view>
     </view>
-    <view class="load-more" wx:if="{{hasMore}}" bindtap="loadMore">加载更多</view>
-    <view class="no-more" wx:elif="{{orders.length}}">没有更多了</view>
   </view>
 </view>

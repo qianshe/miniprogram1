@@ -51,7 +51,7 @@ Page({
       console.error("加载分类失败，使用mock数据:", err);
       
       // 修复语法错误
-      const mockCategories = (this.properties.systemType === 'red' ? 
+      const mockCategories = (this.data.systemType === 'red' ? 
         mockData.redCategories : 
         mockData.whiteCategories)
         .map(category => ({

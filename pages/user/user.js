@@ -91,7 +91,6 @@ Page({
   },
 
   async login() {
-    try {
       // 获取用户信息
       const { userInfo } = await new Promise((resolve, reject) => {
         wx.getUserProfile({
@@ -108,6 +107,8 @@ Page({
           fail: reject
         });
       });
+
+    try {
 
       // 调用后端登录接口
       const loginRes = await request.post('/api/auth/wx/login', {
@@ -147,6 +148,36 @@ Page({
       }
     } catch (err) {
       console.error('登录失败:', err);
+
+      // todo 错误处理，模拟登录效果，正式环境请删除
+      // 保存token和用户信息
+      auth.setToken('test_token', 'test_refresh_token');
+      wx.setStorageSync('userInfo', {
+        avatarUrl: userInfo.avatarUrl,
+        nickName: userInfo.nickName,
+        role: 0,
+        isAdmin: false
+      });
+      app.globalData.userInfo = {
+        avatarUrl: userInfo.avatarUrl,
+        nickName: userInfo.nickName,
+        role: 0,
+        isAdmin: false
+      };
+      this.setData({
+        userInfo: {
+          avatarUrl: userInfo.avatarUrl,
+          nickName: userInfo.nickName,
+          role: 0,
+          isAdmin: false
+        },
+        hasUserInfo: true,
+        isAdmin: false
+      });
+      app.globalData.isAdmin = false;
+
+      // 以上内容为模拟登录效果，正式环境请删除
+
       wx.showToast({
         title: err.message || '登录失败，请稍后重试',
         icon: 'none'
