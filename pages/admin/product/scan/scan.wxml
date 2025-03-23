@@ -1,0 +1,98 @@
+<view class="scan-container">
+  <view class="page-header">
+    <view class="page-title">商品扫描查询</view>
+  </view>
+  
+  <!-- 扫描结果显示 -->
+  <block wx:if="{{scanResult && !isLoading}}">
+    <view class="result-section">
+      <view class="section-title">识别结果</view>
+      
+      <view class="scan-image-container">
+        <image class="scan-image" src="{{scanResult}}" mode="aspectFit"></image>
+      </view>
+      
+      <block wx:if="{{recognizedProduct}}">
+        <view class="product-info">
+          <view class="product-header">
+            <view class="product-name">{{recognizedProduct.name}}</view>
+            <view class="product-price">
+              <text class="current-price">¥{{recognizedProduct.price / 100}}</text>
+              <text class="original-price" wx:if="{{recognizedProduct.originalPrice > recognizedProduct.price}}">¥{{recognizedProduct.originalPrice / 100}}</text>
+            </view>
+          </view>
+          
+          <view class="info-divider"></view>
+          
+          <view class="info-row">
+            <text class="info-label">商品编码</text>
+            <text class="info-value">{{recognizedProduct.barcode || '暂无编码'}}</text>
+          </view>
+          
+          <view class="info-row">
+            <text class="info-label">商品分类</text>
+            <text class="info-value">{{recognizedProduct.categoryName}}</text>
+          </view>
+          
+          <view class="info-row">
+            <text class="info-label">库存数量</text>
+            <text class="info-value">{{recognizedProduct.stock}} 件</text>
+          </view>
+          
+          <view class="info-row">
+            <text class="info-label">销量</text>
+            <text class="info-value">{{recognizedProduct.sales}} 件</text>
+          </view>
+          
+          <view class="info-row">
+            <text class="info-label">商品描述</text>
+            <text class="info-value description">{{recognizedProduct.description}}</text>
+          </view>
+        </view>
+        
+        <view class="action-buttons">
+          <button class="action-btn secondary" bindtap="reScan">重新扫描</button>
+          <button class="action-btn primary" bindtap="quickAddToOrder">快速下单</button>
+        </view>
+      </block>
+      
+      <view class="error-message" wx:if="{{errorMessage}}">
+        {{errorMessage}}
+        <view class="retry-btn" bindtap="reScan">重新扫描</view>
+      </view>
+    </view>
+  </block>
+  
+  <!-- 正在扫描或加载中 -->
+  <block wx:elif="{{isScanning || isLoading}}">
+    <view class="loading-container">
+      <view class="loading-icon"></view>
+      <view class="loading-text">{{isScanning ? '扫描中...' : '识别中...'}}</view>
+    </view>
+  </block>
+  
+  <!-- 初始状态或错误状态 -->
+  <block wx:else>
+    <view class="scan-placeholder">
+      <view class="placeholder-icon">📷</view>
+      <view class="placeholder-text">请扫描商品以查询价格和库存信息</view>
+      <button class="scan-btn" bindtap="startScan">开始扫描</button>
+      
+      <view class="error-message" wx:if="{{errorMessage}}">
+        {{errorMessage}}
+      </view>
+      
+      <view class="scan-tips">
+        <view class="tips-title">使用提示:</view>
+        <view class="tips-item">1. 确保商品在画面中清晰可见</view>
+        <view class="tips-item">2. 避免强光反射和阴影</view>
+        <view class="tips-item">3. 尽量对准商品标签或特征部位</view>
+      </view>
+    </view>
+  </block>
+  
+  <!-- 底部操作按钮 -->
+  <view class="bottom-buttons" wx:if="{{!isScanning && !isLoading && !scanResult}}">
+    <button class="bottom-btn" bindtap="goBack">返回</button>
+  </view>
+</view> 

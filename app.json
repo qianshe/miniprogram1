@@ -12,7 +12,13 @@
     "pages/order/list/list",
     "pages/order/detail/detail",
     "pages/order/confirm/confirm",
-    "pages/order/create/create"
+    "pages/order/create/create",
+    "pages/admin/order/list/list",
+    "pages/admin/product/list/list",
+    "pages/admin/index/index",
+    "pages/admin/login/login",
+    "pages/admin/order/create/create",
+    "pages/admin/product/scan/scan"
   ],
   "window": {
     "navigationBarTextStyle": "black",

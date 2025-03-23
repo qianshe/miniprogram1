@@ -1,0 +1,120 @@
+<view class="admin-products-container">
+  <!-- 页面头部 -->
+  <view class="page-header">
+    <view class="page-title">产品管理</view>
+    <view class="action-buttons">
+      <view class="scan-btn" bindtap="scanProduct">扫描查价</view>
+      <view class="create-btn" bindtap="createProduct">新增产品</view>
+    </view>
+  </view>
+  
+  <!-- 搜索框 -->
+  <view class="search-container">
+    <view class="search-box">
+      <input type="text" class="search-input" placeholder="搜索产品名称" bindinput="onSearchInput" bindconfirm="onSearchConfirm" value="{{keyword}}" confirm-type="search" />
+      <view class="search-icon" bindtap="onSearchConfirm">
+        <image src="/assets/images/icon-search.png" mode="aspectFit"></image>
+      </view>
+    </view>
+    <view class="filter-btn" bindtap="toggleFilterPanel">
+      <image src="/assets/images/icon-filter.png" mode="aspectFit"></image>
+    </view>
+  </view>
+  
+  <!-- 排序选项 -->
+  <view class="sort-options">
+    <view class="sort-item {{orderBy === 'createTime' ? 'active' : ''}}" bindtap="changeOrderBy" data-orderby="createTime">
+      上架时间
+      <view class="sort-icon {{orderBy === 'createTime' ? (orderDirection === 'desc' ? 'desc' : 'asc') : ''}}"></view>
+    </view>
+    <view class="sort-item {{orderBy === 'price' ? 'active' : ''}}" bindtap="changeOrderBy" data-orderby="price">
+      价格
+      <view class="sort-icon {{orderBy === 'price' ? (orderDirection === 'desc' ? 'desc' : 'asc') : ''}}"></view>
+    </view>
+    <view class="sort-item {{orderBy === 'sales' ? 'active' : ''}}" bindtap="changeOrderBy" data-orderby="sales">
+      销量
+      <view class="sort-icon {{orderBy === 'sales' ? (orderDirection === 'desc' ? 'desc' : 'asc') : ''}}"></view>
+    </view>
+  </view>
+  
+  <!-- 产品列表 -->
+  <view class="product-list">
+    <block wx:if="{{isLoading && page === 1}}">
+      <view class="loading">加载中...</view>
+    </block>
+    <block wx:elif="{{products.length === 0 && !isLoading}}">
+      <view class="empty">暂无产品</view>
+    </block>
+    <block wx:else>
+      <view class="product-item" wx:for="{{products}}" wx:key="id">
+        <view class="product-thumb" bindtap="viewProduct" data-id="{{item.id}}">
+          <image src="{{item.thumb}}" mode="aspectFill"></image>
+          <view class="product-status {{item.status === 1 ? 'status-on' : 'status-off'}}">
+            {{item.status === 1 ? '已上架' : '已下架'}}
+          </view>
+        </view>
+        <view class="product-info">
+          <view class="product-name" bindtap="viewProduct" data-id="{{item.id}}">{{item.name}}</view>
+          <view class="product-category">分类：{{item.categoryName || '未分类'}}</view>
+          <view class="product-price">
+            <text class="price">¥{{item.price}}</text>
+            <text class="original-price" wx:if="{{item.originalPrice > item.price}}">¥{{item.originalPrice}}</text>
+          </view>
+          <view class="product-sales">销量: {{item.sales}} | 库存: {{item.stock}}</view>
+          <view class="product-actions">
+            <view class="action-btn edit-btn" bindtap="editProduct" data-id="{{item.id}}">编辑</view>
+            <view class="action-btn {{item.status === 1 ? 'off-btn' : 'on-btn'}}" bindtap="toggleProductStatus" data-id="{{item.id}}" data-status="{{item.status}}">
+              {{item.status === 1 ? '下架' : '上架'}}
+            </view>
+            <view class="action-btn delete-btn" bindtap="deleteProduct" data-id="{{item.id}}">删除</view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 加载更多 -->
+      <view class="load-more" wx:if="{{isLoading && page > 1}}">
+        <view class="loading">加载中...</view>
+      </view>
+      <view class="no-more" wx:if="{{!hasMore && !isLoading && products.length > 0}}">
+        没有更多产品了
+      </view>
+    </block>
+  </view>
+  
+  <!-- 筛选面板 -->
+  <view class="filter-panel {{showFilterPanel ? 'show' : ''}}">
+    <view class="filter-header">
+      <text>筛选</text>
+      <view class="close-icon" bindtap="toggleFilterPanel">
+        <image src="/assets/images/icon-close.png" mode="aspectFit"></image>
+      </view>
+    </view>
+    <view class="filter-content">
+      <view class="filter-item">
+        <text class="filter-label">价格区间</text>
+        <view class="price-range">
+          <input type="digit" class="price-input" placeholder="最低价" bindinput="onFilterPriceMinInput" value="{{filterParams.priceMin}}" />
+          <text class="price-separator">-</text>
+          <input type="digit" class="price-input" placeholder="最高价" bindinput="onFilterPriceMaxInput" value="{{filterParams.priceMax}}" />
+        </view>
+      </view>
+      
+      <view class="filter-item">
+        <text class="filter-label">产品分类</text>
+        <view class="category-list">
+          <view class="category-item {{selectedCategoryId === '' ? 'active' : ''}}" bindtap="onCategoryChange" data-id="">
+            全部
+          </view>
+          <view class="category-item {{selectedCategoryId === item.id ? 'active' : ''}}" wx:for="{{categories}}" wx:key="id" bindtap="onCategoryChange" data-id="{{item.id}}">
+            {{item.name}}
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <view class="filter-footer">
+      <view class="reset-btn" bindtap="resetFilter">重置</view>
+      <view class="apply-btn" bindtap="applyFilter">确定</view>
+    </view>
+  </view>
+</view> 
