@@ -1,0 +1,166 @@
+<view class="page-container">
+  <view class="page-header">
+    <view class="page-title">创建订单</view>
+  </view>
+  
+  <!-- 订单表单 -->
+  <view class="form-section">
+    <view class="section-title">客户信息</view>
+    
+    <view class="form-group">
+      <view class="form-label">联系人姓名<text class="required">*</text></view>
+      <input 
+        class="form-input {{errors.contactName ? 'input-error' : ''}}" 
+        placeholder="请输入联系人姓名" 
+        value="{{formData.contactName}}" 
+        bindinput="onInput" 
+        data-field="contactName"
+      />
+      <view class="error-message" wx:if="{{errors.contactName}}">{{errors.contactName}}</view>
+    </view>
+    
+    <view class="form-group">
+      <view class="form-label">联系电话<text class="required">*</text></view>
+      <input 
+        class="form-input {{errors.contactPhone ? 'input-error' : ''}}" 
+        type="number" 
+        placeholder="请输入联系电话" 
+        value="{{formData.contactPhone}}" 
+        bindinput="onInput" 
+        data-field="contactPhone"
+      />
+      <view class="error-message" wx:if="{{errors.contactPhone}}">{{errors.contactPhone}}</view>
+    </view>
+    
+    <view class="form-group">
+      <view class="form-label">服务时间<text class="required">*</text></view>
+      <picker 
+        mode="date" 
+        value="{{formData.serviceTime}}" 
+        bindchange="onServiceTimeChange"
+        start="{{formData.serviceTime}}"
+      >
+        <view class="form-picker {{errors.serviceTime ? 'input-error' : ''}}">
+          {{formData.serviceTime || '请选择服务时间'}}
+          <view class="picker-arrow"></view>
+        </view>
+      </picker>
+      <view class="error-message" wx:if="{{errors.serviceTime}}">{{errors.serviceTime}}</view>
+    </view>
+    
+    <view class="form-group">
+      <view class="form-label">服务地址<text class="required">*</text></view>
+      <textarea 
+        class="form-textarea {{errors.address ? 'input-error' : ''}}" 
+        placeholder="请输入详细地址" 
+        value="{{formData.address}}" 
+        bindinput="onInput" 
+        data-field="address"
+      />
+      <view class="error-message" wx:if="{{errors.address}}">{{errors.address}}</view>
+    </view>
+    
+    <view class="form-group">
+      <view class="form-label">备注</view>
+      <textarea 
+        class="form-textarea" 
+        placeholder="可选填" 
+        value="{{formData.remark}}" 
+        bindinput="onInput" 
+        data-field="remark"
+      />
+    </view>
+  </view>
+  
+  <!-- 产品列表 -->
+  <view class="form-section">
+    <view class="section-header">
+      <view class="section-title">产品信息</view>
+      <view class="add-product-btn" bindtap="openProductSelector">添加产品</view>
+    </view>
+    
+    <view class="error-message" wx:if="{{errors.products}}">{{errors.products}}</view>
+    
+    <block wx:if="{{selectedProducts.length > 0}}">
+      <view class="product-list">
+        <view class="product-item" wx:for="{{selectedProducts}}" wx:key="id">
+          <view class="product-info">
+            <image class="product-thumb" src="{{item.thumb}}" mode="aspectFill"></image>
+            <view class="product-details">
+              <view class="product-name">{{item.name}}</view>
+              <view class="product-price">¥{{item.price / 100}}</view>
+            </view>
+          </view>
+          <view class="product-quantity">
+            <view class="quantity-adjust decrease" bindtap="decreaseQuantity" data-index="{{index}}">-</view>
+            <view class="quantity-value">{{item.quantity}}</view>
+            <view class="quantity-adjust increase" bindtap="increaseQuantity" data-index="{{index}}">+</view>
+          </view>
+          <view class="remove-btn" bindtap="removeProduct" data-index="{{index}}">×</view>
+        </view>
+      </view>
+      
+      <view class="total-amount">
+        <text class="total-label">总计：</text>
+        <text class="total-value">¥{{totalAmount / 100}}</text>
+      </view>
+    </block>
+    
+    <view class="empty-product" wx:else>
+      <view class="empty-icon">+</view>
+      <view class="empty-text">请添加产品</view>
+    </view>
+  </view>
+  
+  <!-- 操作按钮 -->
+  <view class="action-buttons">
+    <button class="cancel-btn" bindtap="goBack">取消</button>
+    <button 
+      class="submit-btn {{isSubmitting ? 'disabled' : ''}}" 
+      bindtap="submitOrder" 
+      disabled="{{isSubmitting}}"
+    >
+      {{isSubmitting ? '提交中...' : '提交订单'}}
+    </button>
+  </view>
+  
+  <!-- 产品选择弹窗 -->
+  <view class="product-selector {{showProductSelector ? 'show' : ''}}">
+    <view class="selector-mask" bindtap="closeProductSelector"></view>
+    <view class="selector-content">
+      <view class="selector-header">
+        <view class="selector-title">选择产品</view>
+        <view class="close-btn" bindtap="closeProductSelector">×</view>
+      </view>
+      
+      <view class="selector-search">
+        <input 
+          class="search-input" 
+          placeholder="搜索产品名称" 
+          bindinput="onSearchInput" 
+          value="{{searchKeyword}}"
+        />
+        <view class="search-icon">🔍</view>
+      </view>
+      
+      <view class="selector-list">
+        <block wx:if="{{getFilteredProducts().length > 0}}">
+          <view 
+            class="selector-item" 
+            wx:for="{{getFilteredProducts()}}" 
+            wx:key="id" 
+            bindtap="selectProduct" 
+            data-id="{{item.id}}"
+          >
+            <image class="selector-thumb" src="{{item.thumb}}" mode="aspectFill"></image>
+            <view class="selector-details">
+              <view class="selector-name">{{item.name}}</view>
+              <view class="selector-price">¥{{item.price / 100}}</view>
+            </view>
+          </view>
+        </block>
+        <view class="empty-results" wx:else>无匹配产品</view>
+      </view>
+    </view>
+  </view>
+</view> 

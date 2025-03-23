@@ -1,10 +1,9 @@
 {
   "pages": [
     "pages/index_home/index_home",
-    "pages/white_system/index/index",
+    "pages/index/index",
     "pages/goods/category/category",
     "pages/user/user",
-    "pages/red_system/index/index",
     "pages/logs/logs",
     "pages/goods/detail/detail",
     "pages/process/detail/detail",
@@ -13,7 +12,13 @@
     "pages/order/list/list",
     "pages/order/detail/detail",
     "pages/order/confirm/confirm",
-    "pages/order/create/create"
+    "pages/order/create/create",
+    "pages/admin/order/list/list",
+    "pages/admin/product/list/list",
+    "pages/admin/index/index",
+    "pages/admin/login/login",
+    "pages/admin/order/create/create",
+    "pages/admin/product/scan/scan"
   ],
   "window": {
     "navigationBarTextStyle": "black",
@@ -27,7 +32,6 @@
   "useExtendedLib": {
     "weui": true
   },
-  "miniVersion": "0.0.1",
   "tabBar": {
     "custom": true,
     "color": "#999999",
@@ -35,7 +39,7 @@
     "backgroundColor": "#ffffff",
     "list": [
       {
-        "pagePath": "pages/white_system/index/index",
+        "pagePath": "pages/index/index",
         "text": "首页"
       },
       {
@@ -45,10 +49,6 @@
       {
         "pagePath": "pages/user/user",
         "text": "个人中心"
-      },
-      {
-        "pagePath": "pages/red_system/index/index",
-        "text": "首页"
       }
     ]
   },

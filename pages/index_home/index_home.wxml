@@ -2,6 +2,6 @@
   <image class="background"
   src="../../assets/images/home.jpeg" 
   mode="aspectFill"></image>
-  <view class="left" bindtap="navigateToWhiteSystem">白事</view>
-  <view class="right" bindtap="navigateToRedSystem">红事</view>
+  <view class="left" bindtap="navigateToWhiteSystem"></view>
+  <view class="right" bindtap="navigateToRedSystem"></view>
 </view>
