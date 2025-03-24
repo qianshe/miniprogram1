@@ -82,6 +82,12 @@ Page({
     });
   },
 
+  toManagePage() {
+    wx.navigateTo({
+      url: '/pages/admin/index/index'
+    });
+  },
+
   toIndexHome() {
     // 重置app.globalData.index
     app.globalData.currentTabIndex = 0;
