@@ -25,6 +25,25 @@ Page({
     });
   },
 
+  onShow() {
+    // 添加系统类型检查
+    const app = getApp();
+    const currentSystemType = app.globalData.systemType || 'white';
+    
+    // 如果系统类型发生变化，重新加载数据
+    if (currentSystemType !== this.data.systemType) {
+      this.setData({
+        systemType: currentSystemType,
+        sideBarIndex: 0,
+        scrollTop: 0,
+        currentPage: 1,
+        categories: []
+      }, () => {
+        this.loadCategories();
+      });
+    }
+  },
+
   async loadCategories() {
     try {
       // data中的systemType是当前组件的系统类型
