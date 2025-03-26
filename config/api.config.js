@@ -27,6 +27,7 @@ const config = {
     orders: '/api/orders',
     orderDetail: '/api/orders/{orderNo}',
     orderList: '/api/orders/user/{userId}',
+    bindOrder: '/api/orders/bind',
     
     // 购物车
     cart: {
@@ -44,11 +45,25 @@ const config = {
     }
   },
   
-  // 管理员接口 (待开发页面使用)
+  // 管理员接口
   adminApi: {
+    // 商品管理
     products: '/api/admin/products',
+    productDetail: '/api/admin/products/{id}',
+    productUpdate: '/api/admin/products/{id}',
+    productDelete: '/api/admin/products/{id}',
+    updateStock: '/api/admin/product/updateStock',
+    
+    // 订单管理
     orders: '/api/admin/orders',
-    processSteps: '/api/admin/process/steps'
+    orderDetail: '/api/admin/orders/{orderNo}',
+    orderStatistics: '/api/admin/orders/statistics',
+    exportOrders: '/api/admin/orders/export',
+    
+    // 流程管理
+    processSteps: '/api/admin/process/steps',
+    processStepDetail: '/api/admin/process/steps/{stepId}/detail',
+    updateStepSort: '/api/admin/process/steps/{stepId}/sort'
   }
 };
 

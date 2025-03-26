@@ -350,3 +350,22 @@
   background: #07c160;
   color: #fff;
 }
+
+/* 添加二维码容器的样式 */
+.qrcode-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30rpx 0;
+}
+
+.qrcode-image {
+  width: 400rpx;
+  height: 400rpx;
+  margin-bottom: 20rpx;
+}
+
+.qrcode-tip {
+  font-size: 26rpx;
+  color: #666;
+}

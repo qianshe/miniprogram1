@@ -141,12 +141,88 @@ const api = {
         }
         return data;
       });
+  },
+
+  // 绑定订单
+  bindOrder: (orderNo, userId) => {
+    return request.post(apiConfig.api.bindOrder, { orderNo, userId })
+      .then(handleResponse);
   }
 }
 
-// 管理员API封装 (待开发页面使用)
+// 管理员API封装
 const adminApi = {
-  // ...管理员接口待实现...
+  // 商品管理
+  getProducts: (params) => {
+    return request.get(apiConfig.adminApi.products, params)
+      .then(handleResponse)
+      .then(data => {
+        if (data.records) {
+          data.records = data.records.map(item => ({
+            ...item,
+            price: priceToYuan(item.price || 0)
+          }));
+        }
+        return data;
+      });
+  },
+  
+  getProductDetail: (id) => {
+    const url = apiConfig.adminApi.productDetail.replace('{id}', id);
+    return request.get(url)
+      .then(handleResponse)
+      .then(data => ({
+        ...data,
+        price: priceToYuan(data.price)
+      }));
+  },
+  
+  createProduct: (data) => {
+    const requestData = {
+      ...data,
+      price: priceToFen(data.price)
+    };
+    return request.post(apiConfig.adminApi.products, requestData).then(handleResponse);
+  },
+  
+  updateProduct: (id, data) => {
+    const url = apiConfig.adminApi.productUpdate.replace('{id}', id);
+    const requestData = {
+      ...data,
+      price: priceToFen(data.price)
+    };
+    return request.put(url, requestData).then(handleResponse);
+  },
+  
+  deleteProduct: (id) => {
+    const url = apiConfig.adminApi.productDelete.replace('{id}', id);
+    return request.delete(url).then(handleResponse);
+  },
+  
+  updateStock: (productId, delta) => {
+    const url = apiConfig.adminApi.updateStock;
+    return request.post(url, { productId, delta }).then(handleResponse);
+  },
+  
+  // 订单管理
+  getOrders: (params) => {
+    return request.get(apiConfig.adminApi.orders, params).then(handleResponse);
+  },
+  
+  getOrderDetail: (orderNo) => {
+    const url = apiConfig.adminApi.orderDetail.replace('{orderNo}', orderNo);
+    return request.get(url).then(handleResponse);
+  },
+  
+  // 订单统计
+  getOrderStatistics: (params) => {
+    return request.get(apiConfig.adminApi.orderStatistics, params).then(handleResponse);
+  },
+  
+  // 流程管理
+  getProcessSteps: (params) => {
+    return request.get(apiConfig.adminApi.processSteps, params).then(handleResponse);
+  }
 }
 
 module.exports = {

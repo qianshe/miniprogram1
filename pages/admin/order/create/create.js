@@ -315,27 +315,44 @@ Page({
         price: product.price,
         quantity: product.quantity,
         subtotal: product.price * product.quantity
-      }))
+      })),
+      // 标记为管理员创建，等待用户绑定
+      waitForBind: true
     };
     
-    // 模拟创建成功
-    setTimeout(() => {
-      wx.showToast({
-        title: '创建订单成功',
-        icon: 'success'
-      });
-      
-      setTimeout(() => {
-        // 跳转到订单列表页
-        wx.redirectTo({
-          url: '/pages/admin/order/list/list'
+    // 调用创建订单API
+    wx.showLoading({
+      title: '创建订单中...'
+    });
+    
+    // 发送请求创建订单
+    request.post('/api/admin/orders', orderData)
+      .then(res => {
+        wx.hideLoading();
+        
+        if (res.code === 200) {
+          const { orderNo, qrCodeUrl } = res.data;
+          
+          // 跳转到二维码展示页面
+          wx.navigateTo({
+            url: `/pages/admin/order/qr-code/qr-code?orderNo=${orderNo}&qrCodeUrl=${encodeURIComponent(qrCodeUrl)}`
+          });
+        } else {
+          throw new Error(res.message || '创建订单失败');
+        }
+      })
+      .catch(err => {
+        wx.hideLoading();
+        wx.showToast({
+          title: err.message || '创建订单失败',
+          icon: 'none'
         });
-      }, 1500);
-      
-      this.setData({
-        isSubmitting: false
+      })
+      .finally(() => {
+        this.setData({
+          isSubmitting: false
+        });
       });
-    }, 1000);
   },
 
   /**

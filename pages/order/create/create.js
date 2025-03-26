@@ -150,8 +150,15 @@ Page({
       const res = await request.post('/api/orders', orderData);
       
       if (res.code === 200) {
-        wx.showToast({ title: '订单创建成功' });
-        wx.navigateBack();
+        // 获取订单号和二维码链接
+        const { orderNo, qrCodeUrl } = res.data;
+        
+        wx.hideLoading();
+        
+        // 跳转到订单详情页，并传递订单信息
+        wx.navigateTo({
+          url: `/pages/order/detail/detail?orderNo=${orderNo}`
+        });
       } else {
         throw new Error(res.message || '订单创建失败');
       }
@@ -161,7 +168,6 @@ Page({
         title: error.message || '订单创建失败',
         icon: 'none'
       });
-    } finally {
       wx.hideLoading();
     }
   },

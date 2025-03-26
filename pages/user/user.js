@@ -78,7 +78,13 @@ Page({
 
   toCreateOrder() {
     wx.navigateTo({
-      url: '/pages/order/create/create'
+      url: '/pages/admin/order/create/create'
+    });
+  },
+
+  toManagePage() {
+    wx.navigateTo({
+      url: '/pages/admin/index/index'
     });
   },
 

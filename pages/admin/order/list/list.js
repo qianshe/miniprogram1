@@ -302,7 +302,9 @@ Page({
     }
   },
 
-  // 跳转到创建订单页面
+  /**
+   * 跳转到创建订单页面
+   */
   navigateToCreate() {
     wx.navigateTo({
       url: '/pages/admin/order/create/create'

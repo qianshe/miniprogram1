@@ -1,24 +1,2 @@
-<view class="login-container">
-  <view class="login-header">
-    <image class="login-logo" src="/assets/images/admin-logo.png" mode="aspectFit"></image>
-    <view class="login-title">管理员登录</view>
-  </view>
-  
-  <view class="login-form">
-    <view class="input-group">
-      <view class="input-label">用户名</view>
-      <input class="input-field" type="text" placeholder="请输入用户名" value="{{username}}" bindinput="onUsernameInput"/>
-    </view>
-    
-    <view class="input-group">
-      <view class="input-label">密码</view>
-      <input class="input-field" type="password" placeholder="请输入密码" value="{{password}}" bindinput="onPasswordInput"/>
-    </view>
-    
-    <button class="login-btn {{isLoading ? 'loading' : ''}}" bindtap="login" disabled="{{isLoading}}">
-      {{isLoading ? '登录中...' : '登录'}}
-    </button>
-    
-    <view class="tips">提示：请输入用户名 admin，密码 admin</view>
-  </view>
-</view> 
+<!--pages/admin/login/login.wxml-->
+<text>pages/admin/login/login.wxml</text>
