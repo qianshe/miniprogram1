@@ -1,0 +1,77 @@
+<view class="scan-result-container">
+  <view class="page-header">
+    <image class="logo" src="/assets/images/logo.png" mode="aspectFit"></image>
+    <view class="header-title">红白事一站式服务平台</view>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading-container" wx:if="{{loading}}">
+    <view class="loading-icon"></view>
+    <view class="loading-text">正在获取订单信息...</view>
+  </view>
+
+  <!-- 订单信息 -->
+  <block wx:elif="{{orderInfo}}">
+    <view class="order-section">
+      <view class="section-title">订单信息</view>
+      
+      <view class="order-info">
+        <view class="info-row">
+          <text class="info-label">订单号</text>
+          <text class="info-value">{{orderInfo.orderNo}}</text>
+        </view>
+        
+        <view class="info-row">
+          <text class="info-label">联系人</text>
+          <text class="info-value">{{orderInfo.contactName}}</text>
+        </view>
+        
+        <view class="info-row">
+          <text class="info-label">服务时间</text>
+          <text class="info-value">{{orderInfo.serviceTime}}</text>
+        </view>
+        
+        <view class="info-row">
+          <text class="info-label">总金额</text>
+          <text class="info-value amount">¥{{orderInfo.totalAmount}}</text>
+        </view>
+      </view>
+      
+      <view class="goods-list">
+        <view class="goods-title">商品清单</view>
+        <view class="goods-item" wx:for="{{orderInfo.items}}" wx:key="index">
+          <view class="goods-name">{{item.productName}}</view>
+          <view class="goods-detail">
+            <text class="goods-price">¥{{item.price}}</text>
+            <text class="goods-quantity">x{{item.quantity}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 登录后绑定 -->
+    <view class="action-section">
+      <view wx:if="{{!isLoggedIn}}">
+        <view class="notice">请登录后绑定此订单</view>
+        <button class="login-btn" bindtap="login">立即登录</button>
+      </view>
+      <view wx:else>
+        <block wx:if="{{!orderInfo.isBinded}}">
+          <view class="notice success">您已登录，可以绑定此订单</view>
+          <button class="bind-btn" bindtap="bindOrder">绑定订单</button>
+        </block>
+        <block wx:else>
+          <view class="notice success">您已成功绑定此订单</view>
+          <button class="view-btn" bindtap="viewOrder">查看订单详情</button>
+        </block>
+      </view>
+    </view>
+  </block>
+
+  <!-- 错误信息 -->
+  <view class="error-container" wx:elif="{{errorMessage}}">
+    <icon type="warn" size="64"></icon>
+    <view class="error-text">{{errorMessage}}</view>
+    <button class="retry-btn" bindtap="retry">重试</button>
+  </view>
+</view> 

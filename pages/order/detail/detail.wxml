@@ -109,6 +109,14 @@
       <view class="remark">{{orderInfo.remark}}</view>
     </view>
 
+    <view class="section" wx:if="{{orderInfo.qrCodeUrl}}">
+      <view class="section-title">订单二维码</view>
+      <view class="qrcode-container">
+        <image class="qrcode-image" src="{{orderInfo.qrCodeUrl}}" mode="aspectFit"></image>
+        <view class="qrcode-tip">凭此二维码到店核销</view>
+      </view>
+    </view>
+
     <view class="actions">
       <block wx:if="{{orderInfo.status === 0}}">
         <button class="btn cancel" bindtap="handleCancel">取消订单</button>

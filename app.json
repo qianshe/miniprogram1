@@ -18,7 +18,9 @@
     "pages/admin/index/index",
     "pages/admin/login/login",
     "pages/admin/order/create/create",
-    "pages/admin/product/scan/scan"
+    "pages/admin/product/scan/scan",
+    "pages/admin/order/qr-code/qr-code",
+    "pages/scan-result/scan-result"
   ],
   "window": {
     "navigationBarTextStyle": "black",
